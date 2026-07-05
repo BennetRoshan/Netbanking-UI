@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 if (tncModal) tncModal.hide();
                 // Redirect to login page
-                if(window.triggerTransitionLoader) { window.triggerTransitionLoader('login.html', 'register'); } else { window.location.href = 'login.html'; }
+                if(window.triggerTransitionLoader) { window.triggerTransitionLoader('login.html', 'register'); } else { window.location.href = '../auth/login.html'; }
             }, 1500);
         });
     }

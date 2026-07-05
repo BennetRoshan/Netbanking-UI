@@ -348,8 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const adBanner = document.createElement('div');
                 adBanner.className = 'card border-0 rounded-4 mb-4 shadow-sm overflow-hidden position-relative';
                 adBanner.style.minHeight = '140px';
-                                  adBanner.innerHTML = `<a href="${ad.url || 'javascript:void(0)'}" class="d-block text-decoration-none h-100 position-relative">
-                          <img src="${ad.image}" class="w-100 h-100" style="object-fit: contain; max-height: 400px; min-height: 140px;" alt="Advertisement">
+                                  adBanner.innerHTML = `<a href="../${ad.url || 'javascript:void(0)'}" class="d-block text-decoration-none h-100 position-relative">
+                          <img src="../${ad.image}" class="w-100 h-100" style="object-fit: contain; max-height: 400px; min-height: 140px;" alt="Advertisement">
                           ${ad.title ? 
                           `<div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center p-4" style="background: linear-gradient(90deg, rgba(13,110,253,0.95) 0%, rgba(58,123,213,0.6) 50%, transparent 100%);">
                               <div class="col-md-7">

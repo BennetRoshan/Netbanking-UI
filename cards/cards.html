@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cards - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/main.css" rel="stylesheet">
+    
+    <style>
+        .cards-carousel-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1.5rem;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            scrollbar-width: none; /* Firefox */
+        }
+        .cards-carousel-container::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        
+        .bank-card {
+            min-width: 320px;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .bank-card {
+            min-width: 320px;
+            width: 320px;
+            height: 215px;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .bank-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg);
+            animation: shine 6s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+        .bank-card-primary {
+            background: linear-gradient(135deg, #475569 0%, #1e293b 50%, #0f172a 100%);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        }
+        .bank-card-virtual {
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 50%, #f1f5f9 100%);
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.1), inset 0 1px 1px white;
+        }
+        .bank-card-credit {
+            background: linear-gradient(135deg, #64748b 0%, #334155 40%, #0f172a 100%);
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+        }
+        
+        .bank-card .card-type {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .bank-card-virtual .card-type {
+            background: #e2e8f0;
+        }
+        
+        .bank-card .bank-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .bank-card .card-number {
+            font-size: 1.35rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            margin: 0.5rem 0;
+            font-family: monospace;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.15), -1px -1px 0px rgba(0,0,0,0.6);
+            color: #e2e8f0;
+        }
+        .bank-card-virtual .card-number {
+            text-shadow: 1px 1px 0px white, -1px -1px 0px rgba(0,0,0,0.15);
+            color: #334155;
+        }
+        
+        .card-chip {
+            width: 36px;
+            height: 26px;
+            background: linear-gradient(135deg, #fde047 0%, #ca8a04 100%);
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.5), 0 1px 1px rgba(255,255,255,0.2);
+            opacity: 0.9;
+        }
+        .card-chip::after {
+            content: '';
+            position: absolute;
+            top: 40%; left: 0; right: 0;
+            height: 1px;
+            background: rgba(0,0,0,0.25);
+        }
+        .card-chip::before {
+            content: '';
+            position: absolute;
+            left: 40%; top: 0; bottom: 0;
+            width: 1px;
+            background: rgba(0,0,0,0.25);
+        }
+        
+        .mc-logo {
+            position: relative;
+            width: 36px;
+            height: 22px;
+            margin-bottom: 2px;
+        }
+        .mc-red {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #eb001b;
+            left: 0;
+            opacity: 0.9;
+            z-index: 1;
+        }
+        .mc-yellow {
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #f79e1b;
+            right: 0;
+            opacity: 0.9;
+            z-index: 2;
+        }
+        
+        .bank-card .card-holder {
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+        
+        .bank-card .valid-thru {
+            font-size: 0.6rem;
+            color: rgba(255,255,255,0.7);
+        }
+        .bank-card-virtual .valid-thru {
+            color: #64748b;
+        }
+        
+        .bank-card .card-brand {
+            font-size: 1rem;
+            font-weight: 800;
+            font-style: italic;
+            text-align: right;
+        }
+        
+        .bank-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 0.5rem;
+        }
+        .bank-card-virtual .bank-card-footer {
+            border-top: 1px solid #cbd5e1;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+        
+        .apply-card-box {
+            min-width: 320px;
+            width: 320px;
+            height: 215px;
+            border-radius: 1rem;
+            background-color: white;
+            border: 1px dashed #cbd5e1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .apply-card-box:hover {
+            border-color: #94a3b8;
+            background-color: #f8fafc;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 0.75rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-segment {
+            padding: 0 1.5rem;
+        }
+        .summary-segment:not(:last-child) {
+            border-right: 1px solid #e2e8f0;
+        }
+        .summary-label {
+            color: #64748b;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .summary-value {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .txn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.5rem;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #475569;
+        }
+        
+        .control-row {
+            padding: 1.2rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+        }
+        .control-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .control-row:hover .control-title {
+            color: #007bff;
+        }
+        
+        .control-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.1rem;
+            transition: color 0.2s ease;
+        }
+        .control-desc {
+            font-size: 0.65rem;
+            color: #94a3b8;
+        }
+        
+        .btn-apply-header {
+            background-color: #1e293b;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .btn-apply-header:hover {
+            background-color: #0f172a;
+            color: white;
+        }
+    </style>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="../index.html">
+                    <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/dashboard.html">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/payments.html">
+                      <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../loans/loans.html">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="cards.html" style="background-color: #007bff;">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/profile.html">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../support/support.html">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../auth/login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="../dashboard/dashboard.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Customer Portal</a> / <span class="text-dark">Cards</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative dropdown" style="cursor: pointer;">
+                          <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                          </div>
+                          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                              <li class="p-3 border-bottom bg-light">
+                                  <h6 class="mb-0 fw-bold">Notifications</h6>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-check-circle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Transfer Successful</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">₹5,000 sent to Rahul.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../info/kyc.html">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-exclamation-triangle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Action Required: KYC</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Please update your PAN details.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex"><i class="bi bi-gift"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">New Offer Available</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Get 5% cashback on groceries.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4" style="cursor:pointer;" onclick="window.location.href='../dashboard/profile.html'">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Arjun Mehta</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Customer ID: 50010</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5">
+                <!-- Greeting -->
+                <div class="d-flex justify-content-between align-items-end mb-4">
+                    <div>
+                        <h2 class="fw-bold text-dark mb-1">My Cards</h2>
+                        <p class="text-secondary mb-0">Manage your cards, set limits, and control how you use them.</p>
+                    </div>
+                    <button class="btn btn-apply-header" data-bs-toggle="modal" data-bs-target="#applyCardModal">+ Apply New Card</button>
+                </div>
+                
+                <!-- Cards Carousel -->
+                <div class="cards-carousel-container">
+                    
+                    <!-- Primary Card -->
+                    <div class="bank-card bank-card-primary">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="card-type">Primary</span>
+                            <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank" style="height: 28px;">
+                        </div>
+                        <div class="card-chip"></div>
+                        <div class="card-number">**** **** **** 5678</div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <div>
+                                <div class="card-holder">Arjun Mehta</div>
+                                <div class="valid-thru">Valid Thru 12/27</div>
+                            </div>
+                            <div class="card-brand">VISA Platinum</div>
+                        </div>
+                        <div class="bank-card-footer">
+                            <div><span class="status-dot"></span>Active</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Virtual Card -->
+                    <div class="bank-card bank-card-virtual">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="card-type">Virtual</span>
+                            <img src="../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank" style="height: 28px;">
+                        </div>
+                        <div class="card-chip" style="filter: grayscale(1) opacity(0.7);"></div>
+                        <div class="card-number">**** **** **** 9012</div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <div>
+                                <div class="card-holder">Arjun Mehta</div>
+                                <div class="valid-thru">Valid Thru 08/26</div>
+                            </div>
+                            <div class="card-brand">VISA Virtual</div>
+                        </div>
+                        <div class="bank-card-footer">
+                            <div><span class="status-dot"></span>Active</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Credit Card -->
+                    <div class="bank-card bank-card-credit">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="card-type">Credit</span>
+                            <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank" style="height: 28px;">
+                        </div>
+                        <div class="card-chip"></div>
+                        <div class="card-number">**** **** **** 3456</div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <div>
+                                <div class="card-holder">Arjun Mehta</div>
+                                <div class="valid-thru">Valid Thru 11/28</div>
+                            </div>
+                            <div class="d-flex flex-column align-items-end justify-content-end" style="height: 38px;">
+                                <div class="mc-logo">
+                                    <div class="mc-red"></div>
+                                    <div class="mc-yellow"></div>
+                                </div>
+                                <span style="font-size: 0.6rem; font-weight: 700; letter-spacing: 0.5px;">World</span>
+                            </div>
+                        </div>
+                        <div class="bank-card-footer">
+                            <div><span class="status-dot"></span>Active</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Apply New Card Box -->
+                    <div class="apply-card-box bg-pastel-blue border-primary border-opacity-25" data-bs-toggle="modal" data-bs-target="#applyCardModal" style="cursor: pointer;">
+                        <i class="bi bi-plus-lg fs-3 mb-2 text-secondary"></i>
+                        <span class="fw-medium text-secondary">Apply New Card</span>
+                    </div>
+                    
+                </div>
+                
+                <!-- Main Grid Layout -->
+                <div class="row g-4 mt-2">
+                    
+                    <!-- Left Column -->
+                    <div class="col-xl-8">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-dark mb-1">Card Summary</h6>
+                            <p class="text-secondary small mb-0">Overview of your card usage and limits.</p>
+                        </div>
+                        
+                        <!-- Summary Card -->
+                        <div class="content-card py-4 mb-4">
+                            <div class="d-flex justify-content-between">
+                                <div class="summary-segment flex-grow-1 text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2 summary-label">
+                                        <i class="bi bi-credit-card"></i> Total Credit Limit
+                                    </div>
+                                    <div class="summary-value">&#8377; 5,00,000.00</div>
+                                </div>
+                                <div class="summary-segment flex-grow-1 text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2 summary-label">
+                                        <i class="bi bi-pie-chart"></i> Total Utilized
+                                    </div>
+                                    <div class="summary-value">&#8377; 1,25,430.00</div>
+                                </div>
+                                <div class="summary-segment flex-grow-1 text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-2 summary-label">
+                                        <i class="bi bi-check-circle"></i> Total Available
+                                    </div>
+                                    <div class="summary-value text-success">&#8377; 3,74,570.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Transactions -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-bold text-dark mb-0">Recent Transactions</h6>
+                            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" style="font-size: 0.75rem; font-weight: 600;" onclick="window.location.href='../dashboard/statements.html'">View All Transactions &rarr;</button>
+                        </div>
+                        
+                        <div class="content-card p-0">
+                            <!-- &#8377;1 -->
+                            <div class="d-flex justify-content-between align-items-center p-4 border-bottom border-light">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="txn-icon bg-primary-subtle text-primary border-0"><i class="bi bi-cart"></i></div>
+                                    <div>
+                                        <div class="fw-bold text-dark small mb-1">Amazon.in</div>
+                                        <div class="text-muted" style="font-size: 0.65rem;">15 May 2026, 10:24 AM</div>
+                                    </div>
+                                </div>
+                                <div class="text-center text-muted" style="font-size: 0.7rem;">
+                                    Credit Card **** 3456
+                                </div>
+                                <div class="fw-bold text-danger"> - &#8377; 2,450.00
+                                </div>
+                            </div>
+                            
+                            <!-- &#8377;2 -->
+                            <div class="d-flex justify-content-between align-items-center p-4 border-bottom border-light">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="txn-icon bg-warning-subtle text-warning border-0"><i class="bi bi-fuel-pump"></i></div>
+                                    <div>
+                                        <div class="fw-bold text-dark small mb-1">HP Petrol Pump</div>
+                                        <div class="text-muted" style="font-size: 0.65rem;">14 May 2026, 06:15 PM</div>
+                                    </div>
+                                </div>
+                                <div class="text-center text-muted" style="font-size: 0.7rem;">
+                                    Credit Card **** 3456
+                                </div>
+                                <div class="fw-bold text-danger"> - &#8377; 1,200.00
+                                </div>
+                            </div>
+                            
+                            <!-- &#8377;3 -->
+                            <div class="d-flex justify-content-between align-items-center p-4 border-bottom border-light">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="txn-icon bg-danger-subtle text-danger border-0"><i class="bi bi-cup-hot"></i></div>
+                                    <div>
+                                        <div class="fw-bold text-dark small mb-1">Zomato</div>
+                                        <div class="text-muted" style="font-size: 0.65rem;">14 May 2026, 01:42 PM</div>
+                                    </div>
+                                </div>
+                                <div class="text-center text-muted" style="font-size: 0.7rem;">
+                                    Credit Card **** 3456
+                                </div>
+                                <div class="fw-bold text-danger"> - &#8377; 650.00
+                                </div>
+                            </div>
+                            
+                            <!-- &#8377;4 -->
+                            <div class="d-flex justify-content-between align-items-center p-4 border-bottom border-light">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="txn-icon bg-success-subtle text-success border-0"><i class="bi bi-bag"></i></div>
+                                    <div>
+                                        <div class="fw-bold text-dark small mb-1">Blinkit</div>
+                                        <div class="text-muted" style="font-size: 0.65rem;">13 May 2026, 08:30 PM</div>
+                                    </div>
+                                </div>
+                                <div class="text-center text-muted" style="font-size: 0.7rem;">
+                                    Credit Card **** 3456
+                                </div>
+                                <div class="fw-bold text-danger"> - &#8377; 320.00
+                                </div>
+                            </div>
+                            
+                            <!-- &#8377;5 -->
+                            <div class="d-flex justify-content-between align-items-center p-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="txn-icon bg-info-subtle text-info border-0"><i class="bi bi-airplane"></i></div>
+                                    <div>
+                                        <div class="fw-bold text-dark small mb-1">MakeMyTrip</div>
+                                        <div class="text-muted" style="font-size: 0.65rem;">12 May 2026, 11:09 AM</div>
+                                    </div>
+                                </div>
+                                <div class="text-center text-muted" style="font-size: 0.7rem;">
+                                    Credit Card **** 3456
+                                </div>
+                                <div class="fw-bold text-danger"> - &#8377; 8,750.00
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div class="col-xl-4">
+                        <div class="mb-3">
+                            <h6 class="fw-bold text-dark mb-1">Card Controls</h6>
+                            <p class="text-white small mb-0" style="user-select: none;">spacer</p>
+                        </div>
+                        
+                        <!-- Controls Card -->
+                        <div class="content-card">
+                            <div class="d-flex flex-column">
+                                <div class="control-row d-flex align-items-center gap-3 pt-0" cursor-pointer" data-bs-toggle="modal" data-bs-target="#cardLimitsModal" style="cursor: pointer;" onmouseover="this.classList.add('bg-light')" onmouseout="this.classList.remove('bg-light')"""">
+                                    <i class="bi bi-lock fs-5 text-secondary"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="control-title">Manage Limits</div>
+                                        <div class="control-desc">Set spending limits for your card</div>
+                                    </div>
+                                    <i class="bi bi-arrow-right text-primary small"></i>
+</div>
+                                
+                                <div class="control-row d-flex align-items-center gap-3">
+                                    <i class="bi bi-shield-lock fs-5 text-secondary"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="control-title">Lock / Unlock Card</div>
+                                        <div class="control-desc">Temporarily lock or unlock your card</div>
+                                    </div>
+                                    
+        <div class="form-check form-switch m-0 fs-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchLock">
+        </div>
+    </div>
+                                
+                                <div class="control-row d-flex align-items-center gap-3">
+                                    <i class="bi bi-globe fs-5 text-secondary"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="control-title">International Usage</div>
+                                        <div class="control-desc">Enable or disable international usage</div>
+                                    </div>
+                                    
+        <div class="form-check form-switch m-0 fs-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchIntl" checked>
+        </div>
+    </div>
+                                
+                                <div class="control-row d-flex align-items-center gap-3 pb-0 border-0">
+                                    <i class="bi bi-phone fs-5 text-secondary"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="control-title">Contactless Payments</div>
+                                        <div class="control-desc">Enable or disable contactless payments</div>
+                                    </div>
+                                    
+        <div class="form-check form-switch m-0 fs-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchContactless" checked>
+        </div>
+    </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Support Card -->
+                        <div class="content-card bg-pastel-yellow border-0">
+                            <h6 class="fw-bold text-dark mb-1">Need Help?</h6>
+                            <p class="text-secondary mb-3" style="font-size: 0.75rem;">Get quick answers or connect with support.</p>
+                            <button onclick="window.location.href='../support/support.html'" class="btn btn-warning bg-opacity-10 text-dark border-warning border-opacity-25 w-100 fw-semibold" style="font-size: 0.85rem;">Visit Help Center &rarr;</button>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Apply New Card Modal -->
+<div class="modal fade" id="applyCardModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark">Apply for New Card</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-4">
+                <form id="applyCardForm">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark small mb-2">Select Card Type *</label>
+                        <select class="form-select bg-light border-0 py-3 text-secondary" style="border-radius: 0.5rem; font-size: 0.95rem;" id="newCardType" required>
+                            <option value="">Choose a card...</option>
+                            <option value="visa_signature">Visa Signature Credit Card</option>
+                            <option value="mastercard_platinum">Mastercard Platinum Debit Card</option>
+                            <option value="rupay_select">RuPay Select Credit Card</option>
+                            <option value="virtual_card">Instant Virtual Card</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark small mb-2">Name on Card *</label>
+                        <input type="text" class="form-control bg-light border-0 py-3 text-secondary" id="newCardName" placeholder="e.g. JOHN DOE" style="border-radius: 0.5rem; font-size: 0.95rem;" required>
+                    </div>
+                    <div class="mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                            <label class="form-check-label text-secondary small" for="termsCheck">
+                                I agree to the Terms & Conditions and authorize a credit check if applicable.
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold py-2" id="submitCardAppBtn">Submit Application</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="../js/nexa.js"></script>
+
+<!-- Card Limits Modal -->
+<div class="modal fade" id="cardLimitsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold text-dark">Manage Card Limits</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pt-4">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label fw-bold text-dark small mb-0">ATM Withdrawal Limit</label>
+                        <span class="badge bg-primary-subtle text-primary fw-bold" id="cardAtmVal">&#8377; 50,000</span>
+                    </div>
+                    <input type="range" class="form-range" min="10000" max="100000" step="5000" value="50000" oninput="document.getElementById('cardAtmVal').innerText = '&#8377; ' + Number(this.value).toLocaleString('en-IN')">
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label fw-bold text-dark small mb-0">Online / E-Commerce Limit</label>
+                        <span class="badge bg-primary-subtle text-primary fw-bold" id="cardOnlineVal">&#8377; 1,50,000</span>
+                    </div>
+                    <input type="range" class="form-range" min="10000" max="300000" step="10000" value="150000" oninput="document.getElementById('cardOnlineVal').innerText = '&#8377; ' + Number(this.value).toLocaleString('en-IN')">
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="form-label fw-bold text-dark small mb-0">POS Limit</label>
+                        <span class="badge bg-primary-subtle text-primary fw-bold" id="cardPosVal">&#8377; 1,00,000</span>
+                    </div>
+                    <input type="range" class="form-range" min="10000" max="200000" step="10000" value="100000" oninput="document.getElementById('cardPosVal').innerText = '&#8377; ' + Number(this.value).toLocaleString('en-IN')">
+                </div>
+                
+                <div class="bg-light rounded-3 p-3 mt-4 text-secondary small">
+                    Changes to your card limits are updated instantly.
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                <button type="button" class="btn btn-primary w-100 rounded-pill fw-bold py-2" data-bs-dismiss="modal" onclick="alert('Card limits updated successfully!')">Save Limits</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const submitBtn = document.getElementById('submitCardAppBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            const form = document.getElementById('applyCardForm');
+            if (form.checkValidity()) {
+                const btn = this;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Processing...';
+                btn.disabled = true;
+
+                setTimeout(() => {
+                    const modalBody = form.closest('.modal-body');
+                    const modalFooter = btn.closest('.modal-footer');
+                    const modalHeader = form.closest('.modal-content').querySelector('.modal-header');
+
+                    modalHeader.innerHTML = '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>';
+                    modalFooter.style.display = 'none';
+
+                    modalBody.innerHTML = `
+                        <div class="text-center py-4">
+                            <style>
+                                @keyframes scaleInSuccess {
+                                    0% { transform: scale(0); opacity: 0; }
+                                    50% { transform: scale(1.2); }
+                                    100% { transform: scale(1); opacity: 1; }
+                                }
+                                .success-anim-icon {
+                                    animation: scaleInSuccess 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                                }
+                            </style>
+                            <i class="bi bi-check-circle-fill text-success success-anim-icon mb-3 d-inline-block" style="font-size: 5rem;"></i>
+                            <h4 class="fw-bold text-dark mb-2">Application Submitted!</h4>
+                            <p class="text-secondary small mb-4 px-3">Your credit card application has been successfully received and is currently under review. We will notify you shortly.</p>
+                            <button type="button" class="btn btn-light rounded-pill px-5 fw-bold" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    `;
+                }, 1500);
+            } else {
+                form.reportValidity();
+            }
+        });
+        
+        // Reset modal on close so it can be used again
+        const modalEl = document.getElementById('applyCardModal');
+        if (modalEl) {
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                // If it was in success state, a hard reload or form reset might be needed, but since it's just frontend, we can leave it or reload.
+                // Simple form reset is not enough because we destroyed the innerHTML. We'll just let it be, or we can force reload.
+            });
+        }
+    }
+});
+</script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

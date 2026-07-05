@@ -20,12 +20,12 @@
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
         <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <img src="../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+            <img src="../NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
         </div>
         
         <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
             
-        <a href="dashboard.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;">
+        <a href="../dashboard/dashboard.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;">
             <i class="bi bi-grid fs-5"></i>
             <span class="fw-medium">System Dashboard</span>
         </a>
@@ -85,14 +85,14 @@
             <span class="fw-medium">Content Management</span>
         </a>
     
-        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="../dashboard/profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-person-badge fs-5"></i>
             <span class="fw-medium">Profile</span>
         </a>
     
         </div>
         <div class="p-3 border-top border-secondary border-opacity-25">
-            <a href="../login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
                 <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
                 <span class="fw-medium text-danger">Logout</span>
             </a>

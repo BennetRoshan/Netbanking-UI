@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loans - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/main.css" rel="stylesheet">
+    
+    <style>
+        .nav-tabs-custom .nav-link {
+            color: #6c757d;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 0.5rem 1rem 1rem 1rem;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+        .nav-tabs-custom .nav-link.active {
+            color: #0d6efd;
+            border-bottom-color: #0d6efd;
+            background: transparent;
+            position: relative;
+        }
+        .nav-tabs-custom .nav-link.active::before {
+            content: '';
+            position: absolute;
+            top: 40%;
+            left: -5px;
+            width: 8px;
+            height: 8px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .offer-card {
+            transition: all 0.2s;
+        }
+        .offer-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .loan-block {
+            border: 1px solid #e9ecef;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .loan-block:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="../index.html">
+                    <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/dashboard.html">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/payments.html">
+                      <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="loans.html" style="background-color: #007bff;">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../cards/cards.html">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/profile.html">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../support/support.html">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../auth/login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="../dashboard/dashboard.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Customer Portal</a> / <a href="loans.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Loans</a> / <span class="text-dark">Active Loans</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative dropdown" style="cursor: pointer;">
+                          <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                          </div>
+                          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                              <li class="p-3 border-bottom bg-light">
+                                  <h6 class="mb-0 fw-bold">Notifications</h6>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-check-circle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Transfer Successful</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">₹5,000 sent to Rahul.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../info/kyc.html">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-exclamation-triangle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Action Required: KYC</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Please update your PAN details.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex"><i class="bi bi-gift"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">New Offer Available</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Get 5% cashback on groceries.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4" style="cursor:pointer;" onclick="window.location.href='../dashboard/profile.html'">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Arjun Mehta</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Customer ID: 50010</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5">
+                <!-- Greeting -->
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-1">Loans</h2>
+                    <p class="text-secondary">Manage your existing loans and explore new loan options.</p>
+                </div>
+                
+                <!-- Nav Tabs -->
+                <ul class="nav nav-tabs-custom mb-4 border-bottom border-secondary-subtle">
+                      <li class="nav-item ps-3">
+                          <a class="nav-link active" href="loans.html">Overview</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="loan-tracking.html">My Loans</a>
+                      </li>
+                      <li class="nav-item me-5">
+                          <a class="nav-link" href="new-loan.html">Apply for Loan</a>
+                      </li>
+                      <li class="nav-item ms-5 ps-5">
+                          <a class="nav-link" href="loan-eligibility.html">Loan Offers</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="loans-emi.html">Emi Calculator</a>
+                      </li>
+                  </ul>
+                
+                <!-- Summary Cards -->
+                <div class="row g-3 mb-4">
+                    <!-- Total Active Loans -->
+                    <div class="col-md-3">
+                        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-primary-subtle text-primary d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-wallet2 fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-semibold d-block lh-sm mb-1">Total Active<br>Loans</small>
+                                <h5 class="fw-bold text-dark mb-0">&#8377; 3,60,000.00</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">2 Loans</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total Outstanding -->
+                    <div class="col-md-3">
+                        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-warning-subtle text-warning d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-file-earmark-text fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-semibold d-block lh-sm mb-1">Total<br>Outstanding</small>
+                                <h5 class="fw-bold text-dark mb-0">&#8377; 3,05,450.00</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">2 Loans</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total EMI -->
+                    <div class="col-md-3">
+                        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-success-subtle text-success d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-calendar fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-semibold d-block lh-sm mb-1">Total<br>EMI (Monthly)</small>
+                                <h5 class="fw-bold text-dark mb-0">&#8377; 15,750.00</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">2 EMIs</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total Interest -->
+                    <div class="col-md-3">
+                        <div class="card border-0 rounded-4 shadow-sm h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-info-subtle text-info d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-percent fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-semibold d-block lh-sm mb-1">Total Interest<br>Payable</small>
+                                <h5 class="fw-bold text-dark mb-0">&#8377; 54,550.00</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">All Loans</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lower Section -->
+                <div class="row g-4">
+                    
+                    <!-- Left Column -->
+                    <div class="col-xl-8 d-flex flex-column gap-4">
+                        
+                        <!-- My Active Loans -->
+                        <div class="card border-0 rounded-4 shadow-sm p-4">
+                            <h5 class="fw-bold mb-4 text-dark">My Active Loans</h5>
+                            
+                            <!-- Home Loan -->
+                            <div class="loan-block bg-white border" onclick="window.location.href='loan-tracking.html'" style="cursor: pointer;">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 d-flex gap-3">
+                                        <div class="bg-primary-subtle rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-house text-primary fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">Home Loan</h6>
+                                            <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">Loan ID: HLN12345678</small>
+                                            <small class="text-success d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> Active</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">Loan Amount</small>
+                                        <h6 class="fw-bold text-dark mb-0">&#8377; 25,00,000.00</h6>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">Overview</small>
+                                        <h6 class="fw-bold text-dark mb-0">&#8377; 22,45,350.00</h6>
+                                    </div>
+                                    <div class="col-md-2 text-md-end">
+                                        <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">EMI (Monthly)</small>
+                                        <h6 class="fw-bold text-dark mb-0">&#8377; 12,450.00</h6>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-top border-light">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-muted" style="font-size: 0.75rem;">Tenure Completed: 45%</small>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Start date: 01 Jan 2023 - &#8377;01 Jan 2033</small>
+                                    </div>
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 45%;" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Car Loan -->
+                            <div class="loan-block bg-white border" onclick="window.location.href='loan-tracking.html'" style="cursor: pointer;">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 d-flex gap-3">
+                                        <div class="bg-warning-subtle rounded-circle d-flex justify-content-center align-items-center flex-shrink-0" style="width: 50px; height: 50px;">
+                                            <i class="bi bi-car-front text-warning fs-4"></i>
+                                        </div>
+                                        <div>
+                                            <h6 class="fw-bold text-dark mb-1">Car Loan</h6>
+                                            <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">Loan ID: HLN12345679</small>
+                                            <small class="text-success d-flex align-items-center gap-1" style="font-size: 0.7rem;"><i class="bi bi-circle-fill" style="font-size: 0.4rem;"></i> Active</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">Loan Amount</small>
+                                        <h6 class="fw-bold text-dark mb-0">&#8377; 8,00,000.00</h6>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">Overview</small>
+                                        <h6 class="fw-bold text-dark mb-0">&#8377; 6,60&#8377;50.00</h6>
+                                    </div>
+                                    <div class="col-md-2 text-md-end">
+                                        <small class="text-secondary d-block mb-1" style="font-size: 0.75rem;">EMI (Monthly)</small>
+                                        <h6 class="fw-bold text-dark mb-0">&#8377; 3,300.00</h6>
+                                    </div>
+                                </div>
+                                <div class="mt-4 pt-3 border-top border-light">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <small class="text-muted" style="font-size: 0.75rem;">Tenure Completed: 30%</small>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Start date: 15 June 2023 - &#8377;15 Jan 2028</small>
+                                    </div>
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Transactions -->
+                        <div class="card border-0 rounded-4 shadow-sm p-4">
+                            <h5 class="fw-bold mb-4 pb-2 border-bottom text-dark">Recent Loan Transactions</h5>
+                            <div class="table-responsive">
+                                <table class="table table-borderless align-middle mb-0">
+                                    <thead>
+                                        <tr class="text-dark small border-bottom">
+                                            <th class="pb-3 fw-bold">Date</th>
+                                            <th class="pb-3 fw-bold">Description</th>
+                                            <th class="pb-3 fw-bold">Loan Type</th>
+                                            <th class="pb-3 fw-bold">Amount</th>
+                                            <th class="pb-3 fw-bold">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-bottom">
+                                            <td class="py-3 text-secondary small">01 May 2025</td>
+                                            <td class="py-3 text-dark small fw-medium">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="bg-primary-subtle text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px;">
+                                                        <i class="bi bi-arrow-up-right" style="font-size: 0.7rem;"></i>
+                                                    </div>
+                                                    EMI Payment
+                                                </div>
+                                            </td>
+                                            <td class="py-3 text-secondary small">Home Loan</td>
+                                            <td class="py-3 text-danger fw-bold small">-&#8377;12,450.00</td>
+                                            <td class="py-3 small"><span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Success</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 text-secondary small">01 Apr 2025</td>
+                                            <td class="py-3 text-dark small fw-medium">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="bg-primary-subtle text-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 24px; height: 24px;">
+                                                        <i class="bi bi-arrow-up-right" style="font-size: 0.7rem;"></i>
+                                                    </div>
+                                                    EMI Payment
+                                                </div>
+                                            </td>
+                                            <td class="py-3 text-secondary small">Car Loan</td>
+                                            <td class="py-3 text-danger fw-bold small">-&#8377;3,300.00</td>
+                                            <td class="py-3 small"><span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Success</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Right Column -->
+                    <div class="col-xl-4 d-flex flex-column gap-4">
+                        
+                        <!-- Top Loan Offers -->
+                        <div>
+                            <h6 class="fw-bold mb-3 text-dark">Top Loan Offers for You</h6>
+
+
+                            <!-- Personal Loan -->
+                            <div class="card offer-card bg-white border rounded-4 p-3 mb-3 d-flex flex-row align-items-center cursor-pointer">
+                                <div class="bg-primary-subtle rounded p-2 me-3 text-primary">
+                                    <i class="bi bi-wallet2 fs-5"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold text-dark mb-0 fs-6">Personal Loan</h6>
+                                    <small class="text-secondary" style="font-size: 0.7rem;">Interest Rate : 10.49% p.a.</small>
+                                </div>
+                                <i class="bi bi-chevron-right text-dark"></i>
+                            </div>
+                            
+                            <!-- Business Loan -->
+                            <div class="card offer-card bg-white border rounded-4 p-3 mb-3 d-flex flex-row align-items-center cursor-pointer">
+                                <div class="bg-success-subtle rounded p-2 me-3 text-success">
+                                    <i class="bi bi-briefcase fs-5"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold text-dark mb-0 fs-6">Business Loan</h6>
+                                    <small class="text-secondary" style="font-size: 0.7rem;">Interest Rate : 11.25% p.a.</small>
+                                </div>
+                                <i class="bi bi-chevron-right text-dark"></i>
+                            </div>
+                            
+                            <!-- Loan Against Property -->
+                            <div class="card offer-card bg-white border rounded-4 p-3 mb-3 d-flex flex-row align-items-center cursor-pointer">
+                                <div class="bg-danger-subtle rounded p-2 me-3 text-danger">
+                                    <i class="bi bi-house fs-5"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold text-dark mb-0 fs-6">Loan Against Private Property</h6>
+                                    <small class="text-secondary" style="font-size: 0.7rem;">Interest Rate : 8.75% p.a.</small>
+                                </div>
+                                <i class="bi bi-chevron-right text-dark"></i>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="../js/nexa.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

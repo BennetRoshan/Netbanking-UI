@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/main.css" rel="stylesheet">
+    
+    <style>
+        .support-card {
+            background: white;
+            border-radius: 0.75rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-search-card {
+            position: relative;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .hero-shield-icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 6rem;
+            color: #f1f5f9;
+            line-height: 1;
+            z-index: 0;
+        }
+        
+        .search-input-group {
+            position: relative;
+            max-width: 500px;
+            z-index: 1;
+        }
+        .search-input-group .bi-search {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+        .search-input-group .form-control {
+            padding-left: 2.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        .search-input-group .form-control:focus {
+            border-color: #cbd5e1;
+            box-shadow: 0 0 0 0.2rem rgba(203, 213, 225, 0.25);
+        }
+        .btn-search {
+            background-color: #e2e8f0;
+            color: #1e293b;
+            font-weight: 600;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-search:hover {
+            background-color: #cbd5e1;
+        }
+        
+        .topics-carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding-bottom: 0.5rem;
+            scrollbar-width: none; /* Firefox */
+        }
+        .topics-carousel::-webkit-scrollbar {
+            display: none; /* Safari and Chrome */
+        }
+        
+        .topic-card {
+            min-width: 180px;
+            background: white;
+            border-radius: 0.75rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .topic-card:hover {
+            border-color: #cbd5e1;
+        }
+        .topic-icon-wrapper {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #475569;
+            margin-bottom: 1rem;
+        }
+        
+        .article-row {
+            border: 1px solid #f1f5f9;
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .article-row:hover {
+            border-color: #cbd5e1;
+        }
+        .article-category {
+            font-size: 0.65rem;
+            background-color: #f1f5f9;
+            color: #64748b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+        
+        .quick-link-row {
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .quick-link-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .quick-link-row:first-child {
+            padding-top: 0;
+        }
+        .quick-link-row:hover .quick-link-text {
+            color: #007bff;
+        }
+        .quick-link-text {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e293b;
+            flex-grow: 1;
+            transition: color 0.2s;
+        }
+        
+        .contact-btn {
+            background-color: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 0.75rem;
+            width: 100%;
+        }
+        .contact-btn:last-child {
+            margin-bottom: 0;
+        }
+        .contact-btn:hover {
+            background-color: #f1f5f9;
+        }
+        
+    </style>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="../index.html">
+                    <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/dashboard.html">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/payments.html">
+                      <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../loans/loans.html">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../cards/cards.html">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/profile.html">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="support.html" style="background-color: #007bff;">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../auth/login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="../dashboard/dashboard.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Customer Portal</a> / <a href="support.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Support</a> / <span class="text-dark">Help Center</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative dropdown" style="cursor: pointer;">
+                          <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                          </div>
+                          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                              <li class="p-3 border-bottom bg-light">
+                                  <h6 class="mb-0 fw-bold">Notifications</h6>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-check-circle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Transfer Successful</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">?5,000 sent to Rahul.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../info/kyc.html">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-exclamation-triangle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Action Required: KYC</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Please update your PAN details.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex"><i class="bi bi-gift"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">New Offer Available</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Get 5% cashback on groceries.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4" style="cursor:pointer;" onclick="window.location.href='../dashboard/profile.html'">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Arjun Mehta</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Customer ID: 50010</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5">
+                <!-- Greeting -->
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-1">Help Center</h2>
+                    <p class="text-secondary">Find answers, get support and manage your banking better.</p>
+                </div>
+                
+                <!-- Main Grid Layout -->
+                <div class="row g-4">
+                    
+                    <!-- Left Column -->
+                    <div class="col-xl-8">
+                        
+                        <!-- Hero Search Card -->
+                        <div class="support-card hero-search-card">
+                            <i class="bi bi-shield-check hero-shield-icon"></i>
+                            <div class="position-relative z-1">
+                                <h4 class="fw-bold text-dark mb-2">Hi Arjun, how can we help you?</h4>
+                                <p class="text-secondary mb-4" style="font-size: 0.9rem;">Search our help articles or browse topics to find the information you need.</p>
+                                
+                                <div class="d-flex gap-3 search-input-group">
+                                    <div class="flex-grow-1 position-relative">
+                                        <i class="bi bi-search"></i>
+                                        <input type="text" class="form-control" placeholder="Search for help articles...">
+                                    </div>
+                                    <button class="btn-search" onclick="window.location.href='faqs.html'">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Browse by Topics -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                            <h6 class="fw-bold text-dark mb-0">Browse by Topics</h6>
+                        </div>
+                        
+                        <div class="topics-carousel">
+                            <div class="topic-card" style="cursor: pointer;" onclick="window.location.href='support-accounts.html'">
+                                  <div class="topic-icon-wrapper"><i class="bi bi-file-earmark-text"></i></div>
+                                  <div class="fw-bold text-dark" style="font-size: 0.85rem;">Accounts</div>
+                                <div class="text-secondary flex-grow-1" style="font-size: 0.7rem; margin-top: 0.4rem; margin-bottom: 1rem;">Manage accounts, balances and statements</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.7rem;">View Articles &rarr;</div>
+                            </div>
+                            <div class="topic-card" style="cursor: pointer;" onclick="window.location.href='support-payments.html'">
+                                  <div class="topic-icon-wrapper"><i class="bi bi-wallet2"></i></div>
+                                  <div class="fw-bold text-dark" style="font-size: 0.85rem;">Payments</div>
+                                <div class="text-secondary flex-grow-1" style="font-size: 0.7rem; margin-top: 0.4rem; margin-bottom: 1rem;">Bill payments, recharges and other payments</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.7rem;">View Articles &rarr;</div>
+                            </div>
+                            <div class="topic-card" style="cursor: pointer;" onclick="window.location.href='support-fund-transfer.html'">
+                                  <div class="topic-icon-wrapper"><i class="bi bi-arrow-up-right-square"></i></div>
+                                  <div class="fw-bold text-dark" style="font-size: 0.85rem;">Fund Transfer</div>
+                                <div class="text-secondary flex-grow-1" style="font-size: 0.7rem; margin-top: 0.4rem; margin-bottom: 1rem;">IMPS, NEFT, RTGS and transfer queries</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.7rem;">View Articles &rarr;</div>
+                            </div>
+                            <div class="topic-card" style="cursor: pointer;" onclick="window.location.href='support-cards.html'">
+                                  <div class="topic-icon-wrapper"><i class="bi bi-credit-card"></i></div>
+                                  <div class="fw-bold text-dark" style="font-size: 0.85rem;">Cards</div>
+                                <div class="text-secondary flex-grow-1" style="font-size: 0.7rem; margin-top: 0.4rem; margin-bottom: 1rem;">Card activation, usage, limits and more</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.7rem;">View Articles &rarr;</div>
+                            </div>
+                            <div class="topic-card" style="cursor: pointer;" onclick="window.location.href='support-loans.html'">
+                                  <div class="topic-icon-wrapper"><i class="bi bi-currency-rupee"></i></div>
+                                  <div class="fw-bold text-dark" style="font-size: 0.85rem;">Loans</div>
+                                <div class="text-secondary flex-grow-1" style="font-size: 0.7rem; margin-top: 0.4rem; margin-bottom: 1rem;">Loan applications, EMI, foreclosure and more</div>
+                                <div class="fw-bold text-dark" style="font-size: 0.7rem;">View Articles &rarr;</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Popular Articles -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 mt-5">
+                            <h6 class="fw-bold text-dark mb-0">Loans Help FAQ's</h6>
+                        </div>
+                        
+                        <div>
+
+<div class="accordion" id="loansAccordion">
+        <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+            <h2 class="accordion-header">
+                <button class="accordion-button  fw-medium text-dark bg-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseloans0">
+                    How can I check my loan eligibility?
+                </button>
+            </h2>
+            <div id="collapseloans0" class="accordion-collapse collapse show" data-bs-parent="#loansAccordion">
+                <div class="accordion-body text-secondary small bg-white rounded-bottom border-top">
+                    Visit the Loans section and click 'Check Eligibility' to view your pre-approved offers.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-medium text-dark bg-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseloans1">
+                    How is my EMI calculated?
+                </button>
+            </h2>
+            <div id="collapseloans1" class="accordion-collapse collapse " data-bs-parent="#loansAccordion">
+                <div class="accordion-body text-secondary small bg-white rounded-bottom border-top">
+                    EMI is calculated based on the principal amount, interest rate, and loan tenure using a standard formula.
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item border-0 mb-3 rounded shadow-sm">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-medium text-dark bg-white rounded" type="button" data-bs-toggle="collapse" data-bs-target="#collapseloans2">
+                    Can I pre-close my personal loan?
+                </button>
+            </h2>
+            <div id="collapseloans2" class="accordion-collapse collapse " data-bs-parent="#loansAccordion">
+                <div class="accordion-body text-secondary small bg-white rounded-bottom border-top">
+                    Yes, you can pre-close your loan after 12 EMIs. Pre-closure charges may apply.
+                </div>
+            </div>
+        </div></div></div>
+
+
+                        </div>
+                        
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div class="col-xl-4">
+                        
+                        <!-- Support Image Card -->
+<div class="support-card p-0 mb-4 overflow-hidden rounded-4 shadow-sm border-0 position-relative" style="height: 250px;">
+                            <img src="../assets/tech_support_person.png" alt="Tech Support" class="w-100 h-100 object-fit-cover position-absolute top-0 start-0">
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                                <h6 class="fw-bold text-white mb-0">We are here to help</h6>
+                            </div>
+                        </div>
+
+                        <!-- Net Banking Advertisement Card -->
+                        <div class="support-card p-0 mb-4 overflow-hidden rounded-4 shadow-sm border-0 position-relative" style="height: 350px;">
+                            <img src="../assets/net_banking_ad.png" alt="Net Banking Advertisement" class="w-100 h-100 object-fit-cover position-absolute top-0 start-0">
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3 text-center" style="background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);">
+                                <h5 class="fw-bold text-white mb-1">Update Your KYC</h5>
+                                <p class="text-white-50 small mb-0">Claim your dividends today and avoid transfers.</p>
+                            </div>
+                        </div>
+
+                        <!-- Still Need Help Card -->
+                        <div class="support-card p-4">
+                            <h6 class="fw-bold text-dark mb-1">Still Need Help?</h6>
+                            <p class="text-secondary mb-4" style="font-size: 0.8rem;">Our support team is here for you.</p>
+                            
+                            <button class="contact-btn border-0" onclick="document.getElementById('inlineChatBar').classList.toggle('d-none')">
+                                <i class="bi bi-chat-dots fs-4 text-secondary"></i>
+                                <div>
+                                    <div class="fw-bold text-dark" style="font-size: 0.85rem;">Chat with Us</div>
+                                    <div class="text-secondary" style="font-size: 0.7rem;">Available 24/7</div>
+                                </div>
+                            </button>
+                            <div id="inlineChatBar" class="d-none mt-2 p-2 bg-light rounded-3" style="transition: all 0.3s;">
+                                <input type="text" class="form-control form-control-sm border-0 shadow-sm mb-2 p-2" placeholder="Type message and press Enter..." onkeypress="if(event.key === 'Enter') { document.getElementById('inlineChatReply').classList.remove('d-none'); this.value=''; }">
+                                <div id="inlineChatReply" class="d-none text-success small fw-bold"><i class="bi bi-check-circle me-1"></i>Please standby... we will get back to you shortly.</div>
+                            </div>
+                            
+                            <button class="contact-btn border-0" id="callUsBtn" onclick="simulateCall(this)">
+                                <i class="bi bi-telephone fs-4 text-secondary"></i>
+                                <div>
+                                    <div class="fw-bold text-dark" style="font-size: 0.85rem;">Call Us</div>
+                                    <div class="text-secondary" style="font-size: 0.7rem;">1800 123 4567</div>
+                                </div>
+                            </button>
+                            <script>
+                                function simulateCall(btn) {
+                                    if (btn.disabled) return;
+                                    btn.disabled = true;
+                                    
+                                    const originalHTML = btn.innerHTML;
+                                    
+                                    // Change UI to Calling
+                                    btn.innerHTML = `
+                                        <i class="bi bi-telephone-outbound fs-4 text-primary" style="animation: pulse 1s infinite;"></i>
+                                        <div>
+                                            <div class="fw-bold text-primary" style="font-size: 0.85rem;">Calling...</div>
+                                            <div class="text-secondary" style="font-size: 0.7rem;">Ringing</div>
+                                        </div>
+                                    `;
+                                    
+                                    // Web Audio API Ringtone (US standard 440Hz + 480Hz)
+                                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                                    const audioCtx = new AudioContext();
+                                    
+                                    function playRing(time, duration) {
+                                        const osc1 = audioCtx.createOscillator();
+                                        const osc2 = audioCtx.createOscillator();
+                                        const gainNode = audioCtx.createGain();
+                                        osc1.frequency.value = 440;
+                                        osc2.frequency.value = 480;
+                                        osc1.connect(gainNode);
+                                        osc2.connect(gainNode);
+                                        gainNode.connect(audioCtx.destination);
+                                        
+                                        // Fade in and out to avoid clicks
+                                        gainNode.gain.setValueAtTime(0, time);
+                                        gainNode.gain.linearRampToValueAtTime(0.1, time + 0.1);
+                                        gainNode.gain.setValueAtTime(0.1, time + duration - 0.1);
+                                        gainNode.gain.linearRampToValueAtTime(0, time + duration);
+                                        
+                                        osc1.start(time);
+                                        osc2.start(time);
+                                        osc1.stop(time + duration);
+                                        osc2.stop(time + duration);
+                                    }
+                                    
+                                    // Play two rings (2 seconds ring, 1 second pause)
+                                    const now = audioCtx.currentTime;
+                                    playRing(now, 2.0);
+                                    playRing(now + 3.0, 2.0);
+                                    
+                                    // Answer after 5.5 seconds
+                                    setTimeout(() => {
+                                        if(audioCtx.state === 'running') {
+                                            audioCtx.close();
+                                        }
+                                        
+                                        // Change UI
+                                        btn.innerHTML = `
+                                            <i class="bi bi-person-slash fs-4 text-danger"></i>
+                                            <div>
+                                                <div class="fw-bold text-danger" style="font-size: 0.85rem;">Call Answered</div>
+                                                <div class="text-secondary" style="font-size: 0.7rem;">Automated Voice</div>
+                                            </div>
+                                        `;
+                                        
+                                        // Play Voice Message
+                                        const msg = new SpeechSynthesisUtterance('tech support is not available please try again later');
+                                        msg.rate = 0.9; // slightly slower for automated voice effect
+                                        window.speechSynthesis.speak(msg);
+                                        
+                                        msg.onend = () => {
+                                            setTimeout(() => {
+                                                btn.innerHTML = originalHTML;
+                                                btn.disabled = false;
+                                            }, 1500);
+                                        };
+                                    }, 5500);
+                                }
+                            </script>
+                            
+                            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=nexusbanksupport@gmail.com" target="_blank" class="text-decoration-none">
+                                <button class="contact-btn border-0 w-100 text-start" style="padding-left: 1.2rem;">
+                                    <i class="bi bi-envelope fs-4 text-secondary"></i>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size: 0.85rem;">Email Us</div>
+                                        <div class="text-secondary" style="font-size: 0.7rem;">nexusbanksupport@gmail.com</div>
+                                    </div>
+                                </button>
+                            </a>
+                            
+                            <a href="https://www.google.com/maps/search/?api=1&query=SmartCliff+Learning+Solutions+LLP,+2nd+Floor,+103-107,+Thiru+Venkata+Swamy+St,+R.S.+Puram,+Coimbatore,+Tamil+Nadu+641002" target="_blank" class="text-decoration-none">
+                                <button class="contact-btn border-0 w-100 text-start" style="padding-left: 1.2rem;">
+                                    <i class="bi bi-house-door fs-4 text-secondary"></i>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size: 0.85rem;">Visit Branch</div>
+                                        <div class="text-secondary" style="font-size: 0.7rem;">2nd Floor, 103-107, Thiru Venkata Swamy St, R.S. Puram, Coimbatore, Tamil Nadu 641002</div>
+                                    </div>
+                                </button>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="../js/nexa.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

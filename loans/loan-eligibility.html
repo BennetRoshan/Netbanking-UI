@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Eligibility - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/main.css" rel="stylesheet">
+    
+    <style>
+        .nav-pills-custom .nav-link {
+            color: #6c757d;
+            border-radius: 50rem;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+        .nav-pills-custom .nav-link.active {
+            background-color: #f1f3f5;
+            color: #212529;
+            font-weight: 600;
+        }
+        
+        .eligibility-summary-card {
+            border: 1px solid #e9ecef;
+            transition: all 0.2s;
+        }
+        .eligibility-summary-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+        .checklist-icon {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        /* Custom Range Slider */
+        .custom-range::-webkit-slider-thumb {
+            background: #495057;
+        }
+        .custom-range::-moz-range-thumb {
+            background: #495057;
+        }
+        .custom-range::-ms-thumb {
+            background: #495057;
+        }
+    
+          .nav-tabs-custom .nav-link {
+              color: #6c757d;
+              border: none;
+              border-bottom: 3px solid transparent;
+              padding: 0.5rem 1rem 1rem 1rem;
+              margin-right: 1.5rem;
+              font-weight: 500;
+          }
+          .nav-tabs-custom .nav-link.active {
+              color: #0d6efd;
+              border-bottom-color: #0d6efd;
+              background: transparent;
+              position: relative;
+          }
+          .nav-tabs-custom .nav-link.active::before {
+              content: '';
+              position: absolute;
+              top: 40%;
+              left: -5px;
+              width: 8px;
+              height: 8px;
+              background-color: #0d6efd;
+              border-radius: 50%;
+              transform: translateY(-50%);
+          }
+          
+    </style>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="../index.html">
+                    <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/dashboard.html">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../transfers/payments.html">
+                      <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="loans.html" style="background-color: #007bff;">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../cards/cards.html">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/profile.html">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../support/support.html">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../auth/login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="../dashboard/dashboard.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Customer Portal</a> / <a href="loans.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Loans</a> / <span class="text-dark">Eligibility Check</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative dropdown" style="cursor: pointer;">
+                          <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                          </div>
+                          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                              <li class="p-3 border-bottom bg-light">
+                                  <h6 class="mb-0 fw-bold">Notifications</h6>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-check-circle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Transfer Successful</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Ã¢â€šÂ¹5,000 sent to Rahul.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../info/kyc.html">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-exclamation-triangle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Action Required: KYC</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Please update your PAN details.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex"><i class="bi bi-gift"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">New Offer Available</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Get 5% cashback on groceries.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4" style="cursor:pointer;" onclick="window.location.href='../dashboard/profile.html'">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Arjun Mehta</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Customer ID: 50010</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5">
+                <!-- Greeting -->
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-1">Loan Eligibility</h2>
+                    <p class="text-secondary">Check your loan eligibility and preview your sanction amount.</p>
+                </div>
+
+                  <!-- Nav Tabs -->
+                  <ul class="nav nav-tabs-custom mb-4 border-bottom border-secondary-subtle">
+                      <li class="nav-item ps-3">
+                          <a class="nav-link " href="loans.html">Overview</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link " href="loan-tracking.html">My Loans</a>
+                      </li>
+                      <li class="nav-item me-5">
+                          <a class="nav-link " href="new-loan.html">Apply for Loan</a>
+                      </li>
+                      <li class="nav-item ms-5 ps-5">
+                          <a class="nav-link active" href="loan-eligibility.html">Loan Offers</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link " href="loans-emi.html">Emi Calculator</a>
+                      </li>
+                  </ul>
+                
+                <!-- Pill Navigation -->
+                <ul class="nav nav-pills-custom mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../javascript:void(0)" onclick="alert('This section is coming soon!')">Check Eligibility</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../javascript:void(0)" onclick="alert('This section is coming soon!')">Eligibility History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../javascript:void(0)" onclick="alert('This section is coming soon!')">Rate Summary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../javascript:void(0)" onclick="alert('This section is coming soon!')">EMI Preview</a>
+                    </li>
+                </ul>
+                
+                <!-- Summary Cards -->
+                <div class="row g-3 mb-4">
+                    <!-- CIBIL Score -->
+                    <div class="col-md-3">
+                        <div class="card eligibility-summary-card bg-white rounded-4 h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-primary-subtle text-primary d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-speedometer2 fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-medium d-block mb-1" style="font-size: 0.75rem;">CIBIL Score</small>
+                                <h5 class="fw-bold text-dark mb-0">780</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">Good</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Monthly Income -->
+                    <div class="col-md-3">
+                        <div class="card eligibility-summary-card bg-white rounded-4 h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-warning-subtle text-warning d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-wallet2 fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-medium d-block mb-1" style="font-size: 0.75rem;">Monthly Income</small>
+                                <h5 class="fw-bold text-dark mb-0">&#8377; 55,000</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">Verified</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Existing EMI -->
+                    <div class="col-md-3">
+                        <div class="card eligibility-summary-card bg-white rounded-4 h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-success-subtle text-success d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-file-earmark-text fs-5"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-medium d-block mb-1" style="font-size: 0.75rem;">Existing EMI</small>
+                                <h5 class="fw-bold text-dark mb-0">&#8377; 0</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">0% DTI</small>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    
+                    <!-- Eligible Type -->
+                    <div class="col-md-3">
+                        <div class="card eligibility-summary-card bg-white rounded-4 h-100 p-4 d-flex flex-row align-items-center gap-3">
+                            <div class="icon-box rounded bg-info-subtle text-info d-flex justify-content-center align-items-center flex-shrink-0" style="width: 45px; height: 45px;">
+                                <i class="bi bi-house fs-5" id="eligibleTypeIcon"></i>
+                            </div>
+                            <div>
+                                <small class="text-secondary fw-medium d-block mb-1" style="font-size: 0.75rem;">Eligible Type</small>
+                                <h5 class="fw-bold text-dark mb-0" id="eligibleTypeDisplay">Home Loan</h5>
+                                <small class="text-muted" style="font-size: 0.7rem;">Selected</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Layout -->
+
+
+                <div class="row g-4">
+                    
+                    <!-- Left Column (Eligibility Form) -->
+                    <div class="col-xl-8">
+                        <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5 bg-white h-100">
+                            <h6 class="fw-bold text-dark mb-4 pb-2">Check Loan Eligibility</h6>
+                            
+                            <!-- Form Row -->
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-dark small mb-3">Loan Type</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-house position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary" id="loanTypeIcon"></i>
+                                        <select id="loanTypeSelect" class="form-select bg-light border-0 ps-5 py-3 text-secondary" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                                            <option value="Home Loan" selected>Home Loan</option>
+                                            <option value="Car Loan">Car Loan</option>
+                                            <option value="Personal Loan">Personal Loan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold text-dark small mb-3">Desired Amount</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-cash position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                                        <input type="text" id="desiredAmountInput" class="form-control bg-light border-0 ps-5 py-3 text-secondary" value="1000000" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Down Payment (Hidden by default) -->
+                            <div class="row g-4 mb-4 d-none" id="downPaymentContainer">
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold text-dark small mb-3">Down Payment Amount</label>
+                                    <div class="position-relative">
+                                        <i class="bi bi-cash-stack position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                                        <input type="text" id="downPaymentInput" class="form-control bg-light border-0 ps-5 py-3 text-secondary" value="200000" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tenure Selector -->
+                            <div class="mb-5">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+
+
+                                    <label class="form-label fw-bold text-dark small mb-0">Tenure Selector</label>
+                                    <span class="fw-bold text-dark small" id="tenureDisplay">120 months</span>
+                                </div>
+                                <input type="range" class="form-range custom-range" min="12" max="360" value="120" id="tenureRange">
+                            </div>
+                            
+                            <!-- Checklist -->
+                            <div class="mb-5 px-1" id="eligibilityChecklist">
+                                <div class="checklist-item d-flex align-items-center mb-2">
+                                    <i class="bi bi-circle text-secondary me-3 fs-5" id="check-icon-1"></i>
+                                    <span class="text-secondary small fw-medium" id="check-text-1">Age within eligible range</span>
+                                </div>
+                                <div class="checklist-item d-flex align-items-center mb-2">
+                                    <i class="bi bi-circle text-secondary me-3 fs-5" id="check-icon-2"></i>
+                                    <span class="text-secondary small fw-medium" id="check-text-2">Income meets minimum threshold</span>
+                                </div>
+                                <div class="checklist-item d-flex align-items-center mb-2">
+                                    <i class="bi bi-circle text-secondary me-3 fs-5" id="check-icon-3"></i>
+                                    <span class="text-secondary small fw-medium" id="check-text-3">CIBIL above 650</span>
+                                </div>
+                                <div class="checklist-item d-flex align-items-center mb-2">
+                                    <i class="bi bi-circle text-secondary me-3 fs-5" id="check-icon-4"></i>
+                                    <span class="text-secondary small fw-medium" id="check-text-4">Debt-to-Income within 50% cap</span>
+                                </div>
+                                <div class="checklist-item d-flex align-items-center mb-0">
+                                    <i class="bi bi-circle text-secondary me-3 fs-5" id="check-icon-5"></i>
+                                    <span class="text-secondary small fw-medium" id="check-text-5">No active-loan limit breach</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Button -->
+                            <button id="checkEligibilityBtn" class="btn btn-dark-blue w-100 py-3 rounded-3 fw-bold mt-2">Check Eligibility &rarr;</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column (Results) -->
+                    <div class="col-xl-4 d-flex flex-column gap-4">
+                        
+                        <!-- Placeholder Card -->
+                        <div id="placeholderContainer" class="card border-0 rounded-4 shadow-sm p-4 p-md-5 bg-white h-100 d-flex flex-column justify-content-center align-items-center text-center">
+                            <div class="bg-light rounded-circle p-4 mb-4 text-secondary d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="bi bi-shield-check" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <h5 class="fw-bold text-dark mb-3">Ready to Check?</h5>
+                            <p class="text-muted small px-3">Enter your desired loan amount and tenure on the left, then click <b>Check Eligibility</b> to see if you qualify instantly.</p>
+                        </div>
+
+                        <!-- Results Container -->
+                        <div id="resultsContainer" class="d-none flex-column gap-4">
+                            <!-- Eligibility Result -->
+                            <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5 bg-white">
+                                <h6 class="fw-bold text-dark mb-4">Eligibility Result</h6>
+                                
+                                <span class="badge rounded-pill text-success fw-medium px-3 py-2 mb-4" style="background-color: #d1e7dd; width: fit-content;"><i class="bi bi-check-circle-fill me-1"></i> Eligible</span>
+                                
+                                <small class="text-secondary d-block mb-2" style="font-size: 0.75rem;">Max Sanctionable Amount</small>
+                                <h2 class="fw-bold text-dark mb-4" id="maxAmountDisplay">&#8377; 33,00,000</h2>
+                                
+                                <small class="text-muted" style="font-size: 0.7rem;">*Valid for current session</small>
+                            </div>
+                            
+                            <!-- Rate & EMI Preview -->
+                            <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5 bg-white">
+                                <h6 class="fw-bold text-dark mb-4 pb-2">Rate & EMI Preview</h6>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <small class="text-secondary">Interest Rate</small>
+                                    <span class="fw-bold text-dark small" id="interestRateDisplay">10.75% p.a.</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <small class="text-secondary">Estimated EMI</small>
+                                    <span class="fw-bold text-dark small" id="estimatedEmiDisplay">&#8377; 13,510 / monthly</span>
+                                </div>
+                                
+                                <p class="text-muted mb-4" style="font-size: 0.65rem; line-height: 1.4;">Estimated EMI is based on selected tenure and interest rate. Actual EMI may vary on approval.</p>
+                                
+                                <button onclick="window.location.href='new-loan.html'" class="btn btn-dark-blue w-100 py-3 rounded-3 fw-bold">Proceed to Apply &rarr;</button>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Interactive Calculator Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const loanTypeSelect = document.getElementById('loanTypeSelect');
+            const loanTypeIcon = document.getElementById('loanTypeIcon');
+            const desiredAmountInput = document.getElementById('desiredAmountInput');
+            const downPaymentContainer = document.getElementById('downPaymentContainer');
+            const downPaymentInput = document.getElementById('downPaymentInput');
+            const tenureRange = document.getElementById('tenureRange');
+            const tenureDisplay = document.getElementById('tenureDisplay');
+            
+            const maxAmountDisplay = document.getElementById('maxAmountDisplay');
+            const interestRateDisplay = document.getElementById('interestRateDisplay');
+            const estimatedEmiDisplay = document.getElementById('estimatedEmiDisplay');
+
+            // Formatter for Indian Rupees
+            const formatCurrency = (amount) => {
+                return new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    maximumFractionDigits: 0
+                }).format(amount);
+            };
+
+            // Rates mapping
+            const interestRates = {
+                'Home Loan': 8.50,
+                'Car Loan': 9.50,
+                'Personal Loan': 10.75
+            };
+            
+            const icons = {
+                'Home Loan': 'bi-house',
+                'Car Loan': 'bi-car-front',
+                'Personal Loan': 'bi-wallet2'
+            };
+
+            const calculateEMI = () => {
+                // Get raw values
+                const loanType = loanTypeSelect.value;
+                let amount = parseFloat(desiredAmountInput.value.replace(/[^\d.-]/g, '')) || 0;
+                let downPayment = 0;
+                
+                // Show/hide down payment
+                if (loanType === 'Car Loan') {
+                    downPaymentContainer.classList.remove('d-none');
+                    downPayment = parseFloat(downPaymentInput.value.replace(/[^\d.-]/g, '')) || 0;
+                } else {
+                    downPaymentContainer.classList.add('d-none');
+                }
+
+                const tenureMonths = parseInt(tenureRange.value);
+                
+                // Update UI Labels
+                tenureDisplay.innerText = tenureMonths + ' months';
+                
+                const annualRate = interestRates[loanType];
+                interestRateDisplay.innerText = annualRate.toFixed(2) + '% p.a.';
+                
+                // Update loan type icon
+                loanTypeIcon.className = 'bi ' + icons[loanType] + ' position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+                
+                const principal = amount - downPayment;
+                
+                // EMI Formula: P x R x (1+R)^N / ((1+R)^N - 1)
+                // R = Monthly Interest Rate
+                let emi = 0;
+                if (principal > 0 && tenureMonths > 0) {
+                    const r = (annualRate / 12) / 100;
+                    const n = tenureMonths;
+                    emi = principal * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+                }
+                
+                if (principal < 0) {
+                    emi = 0;
+                }
+
+                // Update Results
+                const finalPrincipal = principal > 0 ? principal : 0;
+                maxAmountDisplay.innerText = formatCurrency(finalPrincipal);
+                estimatedEmiDisplay.innerText = formatCurrency(emi) + ' / monthly';
+            };
+
+            const checkBtn = document.getElementById('checkEligibilityBtn');
+            const placeholderContainer = document.getElementById('placeholderContainer');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            // Event Listeners (only update basic UI on change, not results)
+            loanTypeSelect.addEventListener('change', () => {
+                const loanType = loanTypeSelect.value;
+                if (loanType === 'Car Loan') {
+                    downPaymentContainer.classList.remove('d-none');
+                } else {
+                    downPaymentContainer.classList.add('d-none');
+                }
+                loanTypeIcon.className = 'bi ' + icons[loanType] + ' position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+                
+                // Update Top Summary Card
+                const eligibleTypeDisplay = document.getElementById('eligibleTypeDisplay');
+                const eligibleTypeIcon = document.getElementById('eligibleTypeIcon');
+                if (eligibleTypeDisplay) eligibleTypeDisplay.innerText = loanType;
+                if (eligibleTypeIcon) eligibleTypeIcon.className = 'bi ' + icons[loanType] + ' fs-5';
+            });
+            
+            tenureRange.addEventListener('input', () => {
+                tenureDisplay.innerText = tenureRange.value + ' months';
+            });
+            
+            if (checkBtn) {
+                checkBtn.addEventListener('click', function() {
+                    // Start Loading State
+                    checkBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Analyzing profile...';
+                    checkBtn.disabled = true;
+                    
+                    // Reset Checklist
+                    for(let i=1; i<=5; i++) {
+                        document.getElementById('check-icon-'+i).className = 'bi bi-circle text-secondary me-3 fs-5';
+                        document.getElementById('check-text-'+i).className = 'text-secondary small fw-medium';
+                    }
+                    placeholderContainer.classList.remove('d-none');
+                    resultsContainer.classList.remove('d-flex');
+                    resultsContainer.classList.add('d-none');
+                    
+                    // Simulate real-time checking sequence
+                    let step = 1;
+                    const interval = setInterval(() => {
+                        const icon = document.getElementById('check-icon-' + step);
+                        const text = document.getElementById('check-text-' + step);
+                        
+                        icon.className = 'bi bi-check-circle-fill text-success me-3 fs-5';
+                        text.className = 'text-dark small fw-bold';
+                        
+                        step++;
+                        if (step > 5) {
+                            clearInterval(interval);
+                            
+                            // Finish and reveal
+                            calculateEMI();
+                            
+                            placeholderContainer.classList.add('d-none');
+                            resultsContainer.classList.remove('d-none');
+                            resultsContainer.classList.add('d-flex');
+                            
+                            checkBtn.innerHTML = 'Check Eligibility &rarr;';
+                            checkBtn.disabled = false;
+                        }
+                    }, 400); // 400ms per step = 2 seconds total loading
+                });
+            }
+            
+            // Setup initial UI state
+            const initLoanType = loanTypeSelect.value;
+            loanTypeIcon.className = 'bi ' + icons[initLoanType] + ' position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+            tenureDisplay.innerText = tenureRange.value + ' months';
+            
+            const initEligibleTypeDisplay = document.getElementById('eligibleTypeDisplay');
+            const initEligibleTypeIcon = document.getElementById('eligibleTypeIcon');
+            if (initEligibleTypeDisplay) initEligibleTypeDisplay.innerText = initLoanType;
+            if (initEligibleTypeIcon) initEligibleTypeIcon.className = 'bi ' + icons[initLoanType] + ' fs-5';
+        });
+    </script>
+
+
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="../js/nexa.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

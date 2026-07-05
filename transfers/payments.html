@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payments - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/main.css" rel="stylesheet">
+    
+    <style>
+        .nav-tabs-transfer .nav-link {
+            color: #6c757d;
+            border: none;
+            border-bottom: 3px solid transparent;
+            padding: 0.5rem 1rem 1rem 1rem;
+            margin-right: 1.5rem;
+            font-weight: 500;
+        }
+        .nav-tabs-transfer .nav-link.active {
+            color: #0d6efd;
+            border-bottom-color: #0d6efd;
+            background: transparent;
+        }
+        
+        .transfer-type-box {
+            border: 1px solid #e9ecef;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .transfer-type-box:hover {
+            border-color: #0d6efd;
+            background-color: #f8f9fa;
+        }
+        .transfer-type-box.active {
+            border-color: #e9ecef; /* Mockup shows a light border even when selected */
+        }
+        
+        .custom-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #adb5bd;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+        }
+        .transfer-type-box.active .custom-radio {
+            border-color: #0d6efd;
+        }
+        .transfer-type-box.active .custom-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: #0d6efd;
+            border-radius: 50%;
+        }
+        
+        .beneficiary-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #f1f3f5;
+            color: #495057;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .beneficiary-row {
+            transition: background-color 0.2s;
+        }
+        .beneficiary-row:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .progress-custom {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-custom-bar {
+            height: 100%;
+            background-color: #6c757d;
+        }
+    </style>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="../index.html">
+                    <img src="../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/dashboard.html">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="payments.html" style="background-color: #007bff;">
+                    <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../loans/loans.html">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../cards/cards.html">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../dashboard/profile.html">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../support/support.html">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="../auth/login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="../dashboard/dashboard.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Customer Portal</a> / <a href="fund-transfer.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Fund Transfer</a> / <span class="text-dark">Send Money</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative dropdown" style="cursor: pointer;">
+                          <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                          </div>
+                          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                              <li class="p-3 border-bottom bg-light">
+                                  <h6 class="mb-0 fw-bold">Notifications</h6>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-check-circle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Transfer Successful</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">₹5,000 sent to Rahul.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="../info/kyc.html">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-exclamation-triangle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Action Required: KYC</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Please update your PAN details.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 text-wrap" href="../javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex"><i class="bi bi-gift"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">New Offer Available</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Get 5% cashback on groceries.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4" style="cursor:pointer;" onclick="window.location.href='../dashboard/profile.html'">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Arjun Mehta</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Customer ID: 50010</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5">
+                <!-- Greeting -->
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-1">Fund Transfer</h2>
+                    <p class="text-secondary">Transfer money securely to your trusted beneficiaries</p>
+                </div>
+                
+                <!-- Lower Section -->
+                <div class="row g-4">
+                    
+                    <!-- Left Column (Transfer Form) -->
+                    
+    <!-- Left Column (Payments Form) -->
+    <div class="col-xl-8">
+        <div class="card border-0 rounded-4 shadow-sm p-4 p-md-5 h-100 bg-white">
+            
+            <h5 class="fw-bold text-dark mb-4">Select Biller Category</h5>
+            
+            <!-- Categories -->
+            <div class="row g-3 mb-5">
+                <div class="col-4 col-md-3">
+                    <div onclick="selectBiller(this)" class="transfer-type-box text-center p-3 active bg-pastel-blue" style="border-color: #0d6efd;">
+                        <i class="bi bi-phone fs-3 text-primary mb-2 d-block"></i>
+                        <span class="fw-bold small text-dark">Mobile</span>
+                    </div>
+                </div>
+                <div class="col-4 col-md-3">
+                    <div onclick="selectBiller(this)" class="transfer-type-box text-center p-3 bg-pastel-yellow">
+                        <i class="bi bi-lightning-charge fs-3 text-secondary mb-2 d-block"></i>
+                        <span class="fw-bold small text-muted">Electricity</span>
+                    </div>
+                </div>
+                <div class="col-4 col-md-3">
+                    <div onclick="selectBiller(this)" class="transfer-type-box text-center p-3 bg-pastel-green">
+                        <i class="bi bi-tv fs-3 text-secondary mb-2 d-block"></i>
+                        <span class="fw-bold small text-muted">DTH</span>
+                    </div>
+                </div>
+                <div class="col-4 col-md-3">
+                    <div onclick="selectBiller(this)" class="transfer-type-box text-center p-3 bg-pastel-purple">
+                        <i class="bi bi-credit-card-2-front fs-3 text-secondary mb-2 d-block"></i>
+                        <span class="fw-bold small text-muted">Credit Card</span>
+                    </div>
+                </div>
+                <div class="col-4 col-md-3">
+                    <div onclick="selectBiller(this)" class="transfer-type-box text-center p-3 bg-pastel-blue">
+                        <i class="bi bi-droplet fs-3 text-secondary mb-2 d-block"></i>
+                        <span class="fw-bold small text-muted">Water</span>
+                    </div>
+                </div>
+                <div class="col-4 col-md-3">
+                    <div onclick="selectBiller(this)" class="transfer-type-box text-center p-3 bg-pastel-yellow">
+                        <i class="bi bi-wifi fs-3 text-secondary mb-2 d-block"></i>
+                        <span class="fw-bold small text-muted">Broadband</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h5 class="fw-bold text-dark mb-4">Payment Details</h5>
+            
+            <form id="paymentForm">
+                <div id="dynamic-form-container">
+                    <!-- Operator -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark small mb-3" id="label-1">1. Select Operator</label>
+                        <div class="position-relative">
+                            <i class="bi bi-building position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                            <select id="select-1" class="form-select text-muted ps-5 py-3" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                                <option selected>Select Biller/Operator</option>
+                                <option value="1">Jio Prepaid</option>
+                                <option value="2">Airtel Prepaid</option>
+                                <option value="3">Vi Prepaid</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Consumer Number -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-dark small mb-3" id="label-2">2. Mobile Number</label>
+                        <div class="position-relative">
+                            <i class="bi bi-telephone position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary" id="icon-2"></i>
+                            <input type="text" class="form-control text-muted ps-5 py-3" placeholder="Enter 10-digit mobile number" id="input-2" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Amount -->
+                <div class="mb-5">
+                    <label class="form-label fw-bold text-dark small mb-3">3. Amount</label>
+                    <div class="position-relative">
+                        <i class="bi bi-currency-rupee position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                        <input type="number" class="form-control py-3 ps-5" placeholder="Enter Amount" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                    </div>
+                    <div class="text-end mt-2"><a href="../javascript:void(0)" class="text-decoration-none small text-primary fw-medium" id="view-plans-link">View Plans</a></div>
+                </div>
+                
+                <div class="text-center mt-5">
+                    <button type="button" class="btn btn-primary px-5 py-3 rounded-pill fw-bold" onclick="processPayment(this)">
+                        Pay Now
+                    </button>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    
+        <!-- Right Column -->
+        <div class="col-xl-4 d-flex flex-column gap-4">
+            
+            <!-- Recent Payments -->
+            <div class="card border-0 rounded-4 shadow-sm p-4 bg-pastel-blue">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h6 class="fw-bold mb-0 text-dark">Recent Payments</h6>
+                    <a href="../dashboard/statements.html" class="text-secondary small text-decoration-none">View All ></a>
+                </div>
+                
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center justify-content-between py-2 border-bottom">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="bi bi-phone"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold text-dark mb-0 fs-6">Jio Prepaid</h6>
+                                <small class="text-secondary" style="font-size: 0.7rem;">+91 98765 43210</small>
+                            </div>
+                        </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label for="dailyLimitRange" class="form-label fw-bold text-dark small mb-0">Daily Transfer Limit</label>
+                        <span class="badge bg-primary-subtle text-primary fw-bold" id="dailyLimitVal">&#8377; 2,00,000</span>
+                    </div>
+                    <input type="range" class="form-range" id="dailyLimitRange" min="10000" max="1000000" step="10000" value="200000" oninput="document.getElementById('dailyLimitVal').innerText = '&#8377; ' + Number(this.value).toLocaleString('en-IN')">
+                    <div class="d-flex justify-content-between text-muted" style="font-size: 0.7rem;">
+                        <span>&#8377; 10,000</span>
+                        <span>&#8377; 10,00,000</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label for="txnLimitRange" class="form-label fw-bold text-dark small mb-0">Per Transaction Limit</label>
+                        <span class="badge bg-primary-subtle text-primary fw-bold" id="txnLimitVal">&#8377; 1,00,000</span>
+                    </div>
+                    <input type="range" class="form-range" id="txnLimitRange" min="5000" max="500000" step="5000" value="100000" oninput="document.getElementById('txnLimitVal').innerText = '&#8377; ' + Number(this.value).toLocaleString('en-IN')">
+                    <div class="d-flex justify-content-between text-muted" style="font-size: 0.7rem;">
+                        <span>&#8377; 5,000</span>
+                        <span>&#8377; 5,00,000</span>
+                    </div>
+                </div>
+                
+                <div class="bg-warning-subtle text-warning-emphasis p-3 rounded-3 mt-4 d-flex align-items-center gap-3" style="font-size: 0.85rem;">
+                    <i class="bi bi-shield-exclamation fs-4"></i>
+                    <div>Increasing limits will require OTP verification sent to your registered mobile number.</div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 pb-4 px-4">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold" onclick="alert('OTP sent to your mobile number to confirm new limits.');" data-bs-dismiss="modal">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+function selectBeneficiary(name) {
+    // Focus the select dropdown (for standard transfer forms)
+    const select = document.querySelector('select.form-select');
+    if (select && select.options) {
+        for(let i=0; i<select.options.length; i++) {
+            if(select.options[i].text === name) {
+                select.selectedIndex = i;
+                highlightElement(select);
+                return;
+            }
+        }
+    }
+    
+    // Focus the UPI input (for UPI form)
+    const upiInput = document.querySelector('input[placeholder="Enter UPI ID (e.g. username@bank)"]');
+    if (upiInput) {
+        upiInput.value = name.toLowerCase().replace(/\s+/g, '') + '@nexus';
+        highlightElement(upiInput);
+    }
+}
+
+function highlightElement(el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.add('border-primary', 'shadow');
+    el.style.transition = 'all 0.3s';
+    setTimeout(() => {
+        el.classList.remove('border-primary', 'shadow');
+    }, 1500);
+}
+</script>
+
+
+<script>
+function selectBiller(element) {
+    // 1. Remove active state from all boxes
+    const boxes = document.querySelectorAll('.transfer-type-box');
+    boxes.forEach(box => {
+        box.classList.remove('active');
+        box.style.borderColor = '';
+        box.style.backgroundColor = '';
+        
+        // Change icon color back to secondary if it was primary
+        const icon = box.querySelector('i');
+        if (icon) {
+            icon.classList.remove('text-primary');
+            icon.classList.add('text-secondary');
+        }
+    });
+    
+    // 2. Add active state to clicked box
+    element.classList.add('active');
+    element.style.borderColor = '#0d6efd';
+    element.style.backgroundColor = '#f8f9fa';
+    
+    // Change icon color to primary
+    const icon = element.querySelector('i');
+    if (icon) {
+        icon.classList.remove('text-secondary');
+        icon.classList.add('text-primary');
+    }
+    
+    // 3. Update Form based on selected Biller
+    const billerName = element.querySelector('span').innerText.trim();
+    
+    const label1 = document.getElementById('label-1');
+    const label2 = document.getElementById('label-2');
+    const icon2 = document.getElementById('icon-2');
+    const input2 = document.getElementById('input-2');
+    const viewPlansLink = document.getElementById('view-plans-link');
+    const select1 = document.getElementById('select-1');
+    
+    if (billerName === 'Mobile') {
+        label1.innerText = '1. Select Operator';
+        label2.innerText = '2. Mobile Number';
+        icon2.className = 'bi bi-telephone position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+        input2.placeholder = 'Enter 10-digit mobile number';
+        input2.type = 'tel';
+        viewPlansLink.style.display = 'block';
+        select1.innerHTML = '<option selected>Select Biller/Operator</option><option>Jio Prepaid</option><option>Airtel Prepaid</option><option>Vi Prepaid</option>';
+    } else if (billerName === 'Electricity') {
+        label1.innerText = '1. Select Provider';
+        label2.innerText = '2. Consumer Number';
+        icon2.className = 'bi bi-lightning position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+        input2.placeholder = 'Enter Consumer Account Number';
+        input2.type = 'text';
+        viewPlansLink.style.display = 'none';
+        select1.innerHTML = '<option selected>Select Electricity Board</option><option>BESCOM</option><option>TNEB</option><option>Adani Electricity</option>';
+    } else if (billerName === 'DTH') {
+        label1.innerText = '1. Select DTH Provider';
+        label2.innerText = '2. Subscriber ID';
+        icon2.className = 'bi bi-tv position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+        input2.placeholder = 'Enter Subscriber ID or Registered Mobile';
+        input2.type = 'text';
+        viewPlansLink.style.display = 'block';
+        select1.innerHTML = '<option selected>Select DTH Provider</option><option>Tata Play</option><option>Airtel Digital TV</option><option>Dish TV</option>';
+    } else if (billerName === 'Credit Card') {
+        label1.innerText = '1. Select Bank';
+        label2.innerText = '2. Card Number';
+        icon2.className = 'bi bi-credit-card position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+        input2.placeholder = 'Enter 16-digit Credit Card Number';
+        input2.type = 'text';
+        viewPlansLink.style.display = 'none';
+        select1.innerHTML = '<option selected>Select Bank</option><option>HDFC Bank</option><option>SBI Card</option><option>ICICI Bank</option>';
+    } else if (billerName === 'Water') {
+        label1.innerText = '1. Select Water Board';
+        label2.innerText = '2. Account Number / RR No.';
+        icon2.className = 'bi bi-droplet position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+        input2.placeholder = 'Enter Account Number';
+        input2.type = 'text';
+        viewPlansLink.style.display = 'none';
+        select1.innerHTML = '<option selected>Select Water Board</option><option>BWSSB</option><option>Delhi Jal Board</option><option>Chennai Metro Water</option>';
+    } else if (billerName === 'Broadband') {
+        label1.innerText = '1. Select ISP';
+        label2.innerText = '2. Account ID / Landline Number';
+        icon2.className = 'bi bi-wifi position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary';
+        input2.placeholder = 'Enter Account ID';
+        input2.type = 'text';
+        viewPlansLink.style.display = 'block';
+        select1.innerHTML = '<option selected>Select ISP</option><option>Airtel Xstream</option><option>JioFiber</option><option>ACT Fibernet</option>';
+    }
+}
+
+function processPayment(btn) {
+    const container = btn.closest('.card');
+    container.innerHTML = `
+        <div class="text-center py-5 my-5">
+            <i class="bi bi-check-circle-fill text-success mb-4" style="font-size: 5rem;"></i>
+            <h3 class="fw-bold text-dark mb-3">Payment Successful!</h3>
+            <p class="text-muted mb-5 fs-5">Your payment has been securely processed. A confirmation receipt has been sent to your registered email and mobile number.</p>
+            <button class="btn btn-primary px-5 py-3 rounded-pill fw-bold" onclick="location.reload()">Make Another Payment</button>
+        </div>
+    `;
+}
+</script>
+
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
