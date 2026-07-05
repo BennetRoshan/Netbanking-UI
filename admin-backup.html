@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="index.html">
+                    <img src="assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="dashboard.html" style="background-color: #007bff;">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="payments.html">
+                      <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="loans.html">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="cards.html">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="profile.html">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="support.html">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+                        <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="dashboard.html" class="text-decoration-none text-muted">Admin Portal</a> / <span class="text-dark">Backup & Recovery</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative">
+                              <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">System Admin</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Super Admin Power</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5 pt-2">
+                <!-- Title -->
+                <div class="mb-4">
+                    <h2 class="fw-bold text-dark mb-2">System Backup & Recovery</h2>
+                    <p class="text-secondary">Manage database snapshots and disaster recovery protocols.</p>
+                </div>
+                
+                <!-- Status Banner -->
+                <div class="rounded-4 mb-4 d-flex flex-column align-items-center justify-content-center py-5 shadow-sm text-center" style="background-color: #111827; color: #fff;">
+                    <div class="rounded-circle border border-2 border-success d-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <i class="bi bi-check2 text-success fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">System Status: Healthy</h4>
+                    <p class="text-white-50 small mb-0">All redundant systems are operational. Last automatic backup was 2 hours ago.</p>
+                </div>
+                
+                <!-- Two Columns -->
+                <div class="row g-4">
+                    <!-- Left Col -->
+                    <div class="col-xl-8">
+                        <div class="card border-0 rounded-4 shadow-sm p-4 h-100">
+                            <h5 class="fw-bold text-dark mb-4">Recent Snapshots</h5>
+                            <div class="table-responsive">
+                                <table class="table table-borderless align-middle mb-0">
+                                    <thead class="border-bottom">
+                                        <tr>
+                                            <th class="text-muted fw-normal small pb-3">Snapshot Name</th>
+                                            <th class="text-muted fw-normal small pb-3">Date / Time</th>
+                                            <th class="text-muted fw-normal small pb-3">Size</th>
+                                            <th class="text-muted fw-normal small pb-3 text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-bottom">
+                                            <td class="py-3">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-hdd-network text-muted"></i>
+                                                    <span class="fw-medium text-dark">Auto-DB-Sync</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 text-secondary small">Today, 02:00 AM</td>
+                                            <td class="py-3 text-secondary small">1.4 GB</td>
+                                            <td class="py-3 text-end">
+                                                <button class="btn btn-outline-primary btn-sm px-3" onclick="openBackupModal('Auto-DB-Sync', '1.4 GB', 'Today, 02:00 AM', 'restore')">Restore</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="bi bi-hdd-network text-muted"></i>
+                                                    <span class="fw-medium text-dark">Admin-Manual-Snap</span>
+                                                </div>
+                                            </td>
+                                            <td class="py-3 text-secondary small">Yesterday, 14:30 PM</td>
+                                            <td class="py-3 text-secondary small">1.3 GB</td>
+                                            <td class="py-3 text-end">
+                                                <button class="btn btn-outline-primary btn-sm px-3" onclick="openBackupModal('Admin-Manual-Snap', '1.3 GB', 'Yesterday, 14:30 PM', 'restore')">Restore</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Col -->
+                    <div class="col-xl-4">
+                        <div class="card border-0 rounded-4 shadow-sm p-5 text-center h-100 d-flex flex-column justify-content-center align-items-center">
+                            <i class="bi bi-database-down text-primary mb-3" style="font-size: 2.5rem;"></i>
+                            <h5 class="fw-bold text-dark mb-2">Manual Backup</h5>
+                            <p class="text-secondary small mb-4">Create an immediate snapshot of the core database.</p>
+                            <button class="btn btn-primary w-100 py-3 fw-bold rounded-3" onclick="openBackupModal('New Manual Backup', 'Calculating...', 'Just Now', 'backup')">Run Backup Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/export.js"></script>
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <!-- Content Sync Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Sync Custom Logo
+            const savedLogo = localStorage.getItem('nexus_custom_logo');
+            if (savedLogo) {
+                const logoImg = document.querySelector('.dashboard-sidebar img');
+                if (logoImg) logoImg.src = savedLogo;
+            }
+
+            // 2. Sync Custom Background
+            const savedBg = localStorage.getItem('nexus_custom_bg');
+            if (savedBg) {
+                const mainArea = document.querySelector('.dashboard-main');
+                if (mainArea) {
+                    mainArea.style.backgroundImage = `url('${savedBg}')`;
+                    mainArea.style.backgroundSize = 'cover';
+                    mainArea.style.backgroundPosition = 'center';
+                    mainArea.style.backgroundAttachment = 'fixed';
+                    // Overlay to maintain text readability
+                    mainArea.style.backgroundColor = 'rgba(248, 249, 250, 0.85)';
+                    mainArea.style.backgroundBlendMode = 'overlay';
+                }
+            }
+
+            // 3. Sync Advertisements
+            const savedAds = JSON.parse(localStorage.getItem('nexus_ads') || '[]');
+            const activeAds = savedAds.filter(ad => ad.status === 'active');
+            
+            const adContainer = document.getElementById('dashboardAdContainer');
+            
+            if (activeAds.length > 0 && adContainer) {
+                adContainer.classList.remove('d-none');
+                
+                let carouselIndicators = '';
+                let carouselItems = '';
+                
+                activeAds.forEach((ad, index) => {
+                    const activeClass = index === 0 ? 'active' : '';
+                    
+                    carouselIndicators += `
+                        <button type="button" data-bs-target="#nexusAdCarousel" data-bs-slide-to="${index}" class="${activeClass}" aria-label="Slide ${index + 1}"></button>
+                    `;
+                    
+                    carouselItems += `
+                        <div class="carousel-item ${activeClass}">
+                            <div class="card border-0 rounded-4 shadow-sm overflow-hidden" style="background-color: #0f172a;">
+                                <div class="row g-0">
+                                    <div class="col-md-7 p-5 d-flex flex-column justify-content-center text-white">
+                                        <h3 class="fw-bold mb-3">${ad.title}</h3>
+                                        <p class="mb-4 text-white-50 fs-5">${ad.desc}</p>
+                                        <div>
+                                            <a href="${ad.url || 'javascript:void(0)'}" class="btn btn-primary px-4 py-2 rounded-pill fw-medium">${ad.cta || 'Learn More'} <i class="bi bi-arrow-right ms-2"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 d-none d-md-block">
+                                        <div style="background-image: url('${ad.image}'); background-size: cover; background-position: center; height: 100%; min-height: 250px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                adContainer.innerHTML = `
+                    <div id="nexusAdCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div class="carousel-indicators mb-3">
+                            ${activeAds.length > 1 ? carouselIndicators : ''}
+                        </div>
+                        <div class="carousel-inner">
+                            ${carouselItems}
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+
+    <script src="js/nexa.js"></script>
+    <style>
+        /* Custom Colors & Variables */
+        :root {
+            --modal-navy: rgba(11, 18, 32, 0.85);
+            --modal-teal: #14B8A6;
+            --modal-bg: #F4F6F9;
+            --danger-pulse: #F59E0B;
+        }
+
+        /* Modal Overlay */
+        #brOverlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--modal-navy);
+            backdrop-filter: blur(8px);
+            z-index: 1060;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #brOverlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Modal Box */
+        .br-modal {
+            background: #ffffff;
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            transform: scale(0.95) translateY(10px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #brOverlay.active .br-modal {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* SVG Ring */
+        .progress-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .progress-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        .progress-ring circle {
+            fill: transparent;
+            stroke-width: 6;
+        }
+        .ring-bg {
+            stroke: #E2E8F0;
+        }
+        .ring-progress {
+            stroke: var(--modal-teal);
+            stroke-dasharray: 339.292; /* 2 * pi * 54 */
+            stroke-dashoffset: 339.292;
+            transition: stroke-dashoffset 0.1s linear;
+            stroke-linecap: round;
+        }
+        .progress-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0F1B2E;
+        }
+        
+        /* Checkmark Animation */
+        .checkmark {
+            display: none;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .checkmark path {
+            stroke: #10B981;
+            stroke-width: 4;
+            fill: none;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .checkmark.active path {
+            animation: drawCheck 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        @keyframes drawCheck {
+            0% { stroke-dashoffset: 48; }
+            100% { stroke-dashoffset: 0; }
+        }
+
+        /* Subtle spin while loading */
+        .spin-slow {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(270deg); } } /* 360 - 90 base */
+
+        /* Linear Progress */
+        .linear-track {
+            background: #E2E8F0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+        .linear-fill {
+            background: var(--modal-teal);
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        /* Warning Pulse */
+        .warning-pulse {
+            color: var(--danger-pulse);
+            animation: pulse-warn 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse-warn {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* Toast Notification */
+        .br-toast {
+            position: fixed;
+            top: 24px; right: 24px;
+            background: white;
+            border-left: 4px solid #10B981;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+            width: 350px;
+            z-index: 1070;
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+        .br-toast.show {
+            transform: translateX(0);
+        }
+        .toast-progress {
+            height: 3px;
+            background: #10B981;
+            width: 100%;
+            transform-origin: left;
+        }
+    </style>
+
+    <!-- Modal Overlay -->
+    <div id="brOverlay">
+        <div class="br-modal">
+            <!-- Header -->
+            <div class="text-center mb-4">
+                <h4 class="fw-bold text-dark mb-3" id="brTitle">Restoring System Backup</h4>
+                <div class="bg-light rounded p-2 text-start d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="fw-bold text-dark small" id="brSnapName">Admin-Manual-Snap</div>
+                        <div class="text-muted" style="font-size: 0.7rem;" id="brSnapTime">Yesterday 14:30 PM</div>
+                    </div>
+                    <div class="badge bg-secondary rounded-pill" id="brSnapSize">1.3 GB</div>
+                </div>
+            </div>
+
+            <!-- Ring -->
+            <div class="progress-ring">
+                <svg viewBox="0 0 120 120" id="brSvg">
+                    <circle class="ring-bg" cx="60" cy="60" r="54"></circle>
+                    <circle class="ring-progress" cx="60" cy="60" r="54" id="brCircle"></circle>
+                </svg>
+                <div class="progress-text" id="brPercent">0%</div>
+                <svg class="checkmark" id="brCheck" viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+
+            <!-- Stage -->
+            <div class="text-center mb-3">
+                <span class="fw-semibold text-dark" id="brStage">Connecting to secure vault...</span>
+            </div>
+
+            <!-- Linear Progress -->
+            <div class="linear-track">
+                <div class="linear-fill" id="brLinear"></div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="row text-center mb-4 g-0">
+                <div class="col-4 border-end">
+                    <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Data</div>
+                    <div class="fw-bold text-dark small" id="brStatData">0.0 / 1.3 GB</div>
+                </div>
+                <div class="col-4 border-end">
+                    <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Speed</div>
+                    <div class="fw-bold text-dark small" id="brStatSpeed">-- MB/s</div>
+                </div>
+                <div class="col-4">
+                    <div class="text-muted" style="font-size: 0.65rem; text-transform: uppercase;">Time Left</div>
+                    <div class="fw-bold text-dark small" id="brStatTime">--:--</div>
+                </div>
+            </div>
+
+            <!-- Warning -->
+            <div class="text-center">
+                <div class="warning-pulse fw-medium" style="font-size: 0.8rem;" id="brWarning">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> Do not close this window during operation.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="brToast" class="br-toast">
+        <div class="d-flex align-items-start p-3">
+            <i class="bi bi-check-circle-fill text-success fs-4 me-3 mt-1"></i>
+            <div class="flex-grow-1">
+                <div class="fw-bold text-dark mb-1" id="toastTitle">Backup Restored</div>
+                <div class="text-secondary" style="font-size: 0.8rem;" id="toastDesc">Admin-Manual-Snap has been successfully restored.</div>
+            </div>
+            <button class="btn-close ms-2" onclick="closeToast()"></button>
+        </div>
+        <div class="toast-progress" id="toastProg"></div>
+    </div>
+
+    <script>
+        const stagesRestore = [
+            "Connecting to secure vault",
+            "Verifying snapshot integrity",
+            "Decrypting backup data",
+            "Restoring database records",
+            "Rebuilding indexes",
+            "Finalizing & verifying"
+        ];
+        const stagesBackup = [
+            "Connecting to secure vault",
+            "Preparing database clusters",
+            "Encrypting record segments",
+            "Uploading snapshot data",
+            "Verifying checksums",
+            "Finalizing & sealing"
+        ];
+
+        let rafId;
+        let toastTimeout;
+        let mode = 'restore'; 
+        let currentSnapshot = '';
+        let targetSizeGB = 1.3;
+
+        function openBackupModal(name, size, time, operationMode) {
+            mode = operationMode;
+            currentSnapshot = name;
+            targetSizeGB = parseFloat(size) || 1.3;
+
+            // Setup initial UI
+            document.getElementById('brTitle').textContent = mode === 'restore' ? 'Restoring System Backup' : 'Creating System Backup';
+            document.getElementById('brSnapName').textContent = name;
+            document.getElementById('brSnapTime').textContent = time;
+            document.getElementById('brSnapSize').textContent = size;
+            
+            document.getElementById('brWarning').style.opacity = 1;
+            document.getElementById('brWarning').innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> Do not close this window during operation.';
+            document.getElementById('brWarning').className = 'warning-pulse fw-medium';
+
+            // Reset visuals
+            document.getElementById('brCheck').classList.remove('active');
+            document.getElementById('brCheck').style.display = 'none';
+            document.getElementById('brPercent').style.display = 'block';
+            document.getElementById('brPercent').textContent = '0%';
+            document.getElementById('brCircle').style.strokeDashoffset = 339.292;
+            document.getElementById('brLinear').style.width = '0%';
+            document.getElementById('brSvg').classList.add('spin-slow');
+
+            document.getElementById('brOverlay').classList.add('active');
+
+            runAnimation();
+        }
+
+        function runAnimation() {
+            let start = null;
+            const duration = 9500; // ~9.5 seconds
+            const stages = mode === 'restore' ? stagesRestore : stagesBackup;
+
+            function step(timestamp) {
+                if (!start) start = timestamp;
+                const progress = timestamp - start;
+                let rawT = Math.min(progress / duration, 1);
+                
+                // Non-linear easing: fast start, slow end (easeOutQuart)
+                let easedT = 1 - Math.pow(1 - rawT, 4);
+
+                let percent = Math.floor(easedT * 100);
+
+                // Update UI elements
+                document.getElementById('brPercent').textContent = percent + '%';
+                
+                // Circle math (circumference = 339.292)
+                let offset = 339.292 - (easedT * 339.292);
+                document.getElementById('brCircle').style.strokeDashoffset = offset;
+                
+                document.getElementById('brLinear').style.width = percent + '%';
+
+                // Stages mapping
+                let stageIdx = Math.floor(easedT * 5.99); // 0 to 5
+                document.getElementById('brStage').textContent = stages[stageIdx] + '...';
+
+                // Fluctuate stats
+                if (percent < 100) {
+                    let currentGB = (easedT * targetSizeGB).toFixed(2);
+                    document.getElementById('brStatData').textContent = `${currentGB} / ${targetSizeGB.toFixed(1)} GB`;
+                    
+                    // Random speed between 120 and 280 MB/s, changing every 10 frames approx
+                    if(Math.random() < 0.1) {
+                        let speed = Math.floor(Math.random() * 160) + 120;
+                        document.getElementById('brStatSpeed').textContent = `${speed} MB/s`;
+                    }
+                    
+                    // Time left calculation with some noise
+                    let timeLeftSeconds = Math.ceil((duration - progress) / 1000);
+                    let secStr = timeLeftSeconds < 10 ? '0' + timeLeftSeconds : timeLeftSeconds;
+                    document.getElementById('brStatTime').textContent = `00:${secStr}`;
+                }
+
+                if (rawT < 1) {
+                    rafId = requestAnimationFrame(step);
+                } else {
+                    completeOperation();
+                }
+            }
+            rafId = requestAnimationFrame(step);
+        }
+
+        function completeOperation() {
+            document.getElementById('brSvg').classList.remove('spin-slow');
+            document.getElementById('brStage').textContent = "Operation Completed";
+            document.getElementById('brStage').className = "fw-bold text-success";
+            
+            document.getElementById('brPercent').style.display = 'none';
+            document.getElementById('brCheck').style.display = 'block';
+            document.getElementById('brCheck').classList.add('active');
+
+            document.getElementById('brStatData').textContent = `${targetSizeGB.toFixed(1)} / ${targetSizeGB.toFixed(1)} GB`;
+            document.getElementById('brStatSpeed').textContent = "0 MB/s";
+            document.getElementById('brStatTime').textContent = "00:00";
+
+            document.getElementById('brWarning').className = "text-success fw-bold";
+            document.getElementById('brWarning').innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Safe to close.';
+
+            setTimeout(() => {
+                document.getElementById('brOverlay').classList.remove('active');
+                showToast();
+                // Reset stage color for next time
+                setTimeout(() => {
+                    document.getElementById('brStage').className = "fw-semibold text-dark";
+                }, 500);
+            }, 1200);
+        }
+
+        function showToast() {
+            const toast = document.getElementById('brToast');
+            document.getElementById('toastTitle').textContent = mode === 'restore' ? 'Backup Restored' : 'Backup Created';
+            document.getElementById('toastDesc').textContent = `${currentSnapshot} has been successfully ${mode === 'restore' ? 'restored to' : 'created for'} the system.`;
+            
+            toast.classList.add('show');
+            const prog = document.getElementById('toastProg');
+            
+            // CSS transition for progress bar
+            prog.style.transition = 'none';
+            prog.style.transform = 'scaleX(1)';
+            
+            // force reflow
+            void prog.offsetWidth;
+            
+            prog.style.transition = 'transform 4s linear';
+            prog.style.transform = 'scaleX(0)';
+
+            if(toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                closeToast();
+            }, 4000);
+        }
+
+        function closeToast() {
+            document.getElementById('brToast').classList.remove('show');
+        }
+    </script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

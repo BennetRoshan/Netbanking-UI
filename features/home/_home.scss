@@ -1,0 +1,92 @@
+// Home page specific styles
+
+.bg-light-cyan {
+    background-color: rgba($cyan, 0.1) !important;
+}
+
+.text-cyan {
+    color: $cyan !important;
+}
+
+.bg-dark-blue {
+    background-color: $dark-blue !important;
+}
+
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.z-index-0 { z-index: 0; }
+.z-index-1 { z-index: 1; }
+.z-index-2 { z-index: 2; }
+.z-index-3 { z-index: 3; }
+.z-index-4 { z-index: 4; }
+
+.mt-n5 {
+    margin-top: -3rem !important;
+}
+
+// Hero Section
+.hero-section {
+    background-color: #f0f7ff;
+    padding-bottom: 5rem;
+    padding-top: 8rem;
+    
+    .hero-bg {
+        img {
+            object-position: center top;
+            opacity: 1;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(0deg, rgba(240, 247, 255, 1) 0%, rgba(240, 247, 255, 0) 100%);
+        }
+    }
+
+    .hero-mockups {
+        height: 600px;
+        perspective: 1000px;
+
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            border: 8px solid #1e293b;
+            border-radius: 40px !important;
+            right: 280px;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            z-index: 2;
+        }
+        
+        .card-mockup {
+            width: 380px;
+            height: 240px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            right: -130px;
+            top: 32%;
+            transform: translateY(0);
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: -10px 20px 40px rgba(0, 0, 0, 0.3);
+            z-index: 3;
+            border-radius: 16px !important;
+        }
+    }
+}
+
+// Stats Bar
+.stats-bar {
+    .rounded-pill {
+        @media (max-width: 991.98px) {
+            border-radius: 1rem !important;
+        }
+    }
+}
+

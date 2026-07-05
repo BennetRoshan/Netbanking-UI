@@ -1,0 +1,204 @@
+// Auth / Signup Styles
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    
+    .auth-left {
+        background-color: #ffffff;
+        position: relative;
+        overflow: hidden;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #ffffff 0%, #ffffff 45%, rgba(255,255,255,0) 80%), url('../assets/images/signup%20page%20image%201.png') no-repeat center bottom;
+            background-size: cover;
+            z-index: 0;
+        }
+
+        .auth-left-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item {
+            .icon-box {
+                width: 40px;
+                height: 40px;
+                background-color: #e0f2fe;
+                color: $cyan;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+    .auth-right {
+        background: url('../assets/images/background%20image.png') no-repeat center center;
+        background-size: cover;
+        min-height: 100vh;
+        
+        .auth-form-card {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            
+            &:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            }
+        }
+        
+        .form-section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 30px;
+                height: 3px;
+                background-color: $cyan;
+            }
+        }
+
+        .auth-form {
+            .form-label {
+                font-size: 0.85rem;
+                font-weight: 600;
+                color: #212529;
+                margin-bottom: 0.5rem;
+            }
+            
+            .input-group-text {
+                background-color: transparent;
+                border-right: none;
+                color: #6c757d;
+                border-radius: 8px 0 0 8px;
+                transition: all 0.3s ease;
+            }
+
+            .form-control, .form-select {
+                border-left: none;
+                border-radius: 0 8px 8px 0;
+                padding-left: 0;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                
+                &:focus {
+                    box-shadow: none;
+                    border-color: #dee2e6;
+                }
+            }
+            
+            .input-group {
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                background-color: #fff;
+                transition: all 0.3s ease;
+                
+                .form-control, .form-select, .input-group-text {
+                    border: none;
+                    background: transparent;
+                }
+                
+                &:hover {
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    transform: translateY(-1px);
+                }
+            }
+
+            .form-control.no-icon {
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                padding-left: 1rem;
+                transition: all 0.3s ease;
+                
+                &:hover {
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+                    transform: translateY(-1px);
+                }
+            }
+
+            .input-group:focus-within, .form-control.no-icon:focus {
+                box-shadow: 0 0 0 0.25rem rgba($cyan, 0.25);
+                border-color: $cyan;
+                transform: translateY(0);
+            }
+            
+            .social-btn {
+                background-color: white;
+                border: 1px solid #dee2e6;
+                color: #212529;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                
+                &:hover {
+                    background-color: #f8f9fa;
+                    transform: translateY(-3px);
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+                    border-color: #d1d5db;
+                }
+                
+                &:active {
+                    transform: translateY(-1px);
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+                }
+            }
+            
+            .btn-dark-blue {
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                &:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+                    filter: brightness(1.1);
+                }
+                &:active {
+                    transform: translateY(-1px);
+                    box-shadow: 0 5px 10px rgba(15, 23, 42, 0.2);
+                }
+            }
+            
+            .divider {
+                position: relative;
+                text-align: center;
+                margin: 2rem 0;
+                
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    width: 100%;
+                    height: 1px;
+                    background-color: #dee2e6;
+                }
+                
+                span {
+                    position: relative;
+                    background: linear-gradient(135deg, #f0f7ff 0%, #e6f0fa 100%);
+                    padding: 0 1rem;
+                    color: #6c757d;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+    }
+}

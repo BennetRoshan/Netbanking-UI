@@ -1,0 +1,27 @@
+// Main SCSS file
+
+// Abstracts
+@import 'abstracts/variables';
+
+// Features Shared
+@import '../features/shared/navbar/navbar';
+@import '../features/shared/footer/footer';
+@import '../features/shared/components/buttons';
+@import '../features/shared/components/cards';
+
+// Features - Auth
+@import '../features/auth/signup';
+@import '../features/auth/login';
+
+// Features - Dashboard
+@import '../features/dashboard/dashboard';
+
+// Features Home
+@import '../features/home/home';
+
+// Base overrides (if any)
+body {
+    font-family: $font-family-base;
+    background-color: $body-bg;
+    color: $body-color;
+}

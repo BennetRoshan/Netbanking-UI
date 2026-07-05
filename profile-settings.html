@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/main.css" rel="stylesheet">
+    
+    <style>
+        .settings-card {
+            background: white;
+            border-radius: 0.75rem;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-label {
+            color: #94a3b8;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+        .summary-value {
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .input-icon-group {
+            position: relative;
+        }
+        .input-icon-group .bi-left {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        .input-icon-group .bi-right {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        .input-icon-group .form-control {
+            background-color: #f8fafc;
+            border: 0;
+            border-radius: 0.5rem;
+            padding: 1rem 1rem 1rem 2.8rem;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        .input-icon-group.has-right-icon .form-control {
+            padding-right: 2.8rem;
+        }
+        .input-icon-group .form-control:focus {
+            background-color: #f1f5f9;
+            box-shadow: none;
+        }
+        
+        .btn-update {
+            background-color: #334155;
+            color: white;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        .btn-update:hover {
+            background-color: #1e293b;
+            color: white;
+        }
+    </style>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+</head>
+<body>
+
+    <div class="dashboard-layout d-flex min-vh-100">
+        
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar d-flex flex-column text-white" style="width: 280px; flex-shrink: 0; background-color: #0f172a; border-right: 1px solid rgba(255,255,255,0.05);">
+            <!-- Logo -->
+            <div class="p-4 mb-3 d-flex justify-content-center">
+                <a href="index.html">
+                    <img src="assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" class="img-fluid" style="max-height: 160px;">
+                </a>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="nav flex-column flex-grow-1 px-3 gap-1">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="dashboard.html">
+                    <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="account.html">
+                    <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="fund-transfer.html">
+                    <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="payments.html">
+                      <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="loans.html">
+                    <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="cards.html">
+                    <i class="bi bi-credit-card fs-5 text-info"></i> Cards
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="statements.html">
+                    <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
+                </a>
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="profile.html" style="background-color: #007bff;">
+                    <i class="bi bi-person fs-5 text-warning"></i> Profile
+                </a>
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="support.html">
+                    <i class="bi bi-shield-check fs-5 text-danger"></i> Support
+                </a>
+            </nav>
+            
+            <!-- Logout -->
+            <div class="p-3">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="login.html" style="background-color: rgba(255,255,255,0.05);">
+                    <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
+                </a>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="dashboard-main flex-grow-1 overflow-auto position-relative">
+            <!-- Header -->
+            <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
+                <!-- Breadcrumb -->
+                <div class="text-muted small fw-medium">
+                    <a href="dashboard.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Customer Portal</a> / <a href="profile-settings.html" class="text-decoration-none text-muted" onmouseover="this.classList.remove('text-muted'); this.classList.add('text-dark');" onmouseout="this.classList.remove('text-dark'); this.classList.add('text-muted');">Settings</a> / <span class="text-dark">Profile Settings</span>
+                </div>
+                
+                <!-- Right Header Tools -->
+                <div class="d-flex align-items-center gap-4">
+
+                    
+                    <!-- Notification -->
+                      <div class="position-relative dropdown" style="cursor: pointer;">
+                          <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-dark"></i>
+                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                          </div>
+                          <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                              <li class="p-3 border-bottom bg-light">
+                                  <h6 class="mb-0 fw-bold">Notifications</h6>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-check-circle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Transfer Successful</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">?5,000 sent to Rahul.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 border-bottom text-wrap" href="kyc.html">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-exclamation-triangle"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Action Required: KYC</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Please update your PAN details.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                              <li>
+                                  <a class="dropdown-item p-3 text-wrap" href="javascript:void(0)">
+                                      <div class="d-flex align-items-center gap-3">
+                                          <div class="bg-primary-subtle text-primary rounded-circle p-2 d-flex"><i class="bi bi-gift"></i></div>
+                                          <div>
+                                              <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">New Offer Available</p>
+                                              <small class="text-muted" style="font-size: 0.75rem;">Get 5% cashback on groceries.</small>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                          </ul>
+                      </div>
+                    
+                    <!-- User Profile -->
+                    <div class="d-flex align-items-center gap-3 border-start ps-4" style="cursor:pointer;" onclick="window.location.href='profile.html'">
+                        <div class="rounded-circle bg-primary-subtle text-primary d-flex justify-content-center align-items-center fw-bold" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person fs-5"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold text-dark fs-6">Arjun Mehta</h6>
+                            <small class="text-muted" style="font-size: 0.75rem;">Customer ID: 50010</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Main Content Area -->
+            <div class="px-5 pb-5">
+                <!-- Greeting -->
+                <div class="mb-5">
+                    <h2 class="fw-bold text-dark mb-1">Profile Settings</h2>
+                    <p class="text-secondary">Maintain and update your profile details and authentication keys.</p>
+                </div>
+                
+                <!-- Main Layout -->
+                <div class="row g-4">
+                    
+                    <!-- Left Column -->
+                    <div class="col-xl-4">
+                        <!-- Personal Summary -->
+                        <div class="settings-card p-4 p-md-5 h-100">
+                            <h6 class="fw-bold text-dark mb-4 pb-2">Personal Summary</h6>
+                            
+                            <div class="summary-label">Name</div>
+                            <div class="summary-value">Arjun Mehta</div>
+                            
+                            <div class="summary-label">Email</div>
+                            <div class="summary-value">arjun.mehta@gmail.com</div>
+                            
+                            <div class="summary-label">Mobile</div>
+                            <div class="summary-value">9876543210</div>
+                            
+                            <div class="summary-label">Account</div>
+                            <div class="summary-value mb-0">500100010001</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column -->
+                    <div class="col-xl-8 d-flex flex-column gap-4">
+                        
+                        <!-- Update Contact Details -->
+                        <div class="settings-card p-4 p-md-5">
+                            <h6 class="fw-bold text-dark mb-4 pb-2">Update Contact Details</h6>
+                            
+                            <form>
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Update Mobile Number</label>
+                                        <div class="input-icon-group">
+                                            <i class="bi bi-phone bi-left"></i>
+                                            <input type="text" class="form-control" value="9876543210">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Update Email ID</label>
+                                        <div class="input-icon-group">
+                                            <i class="bi bi-person bi-left"></i>
+                                            <input type="email" class="form-control" value="arjun.mehta@gmail.com">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label class="form-label">Address Line</label>
+                                    <div class="input-icon-group">
+                                        <i class="bi bi-geo-alt bi-left"></i>
+                                        <input type="text" class="form-control" value="Mumbai, India">
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-5">
+                                    <label class="form-label">Enter OTP validation key</label>
+                                    <div class="input-icon-group">
+                                        <i class="bi bi-shield-check bi-left"></i>
+                                        <input type="text" class="form-control" value="123456">
+                                    </div>
+                                </div>
+                                
+                                <button type="button" class="btn btn-update w-100">Update Profile &rarr;</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Update Security Keys -->
+                        <div class="settings-card p-4 p-md-5">
+                            <h6 class="fw-bold text-dark mb-4 pb-2">Update Security Keys</h6>
+                            
+                            <form>
+                                <div class="row g-4 align-items-end">
+                                    <div class="col-md-4">
+                                        <label class="form-label">Old Password</label>
+                                        <div class="input-icon-group has-right-icon">
+                                            <i class="bi bi-lock bi-left"></i>
+                                            <input type="password" class="form-control" value="********">
+                                            <i class="bi bi-eye bi-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">New Password</label>
+                                        <div class="input-icon-group has-right-icon">
+                                            <i class="bi bi-lock bi-left"></i>
+                                            <input type="password" class="form-control" value="********">
+                                            <i class="bi bi-eye bi-right"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <button type="button" class="btn btn-update w-100">Change Password</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="js/nexa.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

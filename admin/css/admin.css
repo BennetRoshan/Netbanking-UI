@@ -1,0 +1,178 @@
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+.sidebar .nav-link:hover { background-color: rgba(255,255,255,0.05); color: white !important; }
+.glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); border-radius: 1rem; }
+.table-hover tbody tr:hover { background-color: #f8fafc; cursor: pointer; }
+.form-control:focus, .form-select:focus { box-shadow: none; border-color: #0d6efd; }
+
+/* Global Custom Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0d6efd;
+}
+
+/* Global Dark Mode Styles */
+html.dark-mode, html.dark-mode body, html.dark-mode .dashboard-main, html.dark-mode .main-content {
+    background-color: #000000 !important;
+    background-image: none !important;
+    color: #e0e0e0 !important;
+}
+
+html.dark-mode .dashboard-main::before, html.dark-mode .main-content::before {
+    display: none !important;
+}
+
+html.dark-mode .bg-white, 
+html.dark-mode .bg-light,
+html.dark-mode .profile-card,
+html.dark-mode .card,
+html.dark-mode .glass-card,
+html.dark-mode .security-box,
+html.dark-mode .modal-content,
+html.dark-mode .navbar,
+html.dark-mode .sidebar,
+html.dark-mode .dropdown-menu,
+html.dark-mode .content-card,
+html.dark-mode .kyc-card,
+html.dark-mode .statement-card,
+html.dark-mode .nominee-card,
+html.dark-mode .settings-card,
+html.dark-mode .settings-row-card,
+html.dark-mode .status-card,
+html.dark-mode .support-card,
+html.dark-mode .topic-card,
+html.dark-mode .eligibility-summary-card,
+html.dark-mode .summary-card,
+html.dark-mode .bank-card-virtual {
+    background-color: #000000 !important;
+    border: 1px solid #333 !important;
+}
+
+html.dark-mode .txn-icon,
+html.dark-mode .icon-box,
+html.dark-mode .bg-light-subtle {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+}
+
+html.dark-mode .dropdown-item {
+    color: #e0e0e0 !important;
+}
+html.dark-mode .dropdown-item:hover {
+    background-color: #2a2a2a !important;
+}
+
+html.dark-mode .text-dark,
+html.dark-mode h1, html.dark-mode h2, html.dark-mode h3, 
+html.dark-mode h4, html.dark-mode h5, html.dark-mode h6,
+html.dark-mode .data-value {
+    color: #ffffff !important;
+}
+
+html.dark-mode .text-muted,
+html.dark-mode .text-secondary,
+html.dark-mode .data-label {
+    color: #94a3b8 !important;
+}
+
+html.dark-mode .border,
+html.dark-mode .border-bottom,
+html.dark-mode .border-top,
+html.dark-mode .border-start,
+html.dark-mode .border-end,
+html.dark-mode .border-light {
+    border-color: #333 !important;
+}
+
+html.dark-mode .form-control,
+html.dark-mode .form-select {
+    background-color: #2a2a2a !important;
+    color: #ffffff !important;
+    border-color: #444 !important;
+}
+
+html.dark-mode .modal-header,
+html.dark-mode .modal-footer {
+    border-color: #333 !important;
+}
+
+/* Fix pastel backgrounds in dark mode */
+html.dark-mode .bg-pastel-blue, html.dark-mode .bg-primary-subtle { background-color: rgba(13, 110, 253, 0.15) !important; color: #6ea8fe !important; }
+html.dark-mode .bg-pastel-green, html.dark-mode .bg-success-subtle { background-color: rgba(25, 135, 84, 0.15) !important; color: #75b798 !important; }
+html.dark-mode .bg-pastel-purple { background-color: rgba(111, 66, 193, 0.15) !important; color: #b288ff !important; }
+html.dark-mode .bg-pastel-yellow, html.dark-mode .bg-warning-subtle { background-color: rgba(255, 193, 7, 0.15) !important; color: #ffda6a !important; }
+html.dark-mode .bg-pastel-red, html.dark-mode .bg-danger-subtle { background-color: rgba(220, 53, 69, 0.15) !important; color: #ea868f !important; }
+
+html.dark-mode .btn-outline-custom {
+    background: #1e1e1e !important;
+    color: #f8fafc !important;
+    border-color: #444 !important;
+}
+html.dark-mode .btn-outline-custom:hover {
+    background: #2a2a2a !important;
+}
+html.dark-mode .table {
+    color: #e0e0e0 !important;
+    background-color: transparent !important;
+}
+html.dark-mode .table td, html.dark-mode .table th, html.dark-mode .table tr {
+    border-color: #333 !important;
+    background-color: transparent !important;
+    color: #e0e0e0 !important;
+}
+html.dark-mode .table-hover tbody tr:hover {
+    background-color: #2a2a2a !important;
+}
+html.dark-mode .text-cyan {
+    color: #0dcaf0 !important;
+}
+
+html.dark-mode .page-link {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #e0e0e0 !important;
+}
+html.dark-mode .page-link:hover {
+    background-color: #2a2a2a !important;
+}
+
+html.dark-mode .quick-action-btn {
+    background-color: #2a2a2a !important;
+    border: 1px solid #333 !important;
+}
+html.dark-mode .quick-action-btn span {
+    color: #e0e0e0 !important;
+}
+
+/* Dark mode overrides for scrollbar */
+html.dark-mode::-webkit-scrollbar-track,
+html.dark-mode *::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+html.dark-mode::-webkit-scrollbar-thumb,
+html.dark-mode *::-webkit-scrollbar-thumb {
+    background: #444;
+}
+
+html.dark-mode::-webkit-scrollbar-thumb:hover,
+html.dark-mode *::-webkit-scrollbar-thumb:hover {
+    background: #0d6efd;
+}

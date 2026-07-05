@@ -1,0 +1,39 @@
+// Reusable buttons
+.btn {
+    border-radius: $border-radius;
+    padding: 0.6rem 1.5rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: $dark-blue;
+    border-color: $dark-blue;
+    
+    &:hover {
+        background-color: lighten($dark-blue, 10%);
+        border-color: lighten($dark-blue, 10%);
+    }
+}
+
+.btn-outline-secondary {
+    border-color: $border-color;
+    color: $dark-blue;
+
+    &:hover {
+        background-color: $light-gray;
+        border-color: $border-color;
+        color: $dark-blue;
+    }
+}
+
+.btn-cyan {
+    background-color: $cyan;
+    color: $white;
+    border: none;
+
+    &:hover {
+        background-color: darken($cyan, 5%);
+        color: $white;
+    }
+}
+
