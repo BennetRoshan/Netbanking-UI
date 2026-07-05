@@ -1,0 +1,7 @@
+{
+  "name": "Nexus Bank User Flow",
+  "id": "nexus-bank-user-flow-1",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figjam"]
+}
