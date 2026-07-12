@@ -20,12 +20,12 @@
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
         <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <img src="../NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+            <img src="../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
         </div>
         
         <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
             
-        <a href="../dashboard/dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-grid fs-5"></i>
             <span class="fw-medium">System Dashboard</span>
         </a>
@@ -85,14 +85,14 @@
             <span class="fw-medium">Content Management</span>
         </a>
     
-        <a href="../dashboard/profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-person-badge fs-5"></i>
             <span class="fw-medium">Profile</span>
         </a>
     
         </div>
         <div class="p-3 border-top border-secondary border-opacity-25">
-            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+            <a href="../login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
                 <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
                 <span class="fw-medium text-danger">Logout</span>
             </a>
@@ -204,19 +204,13 @@
     </div>
     
     <script>
-        const customers = [
-            { id: 'CUST-2026-000001', name: 'Arjun Mehta', email: 'arjun.mehta@email.com', frozen: false, reason: '' },
-            { id: 'CUST-2026-000002', name: 'Sneha Iyer', email: 'sneha.iyer@email.com', frozen: false, reason: '' },
-            { id: 'CUST-2026-000003', name: 'Priya Sharma', email: 'priya.sharma@gmail.com', frozen: true, reason: 'Suspicious multiple login failures detected from unauthorized IP.' },
-            { id: 'CUST-2026-000004', name: 'Rahul Verma', email: 'rahul.verma@email.com', frozen: true, reason: 'Suspected fraudulent transaction.' },
-            { id: 'CUST-2026-000005', name: 'Neha Gupta', email: 'neha.gupta@email.com', frozen: false, reason: '' }
-        ];
-        
         let currentCustomer = null;
 
         document.addEventListener('DOMContentLoaded', () => {
+            if (!window.DB) return;
             const dataList = document.getElementById('customerList');
-            customers.forEach(c => {
+            const users = window.DB.getAll('users').filter(u => u.role === 'customer');
+            users.forEach(c => {
                 const opt = document.createElement('option');
                 opt.value = c.id;
                 opt.textContent = c.name + " (" + c.email + ")";
@@ -225,8 +219,10 @@
         });
 
         function searchCustomer() {
+            if (!window.DB) return;
             const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            const result = customers.find(c => c.id.toLowerCase() === query || c.email.toLowerCase() === query || c.name.toLowerCase() === query);
+            const users = window.DB.getAll('users').filter(u => u.role === 'customer');
+            const result = users.find(c => c.id.toLowerCase() === query || c.email.toLowerCase() === query || c.name.toLowerCase() === query);
             
             if (result) {
                 currentCustomer = result;
@@ -249,11 +245,11 @@
             const toggleBtn = document.getElementById('toggleBtn');
             const statusIcon = document.getElementById('statusIcon');
             
-            if (currentCustomer.frozen) {
+            if (currentCustomer.status === 'Frozen') {
                 badge.className = 'badge bg-danger position-absolute top-0 end-0 m-3';
                 badge.textContent = 'Currently Frozen';
                 reasonBox.classList.remove('d-none');
-                document.getElementById('cardReason').textContent = currentCustomer.reason;
+                document.getElementById('cardReason').textContent = currentCustomer.freezeReason || 'Administrative freeze';
                 toggleBtn.className = 'btn btn-outline-success w-100 fw-bold';
                 toggleBtn.textContent = 'Authorize Unfreeze';
                 statusIcon.className = 'bi bi-shield-lock text-danger mb-3 d-block';
@@ -270,9 +266,19 @@
         function toggleFreeze() {
             if (!currentCustomer) return;
             
-            if (currentCustomer.frozen) {
-                currentCustomer.frozen = false;
-                currentCustomer.reason = '';
+            if (currentCustomer.status === 'Frozen') {
+                currentCustomer.status = 'Active';
+                currentCustomer.freezeReason = '';
+                
+                if (window.DB) {
+                    window.DB.update('users', currentCustomer.id, currentCustomer);
+                    window.DB.insert('auditLogs', {
+                        action: 'Account Unfrozen',
+                        details: `Unfrozen account for ${currentCustomer.name}`,
+                        date: new Date().toISOString()
+                    });
+                }
+                
                 alert('Account successfully unfrozen. System logs updated.');
                 updateCard();
             } else {
@@ -303,8 +309,17 @@
                             alert('Please enter a reason before confirming.');
                             return;
                         }
-                        currentCustomer.frozen = true;
-                        currentCustomer.reason = reason;
+                        currentCustomer.status = 'Frozen';
+                        currentCustomer.freezeReason = reason;
+                        
+                        if (window.DB) {
+                            window.DB.update('users', currentCustomer.id, currentCustomer);
+                            window.DB.insert('auditLogs', {
+                                action: 'Account Frozen',
+                                details: `Frozen account for ${currentCustomer.name}. Reason: ${reason}`,
+                                date: new Date().toISOString()
+                            });
+                        }
                         
                         if (typeof bootstrap !== 'undefined') {
                             bootstrap.Modal.getInstance(reasonModal).hide();

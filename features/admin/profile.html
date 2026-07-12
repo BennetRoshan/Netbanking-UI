@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administration Dashboard - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/constants.js"></script>
+    <script src="../../shared/utils/auth-guard.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            
+        <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-grid fs-5"></i>
+            <span class="fw-medium">System Dashboard</span>
+        </a>
+    
+        <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-people fs-5"></i>
+            <span class="fw-medium">Customer List</span>
+        </a>
+    
+        <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-lock fs-5"></i>
+            <span class="fw-medium">Freeze Account</span>
+        </a>
+    
+        <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-speedometer2 fs-5"></i>
+            <span class="fw-medium">CIBIL Score</span>
+        </a>
+    
+        <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="fw-medium">Loans Terminal</span>
+        </a>
+    
+        <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="fw-medium">Audit Logs</span>
+        </a>
+    
+        <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-bar-chart fs-5"></i>
+            <span class="fw-medium">Reports Engine</span>
+        </a>
+    
+        <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-arrow-clockwise fs-5"></i>
+            <span class="fw-medium">Security Resets</span>
+        </a>
+    
+        <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-currency-dollar fs-5"></i>
+            <span class="fw-medium">Balance Update</span>
+        </a>
+    
+        <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-person-plus fs-5"></i>
+            <span class="fw-medium">Bulk User Import</span>
+        </a>
+    
+        <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-server fs-5"></i>
+            <span class="fw-medium">Backup & Recovery</span>
+        </a>
+    
+        <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-file-earmark-richtext fs-5"></i>
+            <span class="fw-medium">Content Management</span>
+        </a>
+    
+        <a href="profile.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;">
+            <i class="bi bi-person-badge fs-5"></i>
+            <span class="fw-medium">Profile</span>
+        </a>
+    
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">
+                Admin Portal / Profile
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+
+                
+                                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                        <li class="p-3 border-bottom bg-light">
+                            <h6 class="mb-0 fw-bold">System Alerts</h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 border-bottom text-wrap" href="javascript:void(0)">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-danger-subtle text-danger rounded-circle p-2 d-flex"><i class="bi bi-shield-x"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Security Alert</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Multiple failed logins detected.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 border-bottom text-wrap" href="backup-recovery.html">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-hdd-network"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Backup Completed</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Auto-DB-Sync finished successfully.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 text-wrap" href="javascript:void(0)">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-cpu"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">High Load</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Server CPU usage exceeded 85%.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark" id="headerAdminName">Admin User</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;" id="headerAdminRole">Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Background Graphic (Optional) -->
+        <div class="position-absolute top-0 end-0 w-100 h-50 z-n1" style="background: url('../../assets/images/background image.png') no-repeat center right; background-size: cover; opacity: 0.3; pointer-events: none;"></div>
+
+        <!-- Dynamic Content -->
+                <main class="p-4 p-md-5 position-relative z-1">
+            <div class="mb-5">
+                <h2 class="fw-bold text-dark">Admin Profile</h2>
+                <p class="text-muted">Manage your administrative account settings and personal details.</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="glass-card p-4 text-center h-100 bg-white border-0 shadow-sm rounded-4 d-flex flex-column align-items-center justify-content-center">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                            <i class="bi bi-person-fill" style="font-size: 4rem;"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="profileAvatarName">Admin Name</h4>
+                        <span class="badge bg-primary text-white rounded-pill px-3 py-2 mb-4" id="profileAvatarRole">Admin Role</span>
+                        <div class="w-100 text-start">
+                            <hr class="text-secondary opacity-25">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">Employee ID</span>
+                                <span class="fw-medium text-dark small" id="profileEmpId">NEX-000</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted small">Status</span>
+                                <span class="fw-medium text-success small" id="profileStatus"><i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-8">
+                    <div class="glass-card p-4 bg-white border-0 shadow-sm rounded-4 h-100">
+                        <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">Personal Information</h5>
+                        <form id="profileForm" novalidate>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-medium">Full Name</label>
+                                    <input type="text" class="form-control bg-light border-0" id="profileFullName" value="Admin Name" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-medium">Department</label>
+                                    <input type="text" class="form-control bg-light border-0" value="IT & Security" readonly>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-medium">Email Address</label>
+                                    <input type="email" id="profileEmail" class="form-control" value="admin@nexusbank.com" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-muted small fw-medium">Phone Number</label>
+                                    <input type="text" id="profilePhone" class="form-control" value="+91 98765 43210" pattern="\\+?\\d{10,13}" required>
+                                    <input type="text" id="profilePhone" class="form-control" pattern="\+?\d{10,13}" required>
+                                </div>
+                            </div>
+                            
+                            <h5 class="fw-bold text-dark mb-4 border-bottom pb-3">Security Settings</h5>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small fw-medium">Current Password</label>
+                                    <input type="password" id="currentPassword" class="form-control" placeholder="••••••••">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small fw-medium">New Password</label>
+                                    <input type="password" id="newPassword" class="form-control" placeholder="Enter new password" minlength="8">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label text-muted small fw-medium">Confirm New Password</label>
+                                    <input type="password" id="confirmNewPassword" class="form-control" placeholder="Confirm new password" minlength="8">
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-end gap-2 mt-4">
+                                <button type="button" class="btn btn-light px-4 fw-medium border shadow-sm">Cancel</button>
+                                <button type="submit" class="btn btn-primary px-4 fw-medium shadow-sm">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Require valid admin session
+            if (typeof NexusAuth === 'undefined' || !NexusAuth.requireAuth('../auth/login.html')) return;
+            
+            const session = NexusAuth.getSession();
+            let currentUser = null;
+            
+            // Wait for DB to initialize
+            setTimeout(() => {
+                if(!window.DB) {
+                    alert('Database failed to load.');
+                    return;
+                }
+                
+                // Admins are technically seeded in constants, but we use the "users" table to allow mutation
+                const allUsers = window.DB.getAll('users');
+                currentUser = allUsers.find(u => u.userId === session.userId);
+                
+                if(!currentUser) {
+                    // Fallback to constant if not in DB yet, and insert to allow editing
+                    const constantMatch = typeof NEXUS_CONSTANTS !== 'undefined' && NEXUS_CONSTANTS.DEMO_USERS ? NEXUS_CONSTANTS.DEMO_USERS.find(u => u.userId === session.userId) : null;
+                    if (constantMatch) {
+                        currentUser = {
+                            id: 'USR-' + Math.floor(Math.random()*90000+10000),
+                            userId: constantMatch.userId,
+                            name: constantMatch.name,
+                            role: constantMatch.role,
+                            password: constantMatch.password,
+                            email: `${constantMatch.userId.toLowerCase()}@nexusbank.com`,
+                            phone: '+91 98765 43210',
+                            status: 'Active',
+                            department: 'IT & Security'
+                        };
+                        window.DB.insert('users', currentUser);
+                    } else {
+                        alert("Session invalid or user not found. Logging out.");
+                        NexusAuth.logout('../auth/login.html');
+                        return;
+                    }
+                }
+                
+                // Populate UI
+                document.getElementById('headerAdminName').textContent = currentUser.name;
+                document.getElementById('headerAdminRole').textContent = currentUser.role || 'Admin Power';
+                
+                document.getElementById('profileAvatarName').textContent = currentUser.name;
+                document.getElementById('profileAvatarRole').textContent = currentUser.role || 'Admin Power';
+                document.getElementById('profileEmpId').textContent = currentUser.userId;
+                document.getElementById('profileFullName').value = currentUser.name;
+                
+                document.getElementById('profileEmail').value = currentUser.email || '';
+                document.getElementById('profilePhone').value = currentUser.phone || '';
+            }, 100);
+
+            // Handle Form Submit
+            document.getElementById('profileForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (!currentUser) return;
+                
+                const newEmail = document.getElementById('profileEmail').value.trim();
+                const newPhone = document.getElementById('profilePhone').value.trim();
+                
+                const currPass = document.getElementById('currentPassword').value;
+                const newPass = document.getElementById('newPassword').value;
+                const confPass = document.getElementById('confirmNewPassword').value;
+                
+                let passwordChanged = false;
+                
+                // Password Validation Logic
+                if (newPass) {
+                    if (currPass !== currentUser.password) {
+                        alert("Security Alert: Current password does not match. Changes aborted.");
+                        return;
+                    }
+                    if (newPass !== confPass) {
+                        alert("New Password and Confirm Password do not match. Please re-type.");
+                        return;
+                    }
+                    if (newPass.length < 8) {
+                        alert("Password must be at least 8 characters long.");
+                        return;
+                    }
+                    passwordChanged = true;
+                }
+                
+                // Update DB object
+                const updateData = {
+                    email: newEmail,
+                    phone: newPhone
+                };
+                if (passwordChanged) {
+                    updateData.password = newPass;
+                }
+                
+                window.DB.update('users', currentUser.id, updateData);
+                
+                // Update local session variable memory
+                currentUser.email = newEmail;
+                currentUser.phone = newPhone;
+                if(passwordChanged) currentUser.password = newPass;
+
+                if (passwordChanged) {
+                    window.addAuditLog('Security Update', currentUser.userId, 'Admin executed a password change', 'CRITICAL');
+                    alert("Password updated successfully. For security reasons, you will now be logged out. Please log in again with your new credentials.");
+                    NexusAuth.clearSession();
+                    window.location.replace('../auth/login.html');
+                } else {
+                    window.addAuditLog('Profile Update', currentUser.userId, 'Admin updated contact information', 'INFO');
+                    alert("Profile information updated successfully.");
+                    // Sync Header
+                    document.getElementById('headerAdminName').textContent = currentUser.name;
+                }
+            });
+        });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const auditLogs = [
+            { id: 101, actor: 'Admin/Staff', action: 'LoanApproved', details: 'Loan LA-2026-000011 approved successfully.', timestamp: '10-06-2026 14:05' },
+            { id: 102, actor: 'Arjun Mehta', action: 'FundTransfer', details: 'Transfer of ₹ 5,000.00 to Sneha Iyer committed.', timestamp: '10-06-2026 13:45' },
+            { id: 103, actor: 'Arjun Mehta', action: 'Login', details: 'Successful login from IP address 192.168.1.52.', timestamp: '10-06-2026 13:30' },
+            { id: 104, actor: 'Sneha Iyer', action: 'PasswordReset', details: 'Password recovery request submitted to Admin.', timestamp: '10-06-2026 13:10' }
+        ];
+
+        function downloadFile(content, fileName, mimeType) {
+            const a = document.createElement('a');
+            const file = new Blob([content], { type: mimeType });
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        document.getElementById('exportTextBtn')?.addEventListener('click', () => {
+            let textContent = "System Audit Activity Log\n\n";
+            textContent += "ID\\tActor User\\tAction Type\\tDetails\\tTimestamp\n";
+            textContent += "----------------------------------------------------------------------\n";
+            auditLogs.forEach(log => {
+                textContent += `${log.id}\t${log.actor}\t${log.action}\t${log.details}\t${log.timestamp}\n`;
+            });
+            downloadFile(textContent, 'Audit_Log.txt', 'text/plain');
+        });
+
+        document.getElementById('exportCsvBtn')?.addEventListener('click', () => {
+            let csvContent = "ID,Actor User,Action Type,Details Description,Timestamp\n";
+            auditLogs.forEach(log => {
+                const details = `"${log.details.replace(/"/g, '""')}"`;
+                csvContent += `${log.id},${log.actor},${log.action},${details},${log.timestamp}\n`;
+            });
+            downloadFile(csvContent, 'Audit_Log.csv', 'text/csv');
+        });
+
+        document.getElementById('exportPdfBtn')?.addEventListener('click', () => {
+            alert('PDF Export initiated. Generating document...');
+            setTimeout(() => {
+                 document.getElementById('exportTextBtn').click();
+            }, 800);
+        });
+
+        document.getElementById('exportWordBtn')?.addEventListener('click', () => {
+            alert('Word Export initiated. Generating document...');
+            setTimeout(() => {
+                 document.getElementById('exportCsvBtn').click();
+            }, 800);
+        });
+    });
+    </script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+           let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+
+    <script src="../../assets/js/global-validation.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('profileForm');
+            
+            // Populate form with DB data if available
+            if (window.DB) {
+                const admin = window.DB.getById('users', 'usr_2');
+                if (admin) {
+                    const nameInput = document.querySelector('input[value="System Admin"]');
+                    if(nameInput) nameInput.value = admin.name;
+                    document.getElementById('profileEmail').value = admin.email;
+                    document.getElementById('profilePhone').value = admin.phone;
+                }
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                if (!form.checkValidity()) {
+                    form.classList.add('was-validated');
+                    return;
+                }
+
+                const email = document.getElementById('profileEmail').value;
+                const phone = document.getElementById('profilePhone').value;
+                const currentPwd = document.getElementById('currentPassword').value;
+                const newPwd = document.getElementById('newPassword').value;
+
+                if (newPwd && !currentPwd) {
+                    alert('Please enter your current password to set a new password.');
+                    return;
+                }
+
+                await window.simulateNetworkRequest(400, 800);
+
+                if (window.DB) {
+                    const updates = { email, phone };
+                    if (newPwd) {
+                        updates.password = newPwd;
+                    }
+                    
+                    window.DB.update('users', 'usr_2', updates);
+                    window.addAuditLog('Profile Update', 'usr_2', 'Admin updated their profile settings');
+                }
+
+                alert('Profile details updated securely!');
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                form.classList.remove('was-validated');
+            });
+        });
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

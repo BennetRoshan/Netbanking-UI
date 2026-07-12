@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loans Terminal - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    
+    <style>
+        /* Table Accordion Styles */
+        .expandable-row { cursor: pointer; transition: background-color 0.2s; }
+        .expandable-row:hover { background-color: rgba(0,0,0,0.02); }
+        .risk-snapshot { display: none; background-color: #f8f9fa; border-bottom: 1px solid #dee2e6; animation: slideDown 0.3s ease-out forwards; }
+        .risk-snapshot.show { display: table-row; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Chips */
+        .filter-chip { border-radius: 50px; padding: 0.4rem 1rem; font-size: 0.85rem; font-weight: 500; cursor: pointer; border: 1px solid #dee2e6; background: #fff; color: #495057; transition: all 0.2s; white-space: nowrap; }
+        .filter-chip:hover { background: #e9ecef; }
+        .filter-chip.active { background: #0d6efd; color: #fff; border-color: #0d6efd; }
+        
+        /* Inline Rejection */
+        .reject-box { display: none; max-width: 200px; }
+        .reject-box.show { display: block; animation: fadeIn 0.3s; }
+    </style>
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-grid fs-5"></i><span class="fw-medium">System Dashboard</span></a>
+            <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-people fs-5"></i><span class="fw-medium">Customer List</span></a>
+            <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-lock fs-5"></i><span class="fw-medium">Freeze Account</span></a>
+            <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-speedometer2 fs-5"></i><span class="fw-medium">CIBIL Score</span></a>
+            <a href="loans-terminal.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;"><i class="bi bi-house-door fs-5"></i><span class="fw-medium">Loans Terminal</span></a>
+            <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-journal-text fs-5"></i><span class="fw-medium">Audit Logs</span></a>
+            <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-bar-chart fs-5"></i><span class="fw-medium">Reports Engine</span></a>
+            <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-arrow-clockwise fs-5"></i><span class="fw-medium">Security Resets</span></a>
+            <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-currency-dollar fs-5"></i><span class="fw-medium">Balance Update</span></a>
+            <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-plus fs-5"></i><span class="fw-medium">Bulk User Import</span></a>
+            <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-server fs-5"></i><span class="fw-medium">Backup & Recovery</span></a>
+            <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-file-earmark-richtext fs-5"></i><span class="fw-medium">Content Management</span></a>
+            <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-badge fs-5"></i><span class="fw-medium">Profile</span></a>
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">Admin Portal / Loans Terminal</div>
+            
+            <div class="d-flex align-items-center gap-4">
+                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative">
+                        <i class="bi bi-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Background Graphic -->
+        <div class="position-absolute top-0 end-0 w-100 h-50 z-n1" style="background: url('../../assets/images/background image.png') no-repeat center right; background-size: cover; opacity: 0.3; pointer-events: none;"></div>
+
+        <!-- Dynamic Content -->
+        <main class="p-4 p-md-5 position-relative z-1 pb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="fw-bold text-dark">Loans Terminal</h2>
+                    <p class="text-muted mb-0">Manage applications, disbursals, and loan product configurations.</p>
+                </div>
+            </div>
+
+            <!-- Terminal Tabs -->
+            <ul class="nav nav-pills mb-4 gap-2" id="loanTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active bg-white shadow-sm border text-dark fw-medium px-4" id="review-tab" data-bs-toggle="pill" data-bs-target="#review" type="button" role="tab" style="border-radius: 8px;">Review Applications</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link bg-white shadow-sm border text-dark fw-medium px-4" id="config-tab" data-bs-toggle="pill" data-bs-target="#config" type="button" role="tab" style="border-radius: 8px;">Product Configuration</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="loanTabsContent">
+                
+                <!-- Review Applications Tab -->
+                <div class="tab-pane fade show active" id="review" role="tabpanel">
+                    <div class="glass-card p-4 p-md-5 bg-white shadow-sm" style="border-radius: 16px;">
+                        
+                        <!-- Top Bar: Filters & View Toggle -->
+                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+                            <div class="d-flex gap-2 flex-wrap" id="filterChips">
+                                <div class="filter-chip active" onclick="applyFilter('all', this)">All (0)</div>
+                                <div class="filter-chip" onclick="applyFilter('highValue', this)">High Value > ₹10L</div>
+                                <div class="filter-chip" onclick="applyFilter('highRisk', this)">High Risk (CIBIL < 650)</div>
+                                <div class="filter-chip" onclick="applyFilter('homeLoan', this)">Home Loans Only</div>
+                            </div>
+                        </div>
+
+                        <!-- LIST VIEW -->
+                        <div id="listViewContainer" class="table-responsive">
+                            <table class="table table-borderless align-middle mb-0">
+                                <thead class="border-bottom">
+                                    <tr>
+                                        <th class="text-muted small fw-medium pb-3 ps-2">Application ID</th>
+                                        <th class="text-muted small fw-medium pb-3">Applicant Name</th>
+                                        <th class="text-muted small fw-medium pb-3">Loan Type</th>
+                                        <th class="text-muted small fw-medium pb-3 text-end">Amount Requested</th>
+                                        <th class="text-muted small fw-medium pb-3 text-end">CIBIL Risk</th>
+                                        <th class="text-muted small fw-medium pb-3 text-center pe-2">Workflow Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loanTableBody">
+                                    <!-- Dynamic rows injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                
+                <!-- Product Configuration Tab (Unchanged from original) -->
+                <div class="tab-pane fade" id="config" role="tabpanel">
+                    <div class="glass-card p-4 bg-white shadow-sm" style="border-radius: 16px;">
+                        <h5 class="fw-bold mb-4">Loan Policy Rates</h5>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="border rounded p-3 bg-light h-100">
+                                    <h6 class="fw-bold text-dark mb-3">Personal Loan</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-muted">Base Interest Rate (%)</label>
+                                        <input type="number" class="form-control" value="10.5" step="0.1">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-muted">Max Tenure (Months)</label>
+                                        <input type="number" class="form-control" value="60">
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary w-100" onclick="alert('Rates updated successfully.')">Update Config</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3 bg-light h-100">
+                                    <h6 class="fw-bold text-dark mb-3">Home Loan</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-muted">Base Interest Rate (%)</label>
+                                        <input type="number" class="form-control" value="8.5" step="0.1">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-muted">Max Tenure (Months)</label>
+                                        <input type="number" class="form-control" value="360">
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary w-100" onclick="alert('Rates updated successfully.')">Update Config</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3 bg-light h-100">
+                                    <h6 class="fw-bold text-dark mb-3">Car Loan</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-muted">Base Interest Rate (%)</label>
+                                        <input type="number" class="form-control" value="9.0" step="0.1">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small text-muted">Max Tenure (Months)</label>
+                                        <input type="number" class="form-control" value="84">
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-primary w-100" onclick="alert('Rates updated successfully.')">Update Config</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        
+        <!-- Disbursal Configuration Modal -->
+        <div class="modal fade" id="disbursalModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 rounded-4 shadow-lg">
+                    <div class="modal-header border-bottom bg-light bg-opacity-50 p-4">
+                        <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-bank2 text-success me-2"></i>Configure Disbursal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="d-flex justify-content-between mb-4 border-bottom pb-3">
+                            <div>
+                                <div class="small text-muted text-uppercase fw-medium">Applicant</div>
+                                <div class="fw-bold fs-5 text-dark" id="modalAppName"></div>
+                            </div>
+                            <div class="text-end">
+                                <div class="small text-muted text-uppercase fw-medium">Requested</div>
+                                <div class="fw-bold fs-5 text-primary" id="modalAppReq"></div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted small mb-4">Adjust the final approved amounts and interest rates before executing the disbursal contract.</p>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <label class="form-label fw-medium small text-dark">Approved Amount (₹)</label>
+                                <input type="number" id="finalAmountInput" class="form-control form-control-lg shadow-sm border-secondary fw-bold text-success">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-medium small text-dark">Interest Rate (%)</label>
+                                <input type="number" id="finalRateInput" class="form-control form-control-lg shadow-sm border-secondary fw-bold" step="0.1" value="8.5">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-success w-100 rounded-pill py-2 fw-bold shadow-sm" id="confirmDisburseBtn">Confirm & Disburse Funds</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+        // --- Mock Data & State ---
+        let loans = [];
+
+        let currentFilter = 'all';
+        let currentView = 'list';
+        let disbursalModal = null;
+        let activeLoanTarget = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof bootstrap !== 'undefined') {
+                disbursalModal = new bootstrap.Modal(document.getElementById('disbursalModal'));
+            }
+            if (window.DB) {
+                // Fetch loans and enhance with user data mock (if needed, but for now just load from DB)
+                loans = window.DB.getAll('loans');
+                
+                // If a loan in DB doesn't have name/cibil, fill it from users (Mocking DB join)
+                loans.forEach(l => {
+                    if (!l.name && l.userId) {
+                        const u = window.DB.getById('users', l.userId);
+                        if (u) {
+                            l.name = u.name;
+                            l.cibil = l.cibil || 750;
+                            l.balance = l.balance || 0;
+                            l.income = l.income || 50000;
+                            l.dti = l.dti || 30;
+                            l.trend = l.trend || 'up';
+                        }
+                    }
+                });
+            }
+            renderAll();
+        });
+
+        // --- Logic & Formatting ---
+        function getCibilClass(score) {
+            if (score < 600) return 'text-danger';
+            if (score < 750) return 'text-warning text-dark';
+            return 'text-success';
+        }
+        function getDtiColor(dti) {
+            if (dti < 30) return 'bg-success';
+            if (dti < 50) return 'bg-warning text-dark';
+            return 'bg-danger';
+        }
+        function formatCurrency(num) {
+            if (num === undefined || num === null) return '₹ 0.00';
+            return '₹ ' + Number(num).toLocaleString('en-IN');
+        }
+
+        // --- Filtering ---
+        function applyFilter(filterType, chipElement) {
+            currentFilter = filterType;
+            
+            // UI update for chips
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chipElement.classList.add('active');
+            
+            renderAll();
+        }
+        function getFilteredLoans() {
+            if (currentFilter === 'highValue') return loans.filter(l => l.requested > 1000000);
+            if (currentFilter === 'highRisk') return loans.filter(l => l.cibil < 650);
+            if (currentFilter === 'homeLoan') return loans.filter(l => l.type === 'Home Loan');
+            return loans;
+        }
+
+        // --- Render Coordination ---
+        function renderAll() {
+            const list = getFilteredLoans();
+            
+            // Update chip count text roughly (just for the "All" chip as demo)
+            document.querySelector('.filter-chip').textContent = `All (${loans.length})`;
+
+            renderList(list);
+        }
+
+        // --- List View (Table + Accordion) ---
+        function renderList(list) {
+            const tbody = document.getElementById('loanTableBody');
+            let html = '';
+            
+            if(list.length === 0) {
+                html = '<tr><td colspan="6" class="text-center text-muted py-4">No applications match the current filter.</td></tr>';
+            }
+
+            list.forEach((l, index) => {
+                const cClass = getCibilClass(l.cibil);
+                const arrow = l.trend === 'up' ? '↑' : '↓';
+                
+                // Main Row
+                html += `
+                <tr class="expandable-row border-bottom" onclick="toggleRow('snap_${l.id}')">
+                    <td class="ps-2"><span class="fw-bold text-dark">${l.id}</span></td>
+                    <td><div class="fw-medium text-dark">${l.name}</div></td>
+                    <td><span class="badge bg-light text-dark border shadow-sm">${l.type}</span></td>
+                    <td class="text-end fw-bold text-dark">${formatCurrency(l.requested || l.amount)}</td>
+                    <td class="text-end fw-bold ${cClass}">${l.cibil} ${arrow}</td>
+                    <td class="text-center pe-2" onclick="event.stopPropagation()">
+                        <div id="action_btn_${l.id}">
+                            ${l.status === 'approved' ? 
+                                '<span class="badge bg-success"><i class="bi bi-check2-all me-1"></i>Approved</span>' : 
+                                `<button class="btn btn-sm btn-outline-success me-1 shadow-sm" onclick="openDisbursal('${l.id}')" title="Approve"><i class="bi bi-check-lg"></i></button>
+                                 <button class="btn btn-sm btn-outline-danger shadow-sm" onclick="toggleReject('${l.id}')" title="Reject"><i class="bi bi-x-lg"></i></button>`
+                            }
+                        </div>
+                        <div id="reject_box_${l.id}" class="reject-box mt-2 text-end ms-auto">
+                            <input type="text" class="form-control form-control-sm mb-1 border-danger" placeholder="Reason for rejection..." id="reject_reason_${l.id}">
+                            <div class="d-flex justify-content-end gap-1">
+                                <button class="btn btn-sm btn-light border" onclick="toggleReject('${l.id}')">Cancel</button>
+                                <button class="btn btn-sm btn-danger fw-bold" onclick="executeReject('${l.id}')">Reject</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                `;
+                
+                // Expanded Snapshot Row
+                html += `
+                <tr id="snap_${l.id}" class="risk-snapshot">
+                    <td colspan="6" class="p-0 border-0">
+                        <div class="p-4 bg-light bg-opacity-50">
+                            <div class="row g-4 align-items-center">
+                                <div class="col-md-3 border-end">
+                                    <h6 class="text-muted small text-uppercase fw-bold mb-3"><i class="bi bi-person-vcard me-2"></i>Financials</h6>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="small text-muted">A/C Balance:</span>
+                                        <span class="fw-bold text-dark">${formatCurrency(l.balance)}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="small text-muted">Monthly Income:</span>
+                                        <span class="fw-medium text-dark">${formatCurrency(l.income)}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 border-end px-md-4">
+                                    <div class="d-flex justify-content-between align-items-end mb-2">
+                                        <h6 class="text-muted small text-uppercase fw-bold mb-0"><i class="bi bi-pie-chart me-2"></i>Debt-to-Income (DTI)</h6>
+                                        <span class="fw-bold fs-5 ${getCibilClass(750 - l.dti * 5)}">${l.dti}%</span>
+                                    </div>
+                                    <div class="progress shadow-sm bg-white" style="height: 10px;">
+                                        <div class="progress-bar ${getDtiColor(l.dti)}" role="progressbar" style="width: ${l.dti}%"></div>
+                                    </div>
+                                    <p class="text-muted small mt-2 mb-0">Ratios above 50% indicate severe default risk.</p>
+                                </div>
+                                <div class="col-md-4 px-md-4">
+                                    <h6 class="text-muted small text-uppercase fw-bold mb-3"><i class="bi bi-file-earmark-check me-2"></i>Attached Docs</h6>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge bg-white text-primary border shadow-sm p-2 cursor-pointer"><i class="bi bi-filetype-pdf me-1"></i>PAN_Card</span>
+                                        <span class="badge bg-white text-primary border shadow-sm p-2 cursor-pointer"><i class="bi bi-filetype-pdf me-1"></i>Salary_Slips</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function toggleRow(rowId) {
+            const el = document.getElementById(rowId);
+            if(el.classList.contains('show')) el.classList.remove('show');
+            else el.classList.add('show');
+        }
+        
+        function toggleReject(id) {
+            const btnBox = document.getElementById(`action_btn_${id}`);
+            const rejectBox = document.getElementById(`reject_box_${id}`);
+            if(rejectBox.classList.contains('show')) {
+                rejectBox.classList.remove('show');
+                btnBox.style.display = 'block';
+            } else {
+                rejectBox.classList.add('show');
+                btnBox.style.display = 'none';
+            }
+        }
+        
+        function executeReject(id) {
+            const reason = document.getElementById(`reject_reason_${id}`).value;
+            if(!reason) { alert('A reason is required.'); return; }
+            
+            // Update in DB instead of just removing locally
+            if (window.DB) {
+                window.DB.update('loans', id, { status: 'rejected' });
+            }
+            loans = loans.filter(l => l.id !== id); // or re-fetch from DB
+            
+            window.addAuditLog('Loan Rejected', 'ADM001', `Rejected ${id}. Reason: ${reason}`);
+            renderAll();
+        }
+
+
+
+        // --- Disbursal Modal ---
+        let isFromKanban = false;
+        function openDisbursal(id, fromKanban = false) {
+            activeLoanTarget = loans.find(l => l.id === id);
+            if(!activeLoanTarget) return;
+            
+            isFromKanban = fromKanban;
+            
+            document.getElementById('modalAppName').textContent = activeLoanTarget.name;
+            document.getElementById('modalAppReq').textContent = formatCurrency(activeLoanTarget.requested);
+            
+            document.getElementById('finalAmountInput').value = activeLoanTarget.requested;
+            document.getElementById('finalRateInput').value = activeLoanTarget.type === 'Home Loan' ? 8.5 : 10.5;
+            
+            if(disbursalModal) disbursalModal.show();
+        }
+
+        document.getElementById('confirmDisburseBtn').addEventListener('click', async () => {
+            if(!activeLoanTarget) return;
+            const amt = document.getElementById('finalAmountInput').value;
+            
+            await window.simulateNetworkRequest(400, 800);
+            
+            activeLoanTarget.status = 'approved';
+            activeLoanTarget.requested = parseInt(amt); // update to final amount
+            
+            if (window.DB) {
+                window.DB.update('loans', activeLoanTarget.id, { 
+                    status: 'approved', 
+                    requested: activeLoanTarget.requested 
+                });
+            }
+
+            window.addAuditLog('Loan Approved', 'ADM001', `Approved ${activeLoanTarget.id} for ₹${amt}`);
+            
+            if(disbursalModal) disbursalModal.hide();
+            
+            // Remove from list or move to approved column
+            renderAll();
+            alert(`Successfully disbursed ${formatCurrency(parseInt(amt))} to ${activeLoanTarget.name}.`);
+        });
+
+        </script>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            }
+        };
+    </script>
+</body>
+</html>

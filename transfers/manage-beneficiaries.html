@@ -56,6 +56,8 @@
             document.documentElement.classList.add('dark-mode');
         }
     </script>
+    <script src="../shared/utils/db.js"></script>
+    <script src="../shared/utils/app-init.js"></script>
 </head>
 <body>
 
@@ -222,7 +224,7 @@
                                     <label class="form-label fw-bold text-dark small mb-2">IFSC Code*</label>
                                     <div class="position-relative">
                                         <i class="bi bi-bank position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
-                                        <input type="text" class="form-control bg-light border-0 ps-5 py-3 text-secondary" placeholder="NEXB00001" style="border-radius: 0.5rem; font-size: 0.95rem;">
+                                        <input type="text" class="form-control bg-light border-0 ps-5 py-3 text-secondary" placeholder="NEXB0000001" style="border-radius: 0.5rem; font-size: 0.95rem;">
                                     </div>
                                 </div>
                                 
@@ -263,7 +265,7 @@
                                         <tr>
                                             <td>Arjun Mehta</td>
                                             <td>500100010001</td>
-                                            <td>NEXB00001</td>
+                                            <td>NEXB0000001</td>
                                             <td>
                                                 <span class="status-badge status-active d-inline-block text-center w-75">Active</span>
                                             </td>
@@ -272,7 +274,7 @@
                                         <tr>
                                             <td>Sneha Iyer</td>
                                             <td>500100010002</td>
-                                            <td>NEXB00001</td>
+                                            <td>NEXB0000001</td>
                                             <td>
                                                 <span class="status-badge status-cooling d-inline-block text-center w-75">Cooling Lockout</span>
                                             </td>
@@ -309,7 +311,7 @@
         const addBtn = document.querySelector('button.btn-dark-blue');
         const nameInput = document.querySelector('input[placeholder="Sneha Iyer"]');
         const accInput = document.querySelector('input[placeholder="500100010002"]');
-        const ifscInput = document.querySelector('input[placeholder="NEXB00001"]');
+        const ifscInput = document.querySelector('input[placeholder="NEXB0000001"]');
         const tableBody = document.querySelector('tbody');
         const form = document.querySelector('form');
 

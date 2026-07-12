@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Profile Editor - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+
+    <!-- Chart.js for Gauge -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    
+    <style>
+        .predictive-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; display: none; background: #fff; border-radius: 0.75rem; box-shadow: 0 15px 35px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.1); max-height: 300px; overflow-y: auto; margin-top: 5px; }
+        .predictive-dropdown.show { display: block; }
+        .predictive-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); transition: background 0.2s; }
+        .predictive-item:hover { background-color: #f8f9fa; }
+        .predictive-item:last-child { border-bottom: none; }
+        
+        .locked-panel { filter: blur(5px); pointer-events: none; opacity: 0.6; transition: all 0.4s ease; position: relative; }
+        .unlocked-panel { filter: blur(0px); pointer-events: auto; opacity: 1; }
+        
+        .lock-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; background: rgba(255,255,255,0.4); border-radius: 1rem; transition: opacity 0.3s; }
+        .unlocked-panel .lock-overlay { opacity: 0; pointer-events: none; }
+    </style>
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-grid fs-5"></i><span class="fw-medium">System Dashboard</span></a>
+            <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-people fs-5"></i><span class="fw-medium">Customer List</span></a>
+            <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-lock fs-5"></i><span class="fw-medium">Freeze Account</span></a>
+            <a href="cibil-score.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;"><i class="bi bi-speedometer2 fs-5"></i><span class="fw-medium">CIBIL Score</span></a>
+            <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-house-door fs-5"></i><span class="fw-medium">Loans Terminal</span></a>
+            <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-journal-text fs-5"></i><span class="fw-medium">Audit Logs</span></a>
+            <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-bar-chart fs-5"></i><span class="fw-medium">Reports Engine</span></a>
+            <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-arrow-clockwise fs-5"></i><span class="fw-medium">Security Resets</span></a>
+            <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-currency-dollar fs-5"></i><span class="fw-medium">Balance Update</span></a>
+            <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-plus fs-5"></i><span class="fw-medium">Bulk User Import</span></a>
+            <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-server fs-5"></i><span class="fw-medium">Backup & Recovery</span></a>
+            <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-file-earmark-richtext fs-5"></i><span class="fw-medium">Content Management</span></a>
+            <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-badge fs-5"></i><span class="fw-medium">Profile</span></a>
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">
+                Admin Portal / CIBIL Score
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative">
+                        <i class="bi bi-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                    </div>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Background Graphic (Optional) -->
+        <div class="position-absolute top-0 end-0 w-100 h-50 z-n1" style="background: url('../../assets/images/background image.png') no-repeat center right; background-size: cover; opacity: 0.3; pointer-events: none;"></div>
+
+        <!-- Dynamic Content -->
+        <main class="p-4 p-md-5 position-relative z-1 pb-5">
+            <div class="mb-5">
+                <h2 class="fw-bold text-dark">Credit Profile Editor</h2>
+                <p class="text-muted">Review and dynamically adjust customer credit scores.</p>
+            </div>
+            
+            <div class="row g-4">
+                <!-- Left Column: Search & Snapshot -->
+                <div class="col-lg-5">
+                    <div class="glass-card p-4 p-md-5 h-100 bg-white" style="border-radius: 20px;">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-search me-2 text-primary"></i>Search Customer</h5>
+                        <p class="text-muted small mb-4">Locate a customer to view their snapshot and unlock editing.</p>
+                        
+                        <div class="position-relative mb-4">
+                            <div class="input-group input-group-lg shadow-sm" style="border-radius: 12px; overflow: hidden; border: 1px solid #dee2e6;">
+                                <span class="input-group-text bg-light border-0 px-3"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" id="searchInput" class="form-control border-0 bg-light fs-6 shadow-none py-3" placeholder="Start typing... (e.g., Arjun)" autocomplete="off">
+                            </div>
+                            <div id="autocompleteDropdown" class="predictive-dropdown text-start mt-2"></div>
+                        </div>
+                        
+                        <div id="profileSnapshot" class="mt-4 pt-4 border-top d-none" style="animation: fadeIn 0.5s;">
+                            <h6 class="fw-bold text-muted small text-uppercase mb-3">Customer Snapshot</h6>
+                            <div class="d-flex align-items-center gap-3 mb-4">
+                                <div id="userAvatar" class="rounded-circle text-white d-flex justify-content-center align-items-center shadow-sm" style="width: 60px; height: 60px; font-size: 1.5rem; font-weight: 700;"></div>
+                                <div>
+                                    <h4 id="cardName" class="fw-bold text-dark mb-0"></h4>
+                                    <div class="text-secondary small mt-1" id="cardDetails"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-light rounded p-4 border text-center shadow-sm position-relative">
+                                <span class="text-muted small fw-medium text-uppercase letter-spacing-1">Current CIBIL Score</span>
+                                <h1 id="currentScoreDisplay" class="display-3 fw-bold text-dark mt-2 mb-0"></h1>
+                                <span id="currentScoreBadge" class="badge rounded-pill mt-2"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Interactive Gauge & Editor -->
+                <div class="col-lg-7">
+                    <div id="editorPanel" class="glass-card p-4 p-md-5 h-100 bg-white locked-panel" style="border-radius: 20px;">
+                        
+                        <div class="lock-overlay" id="lockOverlay">
+                            <i class="bi bi-lock-fill text-muted mb-2" style="font-size: 3rem;"></i>
+                            <h5 class="fw-bold text-dark">Editor Locked</h5>
+                            <p class="text-muted small text-center px-4">Please fetch a valid customer profile<br>on the left to unlock editing.</p>
+                        </div>
+
+                        <div class="row align-items-center">
+                            <div class="col-sm-6 text-center mb-4 mb-sm-0">
+                                <h6 class="fw-bold text-muted small text-uppercase mb-3">Credit Score Gauge</h6>
+                                <div class="position-relative mx-auto" style="max-width: 250px;">
+                                    <canvas id="gaugeChart"></canvas>
+                                    <div class="position-absolute w-100 text-center" style="bottom: 10px;">
+                                        <h3 id="gaugeCenterValue" class="fw-bold mb-0 text-dark"></h3>
+                                        <span class="text-muted small" style="font-size: 0.7rem;">Proposed Score</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <h5 class="fw-bold mb-4"><i class="bi bi-sliders me-2 text-primary"></i>Adjust Profile</h5>
+                                <form id="updateScoreForm" onsubmit="event.preventDefault(); initiateSave();">
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-medium d-flex justify-content-between">
+                                            <span>New Score Value</span>
+                                            <span id="deltaBadge" class="badge bg-secondary" style="opacity: 0; transition: opacity 0.3s;"></span>
+                                        </label>
+                                        <input type="number" id="newScoreInput" class="form-control form-control-lg bg-light shadow-sm" placeholder="Enter score (300-900)" min="300" max="900" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label text-muted small fw-medium">Adjustment Reason</label>
+                                        <select id="scoreReasonInput" class="form-select bg-light shadow-sm" required>
+                                            <option value="" selected disabled>Select a reason...</option>
+                                            <option>Annual Credit Review</option>
+                                            <option>Dispute Resolution</option>
+                                            <option>External Bureau Sync</option>
+                                            <option>Manual Correction</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label text-muted small fw-medium">Administrator Notes</label>
+                                        <textarea id="scoreNotesInput" class="form-control bg-light shadow-sm" rows="2" placeholder="Required context..."></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 py-2 fw-bold shadow-sm rounded-pill">Review & Apply Update</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Final Confirmation Modal -->
+            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 rounded-4 shadow-lg">
+                        <div class="modal-header border-bottom bg-light bg-opacity-50 p-4">
+                            <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Confirm Score Update</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <p class="mb-4" style="font-size: 1.05rem;" id="modalContextText"></p>
+                            
+                            <div class="bg-light p-3 rounded border shadow-sm mb-4">
+                                <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                    <span class="text-muted small">Customer</span>
+                                    <span class="fw-bold text-dark" id="modalName"></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2 pb-2 border-bottom">
+                                    <span class="text-muted small">Score Change</span>
+                                    <span><span class="fw-medium" id="modalOldScore"></span> <i class="bi bi-arrow-right mx-1"></i> <span class="fw-bold" id="modalNewScore"></span></span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted small">Reason</span>
+                                    <span class="fw-medium text-dark text-end" id="modalReason"></span>
+                                </div>
+                            </div>
+
+                            <p class="text-danger small mb-4 fw-medium"><i class="bi bi-shield-lock me-1"></i>This action will permanently alter the customer's credit profile and impact loan eligibility. It will be recorded in the audit logs.</p>
+
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-light w-50 fw-bold" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary w-50 fw-bold" id="confirmFinalSaveBtn">Confirm Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+        <script>
+        let currentCustomer = null;
+        let allCustomers = [];
+        let currentCibilScore = 0;
+        let gaugeChartInstance = null;
+        let confirmModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.DB) {
+                allCustomers = window.DB.getAll('users').filter(u => u.role === 'customer');
+            }
+            setupPredictiveSearch();
+            setupInputListener();
+            initGaugeChart();
+            
+            if (typeof bootstrap !== 'undefined') {
+                confirmModalInstance = new bootstrap.Modal(document.getElementById('confirmationModal'));
+            }
+        });
+
+        function getAvatarColor(name) {
+            const colors = ['bg-primary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark'];
+            const charCode = name.charCodeAt(0) || 0;
+            return colors[charCode % colors.length];
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+        }
+        
+        function getScoreCategory(score) {
+            if (score < 550) return { label: 'Poor', color: 'danger' };
+            if (score < 750) return { label: 'Fair', color: 'warning text-dark' };
+            return { label: 'Excellent', color: 'success' };
+        }
+
+        function setupPredictiveSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const dropdown = document.getElementById('autocompleteDropdown');
+
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+                dropdown.innerHTML = '';
+                
+                if (term.length < 1) {
+                    dropdown.classList.remove('show');
+                    return;
+                }
+
+                const matches = allCustomers.filter(c => 
+                    c.name.toLowerCase().includes(term) || 
+                    c.id.toLowerCase().includes(term) || 
+                    c.email.toLowerCase().includes(term)
+                ).slice(0, 5);
+
+                if (matches.length > 0) {
+                    matches.forEach(c => {
+                        const div = document.createElement('div');
+                        div.className = 'predictive-item d-flex align-items-center gap-3';
+                        const color = getAvatarColor(c.name);
+                        const init = getInitials(c.name);
+                        div.innerHTML = `
+                            <div class="rounded-circle ${color} text-white d-flex justify-content-center align-items-center shadow-sm" style="width: 35px; height: 35px; font-size: 0.75rem; font-weight: bold;">
+                                ${init}
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark small lh-1 mb-1">${c.name}</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">${c.id} &bull; ${c.email}</div>
+                            </div>
+                        `;
+                        div.onclick = () => {
+                            searchInput.value = c.name;
+                            dropdown.classList.remove('show');
+                            selectCustomer(c);
+                        };
+                        dropdown.appendChild(div);
+                    });
+                    dropdown.classList.add('show');
+                } else {
+                    dropdown.innerHTML = '<div class="p-3 text-muted small text-center">No matching accounts found.</div>';
+                    dropdown.classList.add('show');
+                }
+            });
+        }
+
+        function selectCustomer(customer) {
+            currentCustomer = customer;
+            
+            // Generate a random mock score if not set, and save it so it's consistent
+            if (!customer.cibilScore) {
+                const initialScore = Math.floor(Math.random() * (850 - 450) + 450);
+                window.DB.update('users', customer.id, { cibilScore: initialScore });
+                customer.cibilScore = initialScore;
+            }
+            currentCibilScore = customer.cibilScore;
+            
+            // Populate Snapshot
+            const avatar = document.getElementById('userAvatar');
+            avatar.className = `rounded-circle text-white d-flex justify-content-center align-items-center shadow-sm ${getAvatarColor(customer.name)}`;
+            avatar.innerText = getInitials(customer.name);
+            
+            document.getElementById('cardName').textContent = customer.name;
+            document.getElementById('cardDetails').textContent = `${customer.id} | ${customer.email}`;
+            
+            document.getElementById('currentScoreDisplay').textContent = currentCibilScore;
+            
+            const cat = getScoreCategory(currentCibilScore);
+            const badge = document.getElementById('currentScoreBadge');
+            badge.className = `badge bg-${cat.color} bg-opacity-10 text-${cat.color.split(' ')[0]} border border-${cat.color.split(' ')[0]} border-opacity-25 px-3 py-2`;
+            badge.textContent = cat.label;
+
+            document.getElementById('profileSnapshot').classList.remove('d-none');
+            
+            // Unlock Right Panel
+            document.getElementById('editorPanel').classList.remove('locked-panel');
+            document.getElementById('editorPanel').classList.add('unlocked-panel');
+            
+            // Reset form
+            document.getElementById('newScoreInput').value = currentCibilScore;
+            document.getElementById('scoreReasonInput').value = "";
+            document.getElementById('scoreNotesInput').value = "";
+            document.getElementById('deltaBadge').style.opacity = 0;
+            
+            updateGauge(currentCibilScore);
+        }
+
+        // Custom plugin to draw the needle
+        const gaugeNeedle = {
+            id: 'gaugeNeedle',
+            afterDatasetDraw(chart, args, options) {
+                const { ctx, chartArea: { width, height }, config } = chart;
+                ctx.save();
+                
+                const needleValue = chart.config.options.needleValue || 300;
+                // Min 300, Max 900
+                // Angles in Chart.js doughnut start at -90deg (or -Math.PI/2) and go clockwise for 180deg (Math.PI)
+                let clampedValue = Math.max(300, Math.min(900, needleValue));
+                
+                // percentage from 0 to 1
+                let percentage = (clampedValue - 300) / 600;
+                
+                // Math.PI (start at left) to 2*Math.PI (right)
+                let angle = Math.PI + (percentage * Math.PI);
+                
+                const cx = width / 2;
+                // Bottom of the half-doughnut is at chartArea.bottom, but usually it centers it vertically.
+                // Let's use the center Y provided by the chart metadata
+                const cy = chart._metasets[0].data[0].y;
+                
+                ctx.translate(cx, cy);
+                ctx.rotate(angle);
+                
+                // Draw Needle shape
+                ctx.beginPath();
+                ctx.moveTo(0, -6);
+                ctx.lineTo(height/2 - 20, 0); // pointing right, but since we start rotated by Math.PI, it points correctly
+                ctx.lineTo(0, 6);
+                ctx.fillStyle = '#1e293b';
+                ctx.fill();
+                
+                // Draw Center Hub
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI * 2);
+                ctx.fillStyle = '#1e293b';
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        };
+
+        function initGaugeChart() {
+            const ctx = document.getElementById('gaugeChart').getContext('2d');
+            gaugeChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Poor (300-549)', 'Fair (550-749)', 'Excellent (750-900)'],
+                    datasets: [{
+                        data: [250, 200, 150], // Chunks of 600 scale
+                        backgroundColor: ['#dc3545', '#ffc107', '#198754'],
+                        borderWidth: 0,
+                        hoverOffset: 0
+                    }]
+                },
+                options: {
+                    needleValue: 300, // custom property
+                    rotation: -90, // starts at left
+                    circumference: 180, // half circle
+                    cutout: '75%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    },
+                    animation: {
+                        animateRotate: false,
+                        animateScale: false
+                    }
+                },
+                plugins: [gaugeNeedle]
+            });
+        }
+
+        function updateGauge(value) {
+            if (gaugeChartInstance) {
+                gaugeChartInstance.options.needleValue = value;
+                gaugeChartInstance.update();
+                document.getElementById('gaugeCenterValue').textContent = value;
+            }
+        }
+
+        function setupInputListener() {
+            const input = document.getElementById('newScoreInput');
+            const badge = document.getElementById('deltaBadge');
+            
+            input.addEventListener('input', (e) => {
+                let val = parseInt(e.target.value);
+                if (isNaN(val)) val = 300;
+                
+                updateGauge(val);
+                
+                if (currentCustomer && val > 0) {
+                    let diff = val - currentCibilScore;
+                    if (diff === 0) {
+                        badge.style.opacity = 0;
+                    } else {
+                        badge.style.opacity = 1;
+                        if (diff > 0) {
+                            badge.className = 'badge bg-success shadow-sm';
+                            badge.textContent = `+${diff} pts`;
+                        } else {
+                            badge.className = 'badge bg-danger shadow-sm';
+                            badge.textContent = `${diff} pts`;
+                        }
+                    }
+                }
+            });
+        }
+
+        function initiateSave() {
+            const newScore = parseInt(document.getElementById('newScoreInput').value);
+            const reason = document.getElementById('scoreReasonInput').value;
+            const notes = document.getElementById('scoreNotesInput').value.trim();
+            
+            if (newScore < 300 || newScore > 900) {
+                alert("Score must be between 300 and 900.");
+                return;
+            }
+            if (!reason) {
+                alert("Please select an adjustment reason.");
+                return;
+            }
+            if (!notes) {
+                alert("Please provide administrator notes for the audit log.");
+                return;
+            }
+            
+            const diff = newScore - currentCibilScore;
+            const sign = diff > 0 ? '+' : '';
+            
+            // Populate Modal
+            document.getElementById('modalContextText').innerHTML = `You are about to change <strong>${currentCustomer.name}</strong>'s CIBIL score due to <strong>${reason}</strong>.`;
+            document.getElementById('modalName').textContent = currentCustomer.name;
+            document.getElementById('modalOldScore').textContent = currentCibilScore;
+            document.getElementById('modalNewScore').innerHTML = `${newScore} <span class="badge ${diff > 0 ? 'bg-success' : 'bg-danger'} ms-1" style="font-size:0.7rem;">${sign}${diff}</span>`;
+            document.getElementById('modalReason').textContent = reason;
+            
+            if (confirmModalInstance) confirmModalInstance.show();
+            
+            document.getElementById('confirmFinalSaveBtn').onclick = async () => {
+                await finalizeSave(newScore, reason, notes);
+            };
+        }
+
+        async function finalizeSave(newScore, reason, notes) {
+            if (confirmModalInstance) confirmModalInstance.hide();
+            await window.simulateNetworkRequest(500, 1000);
+            
+            if (window.DB) {
+                currentCustomer.cibilScore = newScore;
+                window.DB.update('users', currentCustomer.id, { cibilScore: newScore });
+                window.addAuditLog('CIBIL Update', 'ADM001', `Updated ${currentCustomer.id} score to ${newScore}. Reason: ${reason}`);
+            }
+            
+            alert('Credit score updated successfully. Audit log recorded.');
+            
+            // Update local state to reflect new reality
+            currentCibilScore = newScore;
+            document.getElementById('deltaBadge').style.opacity = 0;
+            
+            // Re-render snapshot
+            document.getElementById('currentScoreDisplay').textContent = currentCibilScore;
+            const cat = getScoreCategory(currentCibilScore);
+            const badge = document.getElementById('currentScoreBadge');
+            badge.className = `badge bg-${cat.color} bg-opacity-10 text-${cat.color.split(' ')[0]} border border-${cat.color.split(' ')[0]} border-opacity-25 px-3 py-2`;
+            badge.textContent = cat.label;
+            
+            document.getElementById('scoreNotesInput').value = "";
+            document.getElementById('scoreReasonInput').value = "";
+        }
+        </script>
+        
+        <style>
+            @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+            .letter-spacing-1 { letter-spacing: 1px; }
+        </style>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            }
+        };
+    </script>
+</body>
+</html>

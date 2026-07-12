@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Administration Dashboard - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            
+        <a href="dashboard.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;">
+            <i class="bi bi-grid fs-5"></i>
+            <span class="fw-medium">System Dashboard</span>
+        </a>
+    
+        <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-people fs-5"></i>
+            <span class="fw-medium">Customer List</span>
+        </a>
+    
+        <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-lock fs-5"></i>
+            <span class="fw-medium">Freeze Account</span>
+        </a>
+    
+        <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-speedometer2 fs-5"></i>
+            <span class="fw-medium">CIBIL Score</span>
+        </a>
+    
+        <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="fw-medium">Loans Terminal</span>
+        </a>
+    
+        <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="fw-medium">Audit Logs</span>
+        </a>
+    
+        <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-bar-chart fs-5"></i>
+            <span class="fw-medium">Reports Engine</span>
+        </a>
+    
+        <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-arrow-clockwise fs-5"></i>
+            <span class="fw-medium">Security Resets</span>
+        </a>
+    
+        <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-currency-dollar fs-5"></i>
+            <span class="fw-medium">Balance Update</span>
+        </a>
+    
+        <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-person-plus fs-5"></i>
+            <span class="fw-medium">Bulk User Import</span>
+        </a>
+    
+        <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-server fs-5"></i>
+            <span class="fw-medium">Backup & Recovery</span>
+        </a>
+    
+        <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-file-earmark-richtext fs-5"></i>
+            <span class="fw-medium">Content Management</span>
+        </a>
+    
+        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-person-badge fs-5"></i>
+            <span class="fw-medium">Profile</span>
+        </a>
+    
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">
+                Admin Portal / System Dashboard
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+
+                
+                                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                        <li class="p-3 border-bottom bg-light">
+                            <h6 class="mb-0 fw-bold">System Alerts</h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 border-bottom text-wrap" href="javascript:void(0)">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-danger-subtle text-danger rounded-circle p-2 d-flex"><i class="bi bi-shield-x"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Security Alert</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Multiple failed logins detected.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 border-bottom text-wrap" href="backup-recovery.html">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-hdd-network"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Backup Completed</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Auto-DB-Sync finished successfully.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 text-wrap" href="javascript:void(0)">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-cpu"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">High Load</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Server CPU usage exceeded 85%.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Background Graphic (Optional) -->
+        <div class="position-absolute top-0 end-0 w-100 h-50 z-n1" style="background: url('../../assets/images/background image.png') no-repeat center right; background-size: cover; opacity: 0.3; pointer-events: none;"></div>
+
+        <!-- Dynamic Content -->
+        <main class="p-4 p-md-5 position-relative z-1">
+            
+            <div class="mb-5 d-flex justify-content-between align-items-end flex-wrap gap-3">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">System Administration Dashboard</h2>
+                    <p class="text-muted mb-0">High-level overview of core systemic repositories.</p>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-primary px-4 py-2 shadow-sm fw-medium dropdown-toggle d-flex align-items-center" type="button" id="exportDataDrop" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-cloud-download me-2"></i>Export Data
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2" aria-labelledby="exportDataDrop" style="border-radius: 12px; min-width: 200px; z-index: 1050;">
+                        <li><a class="dropdown-item py-2 fw-medium d-flex align-items-center" href="#" id="exportPdfBtn"><i class="bi bi-file-earmark-pdf text-danger me-3 fs-5"></i>Export as PDF</a></li>
+                        <li><a class="dropdown-item py-2 fw-medium d-flex align-items-center" href="#" id="exportWordBtn"><i class="bi bi-file-earmark-word text-primary me-3 fs-5"></i>Export as Word</a></li>
+                        <li><a class="dropdown-item py-2 fw-medium d-flex align-items-center" href="#" id="exportCsvBtn"><i class="bi bi-file-earmark-spreadsheet text-success me-3 fs-5"></i>Export as CSV</a></li>
+                        <li><a class="dropdown-item py-2 fw-medium d-flex align-items-center" href="#" id="exportTextBtn"><i class="bi bi-file-earmark-text text-secondary me-3 fs-5"></i>Export as Text</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Left Column (KPIs, Charts, Table) -->
+                <div class="col-lg-9">
+                    
+                    <!-- KPI Cards (2 Rows of 3) -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <div class="glass-card card-accent-blue p-4 h-100 position-relative overflow-hidden" style="transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                                <i class="bi bi-people-fill position-absolute text-secondary opacity-10" style="font-size: 6rem; right: -15px; bottom: -20px; pointer-events: none;"></i>
+                                <i class="bi bi-person fs-4 text-secondary mb-2 d-block position-relative z-1"></i>
+                                <div class="text-muted small fw-medium mb-1 position-relative z-1">Total Registered Customers</div>
+                                <h3 class="fw-bold mb-0 text-dark position-relative z-1"><span id="dashTotalUsers">0</span> Users</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card card-accent-green p-4 h-100 position-relative overflow-hidden" style="transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                                <i class="bi bi-wallet2 position-absolute text-secondary opacity-10" style="font-size: 6rem; right: -15px; bottom: -20px; pointer-events: none;"></i>
+                                <i class="bi bi-cash-coin fs-4 text-secondary mb-2 d-block position-relative z-1"></i>
+                                <div class="text-muted small fw-medium mb-1 position-relative z-1">Total Holdings Deposits</div>
+                                <h3 class="fw-bold mb-0 text-dark position-relative z-1" id="dashTotalBalance">₹ 0.00</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card card-accent-info p-4 h-100 position-relative overflow-hidden" style="transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                                <i class="bi bi-house position-absolute text-secondary opacity-10" style="font-size: 6rem; right: -15px; bottom: -20px; pointer-events: none;"></i>
+                                <i class="bi bi-house fs-4 text-secondary mb-2 d-block position-relative z-1"></i>
+                                <div class="text-muted small fw-medium mb-1 position-relative z-1">Active Disbursed Loans</div>
+                                <h3 class="fw-bold mb-0 text-dark position-relative z-1"><span id="dashTotalLoans">0</span> Active</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card card-accent-danger p-4 h-100 position-relative overflow-hidden" style="transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                                <i class="bi bi-cash-stack position-absolute text-secondary opacity-10" style="font-size: 6rem; right: -15px; bottom: -20px; pointer-events: none;"></i>
+                                <i class="bi bi-cash-stack fs-4 text-secondary mb-2 d-block position-relative z-1"></i>
+                                <div class="text-muted small fw-medium mb-1 position-relative z-1">Consolidated Loan Book</div>
+                                <h3 class="fw-bold mb-0 text-dark position-relative z-1" id="dashLoanBook">₹ 0.00</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card card-accent-yellow p-4 h-100 position-relative overflow-hidden" style="cursor: pointer; transition: transform 0.3s, box-shadow 0.3s;" onclick="window.location.href='loans-terminal.html'" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                                <i class="bi bi-clock-history position-absolute text-secondary opacity-10" style="font-size: 6rem; right: -15px; bottom: -20px; pointer-events: none;"></i>
+                                <i class="bi bi-clock-history fs-4 text-secondary mb-2 d-block position-relative z-1"></i>
+                                <div class="text-muted small fw-medium mb-1 position-relative z-1">Pending Loan Backlog</div>
+                                <h3 class="fw-bold mb-0 text-dark position-relative z-1" id="dashPendingLoans">0 Apps</h3>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card card-accent-purple p-4 h-100 position-relative overflow-hidden" style="background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(139,92,246,0.15)); transition: transform 0.3s, box-shadow 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 25px rgba(0,0,0,0.1)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+                                <i class="bi bi-ticket-detailed position-absolute text-secondary opacity-10" style="font-size: 6rem; right: -15px; bottom: -20px; pointer-events: none;"></i>
+                                <i class="bi bi-ticket-detailed fs-4 text-secondary mb-2 d-block position-relative z-1"></i>
+                                <div class="text-muted small fw-medium mb-1 position-relative z-1">Pending Support Tickets</div>
+                                <h3 class="fw-bold text-dark mb-0 position-relative z-1" id="dashSupportTickets">0 Open</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-8">
+                            <div class="glass-card p-4 h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h6 class="fw-bold mb-0">Holdings Growth (Last 30 Days)</h6>
+                                </div>
+                                <div style="height: 250px;">
+                                    <canvas id="holdingsGrowthChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="glass-card p-4 h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h6 class="fw-bold mb-0">User Status</h6>
+                                </div>
+                                <div style="height: 250px; position: relative;">
+                                    <canvas id="userStatusChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audit Log Table -->
+                    <div class="glass-card p-4 mb-4">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                            <h5 class="fw-bold mb-0">System Audit Activity Log</h5>
+                            <div class="input-group shadow-sm" style="width: 250px; border-radius: 8px; overflow: hidden;">
+                                <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" id="auditSearchInput" class="form-control border-0 bg-light" placeholder="Search logs...">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="auditTable" class="table table-borderless table-striped align-middle">
+                                <thead class="border-bottom">
+                                    <tr>
+                                        <th class="text-muted small fw-medium pb-3">ID</th>
+                                        <th class="text-muted small fw-medium pb-3">Actor User</th>
+                                        <th class="text-muted small fw-medium pb-3">Action Type</th>
+                                        <th class="text-muted small fw-medium pb-3">Details Description</th>
+                                        <th class="text-muted small fw-medium pb-3 text-end">Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="auditTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination Wrapper -->
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                            <span class="text-muted small" id="auditPaginationInfo">Showing 1 to 5 of 5 entries</span>
+                            <div class="btn-group shadow-sm" id="auditPaginationBtns">
+                                <button class="btn btn-sm btn-outline-secondary bg-white" disabled>Prev</button>
+                                <button class="btn btn-sm btn-primary active">1</button>
+                                <button class="btn btn-sm btn-outline-secondary bg-white" disabled>Next</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column (Quick Actions) -->
+                <div class="col-lg-3">
+                    <div class="glass-card p-4 sticky-top" style="top: 100px;">
+                        <h6 class="fw-bold mb-4">Quick Actions</h6>
+                        
+                        <a href="customer-directory.html" class="btn btn-light w-100 text-start py-3 mb-2 border shadow-sm rounded d-flex align-items-center" style="transition: all 0.2s;" onmouseover="this.classList.add('bg-primary-subtle')" onmouseout="this.classList.remove('bg-primary-subtle')">
+                            <div class="bg-primary text-white rounded p-2 me-3 d-flex"><i class="bi bi-person-plus text-white" style="color: white !important;"></i></div>
+                            <span class="fw-medium text-dark" style="font-size: 0.9rem;">Add New User</span>
+                        </a>
+                        
+                        <a href="loans-terminal.html" class="btn btn-light w-100 text-start py-3 mb-2 border shadow-sm rounded d-flex align-items-center" style="transition: all 0.2s;" onmouseover="this.classList.add('bg-warning-subtle')" onmouseout="this.classList.remove('bg-warning-subtle')">
+                            <div class="bg-warning text-white rounded p-2 me-3 d-flex"><i class="bi bi-house-door text-white" style="color: white !important;"></i></div>
+                            <span class="fw-medium text-dark" style="font-size: 0.9rem;">Review Pending Loans</span>
+                        </a>
+
+                        <a href="freeze-account.html" class="btn btn-light w-100 text-start py-3 mb-2 border shadow-sm rounded d-flex align-items-center" style="transition: all 0.2s;" onmouseover="this.classList.add('bg-danger-subtle')" onmouseout="this.classList.remove('bg-danger-subtle')">
+                            <div class="bg-danger text-white rounded p-2 me-3 d-flex"><i class="bi bi-lock text-white" style="color: white !important;"></i></div>
+                            <span class="fw-medium text-dark" style="font-size: 0.9rem;">Freeze Account</span>
+                        </a>
+
+                        <a href="reports.html" class="btn btn-light w-100 text-start py-3 mb-2 border shadow-sm rounded d-flex align-items-center" style="transition: all 0.2s;" onmouseover="this.classList.add('bg-info-subtle')" onmouseout="this.classList.remove('bg-info-subtle')">
+                            <div class="bg-info text-white rounded p-2 me-3 d-flex"><i class="bi bi-bar-chart text-white" style="color: white !important;"></i></div>
+                            <span class="fw-medium text-dark" style="font-size: 0.9rem;">Generate Report</span>
+                        </a>
+
+                        <a href="backup-recovery.html" class="btn btn-light w-100 text-start py-3 mb-2 border shadow-sm rounded d-flex align-items-center" style="transition: all 0.2s;" onmouseover="this.classList.add('bg-success-subtle')" onmouseout="this.classList.remove('bg-success-subtle')">
+                            <div class="bg-success text-white rounded p-2 me-3 d-flex"><i class="bi bi-server text-white" style="color: white !important;"></i></div>
+                            <span class="fw-medium text-dark" style="font-size: 0.9rem;">Run Database Backup</span>
+                        </a>
+                        
+                        <div class="mt-4 pt-4 border-top">
+                            <h6 class="fw-bold mb-3 small text-muted">System Status</h6>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-medium">Database</span>
+                                <span class="badge bg-success">Online</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-medium">API Gateway</span>
+                                <span class="badge bg-success">Online</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small fw-medium">Backup Server</span>
+                                <span class="badge bg-warning text-dark">Syncing</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        function renderDashboard() {
+            if (!window.DB) return;
+            
+            const usersCount = window.DB.analytics.getTotalUsers();
+            document.getElementById('dashTotalUsers').innerText = usersCount;
+            
+            const loans = window.DB.getAll('loans');
+            document.getElementById('dashTotalLoans').innerText = loans.filter(l => l.status === 'Active').length;
+            
+            const pendingLoans = loans.filter(l => l.status !== 'Active' && l.status !== 'approved').length;
+            document.getElementById('dashPendingLoans').innerText = pendingLoans + ' Apps';
+            
+            const totalLoanBook = loans.reduce((sum, l) => sum + parseFloat(l.amount), 0);
+            document.getElementById('dashLoanBook').innerText = '₹ ' + totalLoanBook.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            
+            const totalBal = window.DB.getAll('accounts').reduce((sum, a) => sum + parseFloat(a.balance), 0);
+            document.getElementById('dashTotalBalance').innerText = '₹ ' + totalBal.toLocaleString('en-IN', { minimumFractionDigits: 2 });
+            
+            document.getElementById('dashSupportTickets').innerText = window.DB.getAll('supportTickets').filter(t => t.status === 'Open').length + ' Open';
+
+            const auditBody = document.getElementById('auditTableBody');
+            if (auditBody) {
+                const logs = window.DB.getAll('auditLogs').slice(0, 5);
+                let html = '';
+                logs.forEach(log => {
+                    let badgeClass = 'bg-secondary-subtle text-secondary';
+                    let icon = 'bi-info-circle';
+                    if (log.status === 'SUCCESS') { badgeClass = 'bg-success-subtle text-success'; icon = 'bi-check-circle'; }
+                    else if (log.status === 'WARNING') { badgeClass = 'bg-warning-subtle text-warning'; icon = 'bi-exclamation-triangle'; }
+                    else if (log.status === 'ERROR' || log.status === 'CRITICAL') { badgeClass = 'bg-danger-subtle text-danger'; icon = 'bi-x-circle'; }
+                    else if (log.status === 'INFO') { badgeClass = 'bg-info-subtle text-info'; icon = 'bi-info-circle'; }
+
+                    const user = window.DB.getById('users', log.adminId) || window.DB.getById('users', log.userId);
+                    const actorName = user ? user.name : log.adminId || 'System';
+
+                    html += `
+                    <tr>
+                        <td>${log.id.split('_')[1] || log.id}</td>
+                        <td><span class="fw-medium text-dark">${actorName}</span></td>
+                        <td><span class="badge ${badgeClass} px-2 py-1 rounded-pill"><i class="bi ${icon} me-1"></i>${log.action}</span></td>
+                        <td class="text-secondary small">${log.details}</td>
+                        <td class="text-secondary small text-end">${new Date(log.date).toLocaleString('en-IN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</td>
+                    </tr>`;
+                });
+                auditBody.innerHTML = html;
+                document.getElementById('auditPaginationInfo').innerText = `Showing 1 to ${logs.length} of ${window.DB.getAll('auditLogs').length} entries`;
+            }
+        }
+        
+        // Render immediately
+        renderDashboard();
+
+
+        function downloadFile(content, fileName, mimeType) {
+            const a = document.createElement('a');
+            const file = new Blob([content], { type: mimeType });
+            a.href = URL.createObjectURL(file);
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function getTableData() {
+            const table = document.getElementById('auditTable');
+            if (!table) return [];
+            const rows = Array.from(table.querySelectorAll('tr'));
+            return rows.map(row => {
+                const cols = Array.from(row.querySelectorAll('th, td'));
+                return cols.map(col => col.innerText.trim());
+            });
+        }
+
+        document.getElementById('exportTextBtn')?.addEventListener('click', () => {
+            const data = getTableData();
+            const txtContent = data.map(row => row.join("\t")).join("\n");
+            downloadFile(txtContent, 'Audit_Log.txt', 'text/plain');
+        });
+
+        document.getElementById('exportCsvBtn')?.addEventListener('click', () => {
+            const data = getTableData();
+            const csvContent = data.map(row => row.map(cell => '"' + cell.replace(/"/g, '""') + '"').join(",")).join("\n");
+            downloadFile(csvContent, 'Audit_Log.csv', 'text/csv');
+        });
+
+        document.getElementById('exportPdfBtn')?.addEventListener('click', () => {
+            const table = document.getElementById('auditTable');
+            const newWin = window.open("");
+            newWin.document.write("<html><head><title>Audit Log - PDF</title>");
+            newWin.document.write("<style>body{font-family:sans-serif;} table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid black; padding: 8px; text-align: left; }</style>");
+            newWin.document.write(`
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+</head><body><h2>System Audit Activity Log</h2>`);
+            newWin.document.write(table.outerHTML);
+            newWin.document.write(`
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.DB) {
+        const users = DB.getAll('users').filter(u => u.role === 'customer').length;
+        const elUsers = document.getElementById('dashTotalUsers');
+        if (elUsers) elUsers.innerText = users;
+        
+        const txns = DB.getAll('transactions').length;
+        const elTxns = document.getElementById('dashTotalTxns');
+        if (elTxns) elTxns.innerText = txns;
+        
+        const loans = DB.getAll('loans').length;
+        const elLoans = document.getElementById('dashTotalLoans');
+        if (elLoans) elLoans.innerText = loans;
+        
+        const accounts = DB.getAll('accounts');
+        const totalBal = accounts.reduce((sum, a) => sum + parseFloat(a.balance), 0);
+        const elBal = document.getElementById('dashTotalBalance');
+        if (elBal) elBal.innerHTML = '&#8377; ' + totalBal.toLocaleString('en-IN');
+    }
+});
+<\/script>
+</body></html>`);
+            newWin.document.close();
+            setTimeout(() => { newWin.print(); }, 100);
+        });
+
+        document.getElementById('exportWordBtn')?.addEventListener('click', () => {
+            const table = document.getElementById('auditTable');
+            const header = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Audit Log</title><style>table { border-collapse: collapse; width: 100%; } th, td { border: 1px solid black; padding: 8px; text-align: left; }</style>
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+</head><body><h2>System Audit Activity Log</h2>`;
+            const footer = "</body></html>";
+            const sourceHTML = header + table.outerHTML + footer;
+            downloadFile(sourceHTML, 'Audit_Log.doc', 'application/msword');
+        });
+    });
+    </script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

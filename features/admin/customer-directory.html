@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Directory Settings - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            
+        <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-grid fs-5"></i>
+            <span class="fw-medium">System Dashboard</span>
+        </a>
+    
+        <a href="customer-directory.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;">
+            <i class="bi bi-people fs-5"></i>
+            <span class="fw-medium">Customer List</span>
+        </a>
+    
+        <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-lock fs-5"></i>
+            <span class="fw-medium">Freeze Account</span>
+        </a>
+    
+        <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-speedometer2 fs-5"></i>
+            <span class="fw-medium">CIBIL Score</span>
+        </a>
+    
+        <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-house-door fs-5"></i>
+            <span class="fw-medium">Loans Terminal</span>
+        </a>
+    
+        <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-journal-text fs-5"></i>
+            <span class="fw-medium">Audit Logs</span>
+        </a>
+    
+        <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-bar-chart fs-5"></i>
+            <span class="fw-medium">Reports Engine</span>
+        </a>
+    
+        <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-arrow-clockwise fs-5"></i>
+            <span class="fw-medium">Security Resets</span>
+        </a>
+    
+        <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-currency-dollar fs-5"></i>
+            <span class="fw-medium">Balance Update</span>
+        </a>
+    
+        <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-person-plus fs-5"></i>
+            <span class="fw-medium">Bulk User Import</span>
+        </a>
+    
+        <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-server fs-5"></i>
+            <span class="fw-medium">Backup & Recovery</span>
+        </a>
+    
+        <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-file-earmark-richtext fs-5"></i>
+            <span class="fw-medium">Content Management</span>
+        </a>
+    
+        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+            <i class="bi bi-person-badge fs-5"></i>
+            <span class="fw-medium">Profile</span>
+        </a>
+    
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">
+                Admin Portal / Customer List
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+
+                
+                                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <div data-bs-toggle="dropdown" aria-expanded="false" class="position-relative" onclick="const badge = this.querySelector('.badge'); if(badge) { if(badge.style.display === 'none') { const menu = this.nextElementSibling; if(menu) menu.innerHTML = '<li class=&quot;p-3 border-bottom bg-light&quot;><h6 class=&quot;mb-0 fw-bold&quot;>Notifications</h6></li><li><a class=&quot;dropdown-item p-3 text-wrap text-center text-muted&quot; href=&quot;javascript:void(0)&quot;><small>No new notifications</small></a></li>'; } else { badge.style.display = 'none'; } }">
+                                <i class="bi bi-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-white" style="font-size: 0.6rem;">3</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-0 mt-3" style="width: 320px; border-radius: 12px; overflow: hidden; z-index: 9999;">
+                        <li class="p-3 border-bottom bg-light">
+                            <h6 class="mb-0 fw-bold">System Alerts</h6>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 border-bottom text-wrap" href="javascript:void(0)">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-danger-subtle text-danger rounded-circle p-2 d-flex"><i class="bi bi-shield-x"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Security Alert</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Multiple failed logins detected.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 border-bottom text-wrap" href="backup-recovery.html">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-success-subtle text-success rounded-circle p-2 d-flex"><i class="bi bi-hdd-network"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">Backup Completed</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Auto-DB-Sync finished successfully.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-3 text-wrap" href="javascript:void(0)">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-warning-subtle text-warning rounded-circle p-2 d-flex"><i class="bi bi-cpu"></i></div>
+                                    <div>
+                                        <p class="mb-0 fw-semibold" style="font-size: 0.85rem;">High Load</p>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Server CPU usage exceeded 85%.</small>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Background Graphic (Optional) -->
+        <div class="position-absolute top-0 end-0 w-100 h-50 z-n1" style="background: url('../../assets/images/background image.png') no-repeat center right; background-size: cover; opacity: 0.3; pointer-events: none;"></div>
+
+        <!-- Dynamic Content -->
+        <main class="p-4 p-md-5 position-relative z-1 pb-5">
+            
+            <div class="mb-4 d-flex justify-content-between align-items-end flex-wrap gap-3">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">Customer Directory</h2>
+                    <p class="text-muted mb-0">Search, review, and adjust details of all system customer accounts.</p>
+                </div>
+            </div>
+            
+            <div class="glass-card p-0 mb-5 overflow-hidden shadow-sm" style="border: 1px solid rgba(0,0,0,0.05);">
+                <!-- Card Header with Compact Search -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center p-4 border-bottom bg-light bg-opacity-50">
+                    <h5 class="fw-bold mb-0 text-dark">Customer Database</h5>
+                    <div class="input-group shadow-sm bg-white" style="width: 320px; border-radius: 8px; overflow: hidden; border: 1px solid #dee2e6;">
+                        <span class="input-group-text bg-transparent border-0"><i class="bi bi-search text-muted"></i></span>
+                        <input id="customerSearchInput" type="text" class="form-control border-0 bg-transparent shadow-none" placeholder="Search name, email, or ID...">
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-borderless table-hover align-middle mb-0" id="customerTable">
+                        <thead class="border-bottom bg-light bg-opacity-50">
+                            <tr>
+                                <th class="text-muted small fw-medium py-3 ps-4 cursor-pointer" onclick="handleSort('id')" style="width: 60px;"># <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 cursor-pointer" onclick="handleSort('custId')">Customer ID <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 cursor-pointer" onclick="handleSort('name')">Customer Name <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 cursor-pointer" onclick="handleSort('contact')">Contact Info <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 cursor-pointer" onclick="handleSort('date')">Join Date <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 cursor-pointer text-end" onclick="handleSort('balance')">Balance <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 text-center cursor-pointer" onclick="handleSort('status')">Status <i class="bi bi-arrow-down-up ms-1 opacity-50"></i></th>
+                                <th class="text-muted small fw-medium py-3 text-end pe-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTableBody">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center p-3 border-top bg-light bg-opacity-50">
+                    <div class="d-flex align-items-center gap-3 ms-2">
+                        <span class="text-muted small fw-medium" id="paginationInfo">Showing 0 to 0 of 0 entries</span>
+                        <select class="form-select form-select-sm shadow-sm border-secondary text-secondary fw-medium" style="width: auto; border-radius: 6px;" id="rowsPerPageSelect">
+                            <option value="5">5 per page</option>
+                            <option value="10" selected>10 per page</option>
+                            <option value="20">20 per page</option>
+                            <option value="50">50 per page</option>
+                        </select>
+                    </div>
+                    <div class="btn-group shadow-sm me-2" id="paginationBtns" style="border-radius: 6px; overflow: hidden;">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+        
+        </main>
+
+        <!-- Offcanvas Profile View -->
+        <div class="offcanvas offcanvas-end shadow-lg" tabindex="-1" id="customerOffcanvas" style="width: 450px; border-left: none;">
+            <div class="offcanvas-header border-bottom bg-light bg-opacity-50 p-4">
+                <h5 class="fw-bold mb-0 text-dark">Customer Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-0 bg-white" id="offcanvasBodyContent">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const searchInput = document.getElementById('customerSearchInput');
+        const tableBody = document.getElementById('customerTableBody');
+        
+        if (searchInput && tableBody) {
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                const rows = tableBody.querySelectorAll('tr');
+                
+                rows.forEach(row => {
+                    const textContent = row.textContent.toLowerCase();
+                    if (textContent.includes(query)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
+    });
+    </script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+
+<script>
+let currentUsers = [];
+let filteredUsers = [];
+let sortCol = 'date';
+let sortAsc = false;
+let currentPage = 1;
+let itemsPerPage = 10;
+
+document.addEventListener('DOMContentLoaded', () => {
+    initData();
+    setupEventListeners();
+    renderTable();
+});
+
+function initData() {
+    if (window.DB) {
+        const baseUsers = window.DB.getAll('users').filter(u => u.role === 'customer');
+        currentUsers = baseUsers.map(u => {
+            const accs = window.DB.filter('accounts', a => a.userId === u.id);
+            const totalBal = accs.reduce((sum, a) => sum + parseFloat(a.balance), 0);
+            return {
+                ...u,
+                balance: totalBal,
+                timestamp: new Date(u.joinedDate).getTime()
+            };
+        });
+        filteredUsers = [...currentUsers];
+    }
+}
+
+function setupEventListeners() {
+    // Search
+    const searchInput = document.getElementById('customerSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            filteredUsers = currentUsers.filter(u => 
+                u.name.toLowerCase().includes(term) || 
+                u.email.toLowerCase().includes(term) || 
+                u.id.toLowerCase().includes(term) || 
+                u.phone.includes(term)
+            );
+            currentPage = 1;
+            renderTable();
+        });
+    }
+
+    // Pagination Select
+    const select = document.getElementById('rowsPerPageSelect');
+    if (select) {
+        select.addEventListener('change', (e) => {
+            itemsPerPage = parseInt(e.target.value);
+            currentPage = 1;
+            renderTable();
+        });
+    }
+}
+
+function handleSort(col) {
+    if (sortCol === col) {
+        sortAsc = !sortAsc;
+    } else {
+        sortCol = col;
+        sortAsc = true;
+    }
+    
+    filteredUsers.sort((a, b) => {
+        let valA, valB;
+        switch(col) {
+            case 'id': valA = a.id; valB = b.id; break;
+            case 'custId': valA = a.id; valB = b.id; break;
+            case 'name': valA = a.name.toLowerCase(); valB = b.name.toLowerCase(); break;
+            case 'contact': valA = a.email.toLowerCase(); valB = b.email.toLowerCase(); break;
+            case 'date': valA = a.timestamp; valB = b.timestamp; break;
+            case 'balance': valA = a.balance; valB = b.balance; break;
+            case 'status': valA = a.status; valB = b.status; break;
+            default: valA = a.timestamp; valB = b.timestamp;
+        }
+        
+        if (valA < valB) return sortAsc ? -1 : 1;
+        if (valA > valB) return sortAsc ? 1 : -1;
+        return 0;
+    });
+    
+    renderTable();
+}
+
+function getInitials(name) {
+    return name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+}
+
+function getAvatarColor(name) {
+    const colors = ['bg-primary', 'bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-dark'];
+    const charCode = name.charCodeAt(0);
+    return colors[charCode % colors.length];
+}
+
+function renderTable() {
+    const tbody = document.getElementById('customerTableBody');
+    if (!tbody) return;
+
+    // Pagination Logic
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+    let html = '';
+    
+    if (paginatedUsers.length === 0) {
+        html = '<tr><td colspan="9" class="text-center py-5 text-muted"><i class="bi bi-inbox fs-2 d-block mb-3 text-secondary opacity-50" style="font-size: 3rem;"></i><span class="fs-5 fw-medium">No customers found.</span></td></tr>';
+    } else {
+        paginatedUsers.forEach((c, idx) => {
+            const actualIndex = startIndex + idx + 1;
+            const initials = getInitials(c.name);
+            const avatarColor = getAvatarColor(c.name);
+            const badgeClass = c.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+            
+            html += `
+            <tr style="transition: background-color 0.2s;" onmouseover="this.classList.add('bg-light')" onmouseout="this.classList.remove('bg-light')">
+                <td class="ps-4 text-secondary small fw-medium">${actualIndex}</td>
+                <td><span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-2 py-1 shadow-sm">${c.id}</span></td>
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="rounded-circle ${avatarColor} text-white d-flex justify-content-center align-items-center shadow-sm" style="width: 36px; height: 36px; font-size: 0.8rem; font-weight: 600;">
+                            ${initials}
+                        </div>
+                        <span class="fw-bold text-dark">${c.name}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="d-flex flex-column">
+                        <span class="text-dark small fw-medium"><i class="bi bi-envelope text-muted me-2"></i>${c.email}</span>
+                        <span class="text-muted small" style="font-size: 0.75rem;"><i class="bi bi-telephone text-muted me-2"></i>+91 ${c.phone}</span>
+                    </div>
+                </td>
+                <td class="text-secondary small fw-medium">${new Date(c.joinedDate).toLocaleDateString('en-GB')}</td>
+                <td class="fw-bold text-dark text-end">&#8377; ${c.balance.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                <td class="text-center"><span class="badge ${badgeClass} rounded-pill px-3 py-2 border border-opacity-25 shadow-sm">${c.status}</span></td>
+                <td class="text-end pe-4">
+                    <button class="btn btn-sm btn-light border shadow-sm text-primary rounded-circle p-0 d-inline-flex align-items-center justify-content-center" style="width:32px; height:32px;" onclick="viewCustomer('${c.id}')" data-bs-toggle="tooltip" title="View Profile"><i class="bi bi-eye-fill"></i></button>
+                    <button class="btn btn-sm btn-light border shadow-sm text-danger rounded-circle ms-1 p-0 d-inline-flex align-items-center justify-content-center" style="width:32px; height:32px;" onclick="deleteCustomer('${c.id}')" data-bs-toggle="tooltip" title="Delete User"><i class="bi bi-trash-fill"></i></button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    tbody.innerHTML = html;
+
+    updatePaginationUI();
+    
+    // Re-init tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+}
+
+function updatePaginationUI() {
+    const total = filteredUsers.length;
+    const totalPages = Math.ceil(total / itemsPerPage);
+    
+    const info = document.getElementById('paginationInfo');
+    if (info) {
+        const start = total === 0 ? 0 : ((currentPage - 1) * itemsPerPage) + 1;
+        const end = Math.min(currentPage * itemsPerPage, total);
+        info.innerHTML = `Showing <span class="fw-bold text-dark">${start}</span> to <span class="fw-bold text-dark">${end}</span> of <span class="fw-bold text-dark">${total}</span> entries`;
+    }
+    
+    const btnGroup = document.getElementById('paginationBtns');
+    if (!btnGroup) return;
+    
+    let btnsHTML = '';
+    
+    // Prev
+    btnsHTML += `<button class="btn btn-sm btn-outline-secondary bg-white fw-medium px-3" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">Prev</button>`;
+    
+    // Page Numbers (simplified logic for demo)
+    for(let i = 1; i <= totalPages; i++) {
+        if(i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            btnsHTML += `<button class="btn btn-sm ${currentPage === i ? 'btn-primary' : 'btn-outline-secondary bg-white'} fw-medium px-3" onclick="changePage(${i})">${i}</button>`;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+            btnsHTML += `<button class="btn btn-sm btn-outline-secondary bg-white px-2" disabled>...</button>`;
+        }
+    }
+    
+    // Next
+    btnsHTML += `<button class="btn btn-sm btn-outline-secondary bg-white fw-medium px-3" ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">Next</button>`;
+    
+    btnGroup.innerHTML = btnsHTML;
+}
+
+function changePage(page) {
+    currentPage = page;
+    renderTable();
+}
+
+window.viewCustomer = function(id) {
+    const user = currentUsers.find(u => u.id === id);
+    if (!user) return;
+    
+    window.addAuditLog('View Customer Record', 'ADM001', `Viewed profile of ${user.name}`);
+    
+    const offcanvasBody = document.getElementById('offcanvasBodyContent');
+    const avatarColor = getAvatarColor(user.name);
+    const initials = getInitials(user.name);
+    const badgeClass = user.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+    
+    const freezeBtnText = user.status === 'Active' ? 'Freeze Account' : 'Unfreeze Account';
+    const freezeBtnClass = user.status === 'Active' ? 'btn-danger' : 'btn-success';
+    const freezeIconClass = user.status === 'Active' ? 'bi-lock-fill' : 'bi-unlock-fill';
+
+    offcanvasBody.innerHTML = `
+        <div class="p-4 border-bottom bg-light bg-opacity-25 text-center">
+            <div class="rounded-circle ${avatarColor} text-white d-flex justify-content-center align-items-center shadow mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem; font-weight: 700;">
+                ${initials}
+            </div>
+            <h4 class="fw-bold text-dark mb-1">${user.name}</h4>
+            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 rounded-pill px-3 py-1 mb-2 shadow-sm">${user.id}</span>
+            <div class="mt-2">
+                <span class="badge ${badgeClass} rounded-pill px-3 py-2 border border-opacity-25 shadow-sm">${user.status}</span>
+            </div>
+        </div>
+        
+        <div class="p-4">
+            <h6 class="fw-bold text-muted small text-uppercase mb-3">Contact Information</h6>
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3"><i class="bi bi-envelope"></i></div>
+                <div>
+                    <div class="small text-muted mb-1">Email Address</div>
+                    <div class="fw-medium text-dark">${user.email}</div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center mb-4">
+                <div class="bg-primary bg-opacity-10 text-primary rounded p-2 me-3"><i class="bi bi-telephone"></i></div>
+                <div>
+                    <div class="small text-muted mb-1">Mobile Number</div>
+                    <div class="fw-medium text-dark">+91 ${user.phone}</div>
+                </div>
+            </div>
+            
+            <h6 class="fw-bold text-muted small text-uppercase mb-3 mt-4">Account Details</h6>
+            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded border mb-3">
+                <span class="text-muted fw-medium">Total Balance</span>
+                <span class="fw-bold text-dark fs-5">&#8377; ${user.balance.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded border mb-4">
+                <span class="text-muted fw-medium">Join Date</span>
+                <span class="fw-bold text-dark">${new Date(user.joinedDate).toLocaleDateString('en-GB')}</span>
+            </div>
+            
+            <div class="d-grid gap-2 mt-5">
+                <button class="btn btn-outline-primary fw-medium py-2" onclick="editCustomerProfile('${user.id}')"><i class="bi bi-pencil-square me-2"></i>Edit Profile</button>
+                <button class="btn btn-outline-warning fw-medium py-2" onclick="resetCustomerPassword('${user.id}')"><i class="bi bi-key me-2"></i>Reset Password</button>
+                <button class="btn ${freezeBtnClass} fw-bold py-2 shadow-sm" onclick="toggleCustomerStatus('${user.id}')"><i class="bi ${freezeIconClass} me-2"></i>${freezeBtnText}</button>
+            </div>
+        </div>
+    `;
+    
+    const offcanvasEl = document.getElementById('customerOffcanvas');
+    let bsOffcanvas = bootstrap.Offcanvas.getInstance(offcanvasEl);
+    if (!bsOffcanvas) {
+        bsOffcanvas = new bootstrap.Offcanvas(offcanvasEl);
+    }
+    bsOffcanvas.show();
+};
+
+window.deleteCustomer = function(id) {
+    window.modernConfirm(
+        'Confirm Deletion',
+        `Are you sure you want to permanently delete customer ${id}? This action cannot be undone.`,
+        async () => {
+            await window.simulateNetworkRequest(400, 800);
+            window.DB.delete('users', id);
+            window.addAuditLog('Delete Customer', 'ADM001', `Deleted customer ${id}`);
+            
+            // Delete associated accounts and loans
+            const accounts = window.DB.getAll('accounts').filter(a => a.userId === id);
+            accounts.forEach(a => window.DB.delete('accounts', a.id));
+            
+            const loans = window.DB.getAll('loans').filter(l => l.userId === id);
+            loans.forEach(l => window.DB.delete('loans', l.id));
+
+            window.modernAlert('Success', `Customer ${id} deleted successfully.`, 'success');
+            initData();
+            renderTable();
+        }
+    );
+};
+
+window.editCustomerProfile = function(id) {
+    const user = window.DB.getById('users', id);
+    if (!user) return;
+    const newEmail = prompt('Enter new email address:', user.email);
+    if (newEmail === null) return;
+    const newPhone = prompt('Enter new mobile number (without +91):', user.phone);
+    if (newPhone === null) return;
+    
+    window.DB.update('users', id, { email: newEmail.trim(), phone: newPhone.trim() });
+    window.addAuditLog('Update Customer Profile', 'ADM001', `Updated contact info for ${user.name}`);
+    window.modernAlert('Success', 'Customer profile updated successfully.', 'success');
+    
+    initData();
+    viewCustomer(id);
+    renderTable();
+};
+
+window.resetCustomerPassword = function(id) {
+    const user = window.DB.getById('users', id);
+    window.modernConfirm('Reset Password', `Reset password for ${user.name} to default?`, () => {
+        window.DB.update('users', id, { password: 'password123' });
+        window.addAuditLog('Reset Password', 'ADM001', `Reset password for ${user.name}`);
+        window.modernAlert('Password Reset', 'Password has been reset to "password123".', 'success');
+    });
+};
+
+window.toggleCustomerStatus = function(id) {
+    const user = window.DB.getById('users', id);
+    const newStatus = user.status === 'Active' ? 'Frozen' : 'Active';
+    const action = newStatus === 'Frozen' ? 'Freeze' : 'Unfreeze';
+    
+    window.modernConfirm(`${action} Account`, `Are you sure you want to ${action.toLowerCase()} this account?`, () => {
+        window.DB.update('users', id, { status: newStatus });
+        
+        // Also update all their accounts
+        const accounts = window.DB.getAll('accounts').filter(a => a.userId === id);
+        accounts.forEach(a => {
+            window.DB.update('accounts', a.id, { status: newStatus });
+        });
+
+        window.addAuditLog(`${action} Account`, 'ADM001', `${action}d account for ${user.name}`);
+        window.modernAlert('Status Updated', `Account is now ${newStatus}.`, 'success');
+        
+        initData();
+        viewCustomer(id);
+        renderTable();
+    });
+};
+</script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

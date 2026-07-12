@@ -20,12 +20,12 @@
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
         <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <img src="../NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+            <img src="../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
         </div>
         
         <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
             
-        <a href="../dashboard/dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-grid fs-5"></i>
             <span class="fw-medium">System Dashboard</span>
         </a>
@@ -85,14 +85,14 @@
             <span class="fw-medium">Content Management</span>
         </a>
     
-        <a href="../dashboard/profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-person-badge fs-5"></i>
             <span class="fw-medium">Profile</span>
         </a>
     
         </div>
         <div class="p-3 border-top border-secondary border-opacity-25">
-            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+            <a href="../login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
                 <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
                 <span class="fw-medium text-danger">Logout</span>
             </a>
@@ -239,19 +239,13 @@
     </div>
     
     <script>
-        const scoreCustomers = [
-            { id: 'CUST-2026-000001', name: 'Arjun Mehta', score: 785 },
-            { id: 'CUST-2026-000002', name: 'Sneha Iyer', score: 820 },
-            { id: 'CUST-2026-000003', name: 'Priya Sharma', score: 650 },
-            { id: 'CUST-2026-000004', name: 'Rahul Verma', score: 540 },
-            { id: 'CUST-2026-000005', name: 'Neha Gupta', score: 710 }
-        ];
-        
         let currentScoreCustomer = null;
 
         document.addEventListener('DOMContentLoaded', () => {
+            if (!window.DB) return;
             const dataList = document.getElementById('scoreCustomerList');
-            scoreCustomers.forEach(c => {
+            const users = window.DB.getAll('users').filter(u => u.role === 'customer');
+            users.forEach(c => {
                 const opt = document.createElement('option');
                 opt.value = c.id;
                 opt.textContent = c.name;
@@ -260,15 +254,22 @@
         });
 
         function fetchProfile() {
+            if (!window.DB) return;
             const query = document.getElementById('searchScoreInput').value.trim().toLowerCase();
-            const result = scoreCustomers.find(c => c.id.toLowerCase() === query || c.name.toLowerCase() === query);
+            const users = window.DB.getAll('users').filter(u => u.role === 'customer');
+            const result = users.find(c => (c.id && c.id.toLowerCase() === query) || (c.name && c.name.toLowerCase() === query));
             
             if (result) {
                 currentScoreCustomer = result;
-                document.getElementById('newScoreInput').value = result.score;
+                const score = result.cibilScore || (Math.floor(Math.random() * 300) + 500);
+                document.getElementById('newScoreInput').value = score;
                 document.getElementById('scoreNotesInput').value = '';
                 document.getElementById('scoreFieldset').disabled = false;
+                
+                // Set score dynamically for UI updates
+                currentScoreCustomer.score = score;
                 updateProfileUI();
+                
                 document.getElementById('profileContainer').classList.remove('d-none');
             } else {
                 alert('Customer not found.');
@@ -309,13 +310,27 @@
         }
 
         function applyScoreUpdate() {
-            if (!currentScoreCustomer) return;
+            if (!currentScoreCustomer || !window.DB) return;
             const newScore = parseInt(document.getElementById('newScoreInput').value, 10);
+            const notes = document.getElementById('scoreNotesInput').value;
+            
             if (newScore < 300 || newScore > 900 || isNaN(newScore)) {
                 alert('Invalid score. Must be between 300 and 900.');
                 return;
             }
-            currentScoreCustomer.score = newScore;
+            
+            // Save to DB
+            currentScoreCustomer.cibilScore = newScore;
+            window.DB.update('users', currentScoreCustomer.id, currentScoreCustomer);
+            
+            // Generate Audit Log
+            window.DB.insert('auditLogs', {
+                action: 'CIBIL Score Update',
+                details: `Updated ${currentScoreCustomer.name}'s score to ${newScore}. Notes: ${notes || 'None'}`,
+                date: new Date().toISOString()
+            });
+
+            currentScoreCustomer.score = newScore; // Update local display prop
             updateProfileUI();
             alert('Credit Score Updated Successfully');
         }

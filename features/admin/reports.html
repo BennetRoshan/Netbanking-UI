@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    <link href="css/admin.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .dark-mode .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .glass-panel:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+        .dark-mode .glass-panel:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+        .kpi-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.5rem;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        .trend-neutral { color: #64748b; }
+        
+        .nav-pills .nav-link {
+            color: #64748b;
+            border-radius: 50rem;
+            padding: 0.25rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #0f172a;
+            color: white;
+        }
+        .dark-mode .nav-pills .nav-link.active {
+            background-color: #3b82f6;
+        }
+        
+        /* Table enhancements */
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .table > :not(caption) > * > * {
+            padding: 1rem;
+            background-color: transparent;
+        }
+        .table tbody tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        .dark-mode .table tbody tr:hover {
+            background-color: rgba(255,255,255,0.02);
+        }
+    </style>
+</head>
+<body style="background-color: #f8fafc; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-grid fs-5"></i><span class="fw-medium">System Dashboard</span>
+            </a>
+            <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-people fs-5"></i><span class="fw-medium">Customer List</span>
+            </a>
+            <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-lock fs-5"></i><span class="fw-medium">Freeze Account</span>
+            </a>
+            <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-speedometer2 fs-5"></i><span class="fw-medium">CIBIL Score</span>
+            </a>
+            <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-house-door fs-5"></i><span class="fw-medium">Loans Terminal</span>
+            </a>
+            <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-journal-text fs-5"></i><span class="fw-medium">Audit Logs</span>
+            </a>
+            <a href="reports.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;">
+                <i class="bi bi-bar-chart-line-fill fs-5"></i><span class="fw-medium">Advanced Analytics</span>
+            </a>
+            <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-arrow-clockwise fs-5"></i><span class="fw-medium">Security Resets</span>
+            </a>
+            <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-currency-dollar fs-5"></i><span class="fw-medium">Balance Update</span>
+            </a>
+            <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-person-plus fs-5"></i><span class="fw-medium">Bulk User Import</span>
+            </a>
+            <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-server fs-5"></i><span class="fw-medium">Backup & Recovery</span>
+            </a>
+            <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-file-earmark-richtext fs-5"></i><span class="fw-medium">Content Management</span>
+            </a>
+            <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+                <i class="bi bi-person-badge fs-5"></i><span class="fw-medium">Profile</span>
+            </a>
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-muted fw-medium fs-5">Advanced Analytics Hub</div>
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-2 d-flex align-items-center gap-2 shadow-sm">
+                    <span class="spinner-grow spinner-grow-sm text-success" role="status" style="width: 8px; height: 8px;"></span>
+                    <span id="liveStatusText">Live Connection</span>
+                </span>
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+                <div class="d-flex align-items-center gap-2 border-end pe-4">
+                    <button class="btn btn-outline-primary btn-sm rounded-pill fw-medium" onclick="AnalyticsApp.generateReport()"><i class="bi bi-file-earmark-bar-graph me-1"></i> Generate Report</button>
+                    <button class="btn btn-light btn-sm rounded-pill border fw-medium shadow-sm"><i class="bi bi-clock-history me-1"></i> Auto-Schedule</button>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Background Graphic -->
+        <div class="position-absolute top-0 end-0 w-100 h-50 z-n1" style="background: url('../../assets/images/background image.png') no-repeat center right; background-size: cover; opacity: 0.15; pointer-events: none;"></div>
+
+        <main class="p-4 p-md-5 position-relative z-1">
+
+            <!-- KPIs -->
+            <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" data-bs-toggle="collapse" data-bs-target="#kpiPanel">
+                <h5 class="fw-bold text-dark mb-0"><i class="bi bi-speedometer2 me-2 text-primary"></i>Key Performance Indicators</h5>
+                <button class="btn btn-sm btn-light border rounded-pill"><i class="bi bi-chevron-down"></i> Hide/Show</button>
+            </div>
+            <div class="collapse show" id="kpiPanel">
+                <div class="row g-4 mb-5">
+                <div class="col-md-4 col-lg-2">
+                    <div class="glass-panel p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted small fw-medium">Txn Volume</div>
+                            <div class="kpi-icon bg-primary-subtle text-primary" style="width: 32px; height: 32px; font-size: 1rem;"><i class="bi bi-currency-rupee"></i></div>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="kpiTxnVolume">₹0</h4>
+                        <div class="small fw-medium trend-up"><i class="bi bi-arrow-up-right me-1"></i>12.4%</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="glass-panel p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted small fw-medium">Total Txns</div>
+                            <div class="kpi-icon bg-info-subtle text-info" style="width: 32px; height: 32px; font-size: 1rem;"><i class="bi bi-activity"></i></div>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="kpiTxnCount">0</h4>
+                        <div class="small fw-medium trend-up"><i class="bi bi-arrow-up-right me-1"></i>8.2%</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="glass-panel p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted small fw-medium">Failed Rate</div>
+                            <div class="kpi-icon bg-danger-subtle text-danger" style="width: 32px; height: 32px; font-size: 1rem;"><i class="bi bi-exclamation-triangle"></i></div>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="kpiFailRate">0%</h4>
+                        <div class="small fw-medium trend-down"><i class="bi bi-arrow-down-right me-1"></i>1.1%</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="glass-panel p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted small fw-medium">Active Users</div>
+                            <div class="kpi-icon bg-success-subtle text-success" style="width: 32px; height: 32px; font-size: 1rem;"><i class="bi bi-people"></i></div>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="kpiActiveUsers">0</h4>
+                        <div class="small fw-medium trend-up"><i class="bi bi-arrow-up-right me-1"></i>5.3%</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="glass-panel p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted small fw-medium">Active Loans</div>
+                            <div class="kpi-icon bg-warning-subtle text-warning" style="width: 32px; height: 32px; font-size: 1rem;"><i class="bi bi-bank"></i></div>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="kpiLoans">₹0</h4>
+                        <div class="small fw-medium trend-neutral"><i class="bi bi-dash me-1"></i>0.0%</div>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-2">
+                    <div class="glass-panel p-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div class="text-muted small fw-medium">AUM (Bal)</div>
+                            <div class="kpi-icon bg-secondary-subtle text-secondary" style="width: 32px; height: 32px; font-size: 1rem;"><i class="bi bi-wallet2"></i></div>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-1" id="kpiTotalBal">₹0</h4>
+                        <div class="small fw-medium trend-up"><i class="bi bi-arrow-up-right me-1"></i>2.7%</div>
+                    </div>
+                </div>
+            </div>
+            </div> <!-- End KPI Panel -->
+
+            <!-- Charts Section -->
+            <div class="d-flex justify-content-between align-items-center mb-3 cursor-pointer" data-bs-toggle="collapse" data-bs-target="#chartsPanel">
+                <h5 class="fw-bold text-dark mb-0"><i class="bi bi-bar-chart me-2 text-primary"></i>Visual Analytics</h5>
+                <button class="btn btn-sm btn-light border rounded-pill"><i class="bi bi-chevron-down"></i> Hide/Show</button>
+            </div>
+            <div class="collapse show" id="chartsPanel">
+                <div class="row g-4 mb-5">
+                <!-- Main Line Chart -->
+                <div class="col-lg-8">
+                    <div class="glass-panel p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold text-dark mb-0">Transaction Volume Trends</h5>
+                            <ul class="nav nav-pills" id="trendTimeFilters">
+                                <li class="nav-item"><a class="nav-link" onclick="AnalyticsApp.updateMainChart('7d')">7D</a></li>
+                                <li class="nav-item"><a class="nav-link active" onclick="AnalyticsApp.updateMainChart('30d')">30D</a></li>
+                                <li class="nav-item"><a class="nav-link" onclick="AnalyticsApp.updateMainChart('6m')">6M</a></li>
+                            </ul>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="mainTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Doughnut Chart -->
+                <div class="col-lg-4">
+                    <div class="glass-panel p-4 h-100">
+                        <h5 class="fw-bold text-dark mb-4">Volume by Type</h5>
+                        <div class="chart-container d-flex justify-content-center align-items-center">
+                            <canvas id="typeDoughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <!-- Bar Chart 1 -->
+                <div class="col-lg-6">
+                    <div class="glass-panel p-4 h-100">
+                        <h5 class="fw-bold text-dark mb-4">Active Loans by Type</h5>
+                        <div class="chart-container">
+                            <canvas id="loansBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bar Chart 2 -->
+                <div class="col-lg-6">
+                    <div class="glass-panel p-4 h-100">
+                        <h5 class="fw-bold text-dark mb-4">System Audit Activity</h5>
+                        <div class="chart-container">
+                            <canvas id="auditBarChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div> <!-- End Charts Panel -->
+
+            <!-- Comparative Analysis & Filters -->
+            <div class="glass-panel p-4 mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4 cursor-pointer" data-bs-toggle="collapse" data-bs-target="#comparativePanel">
+                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-arrow-left-right me-2 text-primary"></i>Comparative Analysis Module</h5>
+                    <button class="btn btn-sm btn-light border rounded-pill"><i class="bi bi-chevron-down"></i> Hide/Show</button>
+                </div>
+                
+                <div class="collapse show" id="comparativePanel">
+                    <div class="row g-4 align-items-end">
+                        <div class="col-md-5">
+                            <label class="form-label small fw-bold text-muted">Period A</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="compDateAStart">
+                                <span class="input-group-text bg-light text-muted">to</span>
+                                <input type="date" class="form-control" id="compDateAEnd">
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex justify-content-center align-items-center">
+                            <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill fw-bold border">VS</span>
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label small fw-bold text-muted">Period B</label>
+                            <div class="input-group">
+                                <input type="date" class="form-control" id="compDateBStart">
+                                <span class="input-group-text bg-light text-muted">to</span>
+                                <input type="date" class="form-control" id="compDateBEnd">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button class="btn btn-dark rounded-pill px-4" onclick="AnalyticsApp.runComparativeAnalysis()">Analyze Variance</button>
+                    </div>
+
+                    <div id="comparativeResults" class="mt-4 pt-4 border-top d-none">
+                        <div class="row g-4 text-center">
+                            <div class="col-md-3">
+                                <div class="text-muted small fw-medium mb-1">Volume Variance</div>
+                                <h4 class="fw-bold text-dark mb-0" id="compVolVal">-</h4>
+                                <div class="small fw-bold" id="compVolDiff"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-muted small fw-medium mb-1">Txn Count Variance</div>
+                                <h4 class="fw-bold text-dark mb-0" id="compCountVal">-</h4>
+                                <div class="small fw-bold" id="compCountDiff"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-muted small fw-medium mb-1">New Users</div>
+                                <h4 class="fw-bold text-dark mb-0" id="compUsersVal">-</h4>
+                                <div class="small fw-bold" id="compUsersDiff"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-muted small fw-medium mb-1">Loan Disbursement</div>
+                                <h4 class="fw-bold text-dark mb-0" id="compLoansVal">-</h4>
+                                <div class="small fw-bold" id="compLoansDiff"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Records Grid -->
+            <div class="glass-panel p-4 mb-5">
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3 cursor-pointer" data-bs-toggle="collapse" data-bs-target="#gridPanel">
+                    <h5 class="fw-bold text-dark mb-0"><i class="bi bi-table me-2 text-primary"></i>System Data Grid</h5>
+                    <div class="d-flex gap-2 align-items-center" onclick="event.stopPropagation()">
+                        <input type="text" id="gridSearch" class="form-control form-control-sm rounded-pill px-3" placeholder="Global Search..." style="width: 250px;" onkeyup="AnalyticsApp.filterGrid()">
+                        <button class="btn btn-outline-secondary btn-sm rounded-pill dropdown-toggle" data-bs-toggle="dropdown">Rows</button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="min-width: 100px;">
+                            <li><a class="dropdown-item" href="#" onclick="AnalyticsApp.setGridRows(10)">10</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="AnalyticsApp.setGridRows(50)">50</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="AnalyticsApp.setGridRows(100)">100</a></li>
+                        </ul>
+                        <button class="btn btn-outline-success btn-sm rounded-pill px-3" onclick="AnalyticsApp.exportCSV()"><i class="bi bi-filetype-csv me-1"></i> CSV</button>
+                        <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="window.print()"><i class="bi bi-filetype-pdf me-1"></i> PDF</button>
+                        <button class="btn btn-sm btn-light border rounded-pill ms-2" data-bs-toggle="collapse" data-bs-target="#gridPanel"><i class="bi bi-chevron-down"></i> Hide</button>
+                    </div>
+                </div>
+
+                <div class="collapse show" id="gridPanel">
+                <!-- Tabs -->
+                <ul class="nav nav-tabs border-0 mb-3" id="gridTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-bold border-0 bg-transparent text-primary" data-bs-toggle="tab" data-bs-target="#tab-txns" type="button" onclick="AnalyticsApp.switchTab('transactions')">Transactions</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium border-0 bg-transparent text-muted" data-bs-toggle="tab" data-bs-target="#tab-users" type="button" onclick="AnalyticsApp.switchTab('users')">Customers</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium border-0 bg-transparent text-muted" data-bs-toggle="tab" data-bs-target="#tab-accounts" type="button" onclick="AnalyticsApp.switchTab('accounts')">Accounts</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium border-0 bg-transparent text-muted" data-bs-toggle="tab" data-bs-target="#tab-loans" type="button" onclick="AnalyticsApp.switchTab('loans')">Loans</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-medium border-0 bg-transparent text-muted" data-bs-toggle="tab" data-bs-target="#tab-audits" type="button" onclick="AnalyticsApp.switchTab('audits')">Audit Logs</button>
+                    </li>
+                </ul>
+
+                <!-- Grid Content -->
+                <div class="table-responsive">
+                    <table class="table table-borderless align-middle w-100" id="dataGridTable">
+                        <thead class="border-bottom" id="dataGridHead">
+                            <!-- Populated dynamically -->
+                        </thead>
+                        <tbody id="dataGridBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                    <span class="text-muted small" id="gridPaginationInfo">Showing 1-10 of 0</span>
+                    <div class="d-flex gap-1" id="gridPaginationControls">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+                </div> <!-- End Grid Panel -->
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Export Modal (Feedback) -->
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 rounded-4 shadow">
+                <div class="modal-body p-4 text-center">
+                    <div class="spinner-border text-primary mb-3" role="status"></div>
+                    <h6 class="fw-bold mb-0">Generating Export...</h6>
+                    <small class="text-muted">Please wait while we compile the data.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+    
+    <script>
+        // Advanced Analytics Logic
+        const AnalyticsApp = {
+            charts: {},
+            currentTab: 'transactions',
+            gridData: [],
+            filteredGridData: [],
+            gridPage: 1,
+            gridRowsPerPage: 10,
+
+            init() {
+                if (!window.DB) {
+                    console.error("DB not loaded");
+                    return;
+                }
+                
+                // Add tab event listeners for styling
+                document.querySelectorAll('#gridTabs .nav-link').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        document.querySelectorAll('#gridTabs .nav-link').forEach(t => {
+                            t.classList.remove('active', 'text-primary', 'fw-bold');
+                            t.classList.add('text-muted', 'fw-medium');
+                        });
+                        e.target.classList.remove('text-muted', 'fw-medium');
+                        e.target.classList.add('active', 'text-primary', 'fw-bold');
+                    });
+                });
+
+                // Add pill event listeners
+                document.querySelectorAll('#trendTimeFilters .nav-link').forEach(pill => {
+                    pill.addEventListener('click', (e) => {
+                        document.querySelectorAll('#trendTimeFilters .nav-link').forEach(p => {
+                            p.classList.remove('active');
+                        });
+                        e.target.classList.add('active');
+                    });
+                });
+
+                // Default Dates for Comparative
+                const today = new Date();
+                const lastMonth = new Date();
+                lastMonth.setMonth(today.getMonth() - 1);
+                
+                document.getElementById('compDateBEnd').valueAsDate = today;
+                const compBStart = new Date(today);
+                compBStart.setDate(today.getDate() - 7);
+                document.getElementById('compDateBStart').valueAsDate = compBStart;
+
+                document.getElementById('compDateAEnd').valueAsDate = compBStart;
+                const compAStart = new Date(compBStart);
+                compAStart.setDate(compBStart.getDate() - 7);
+                document.getElementById('compDateAStart').valueAsDate = compAStart;
+
+                // Load Data
+                this.calculateKPIs();
+                this.initCharts();
+                this.switchTab('transactions');
+            },
+
+            formatINR(amount) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(amount);
+            },
+
+            animateValue(obj, start, end, duration, isCurrency = false) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const current = Math.floor(progress * (end - start) + start);
+                    
+                    obj.innerHTML = isCurrency ? this.formatINR(current) : current.toLocaleString('en-IN');
+                    
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        obj.innerHTML = isCurrency ? this.formatINR(end) : end.toLocaleString('en-IN');
+                    }
+                };
+                window.requestAnimationFrame(step);
+            },
+
+            calculateKPIs() {
+                const txns = window.DB.getAll('transactions');
+                const users = window.DB.getAll('users').filter(u => u.role === 'customer' && u.status === 'Active');
+                const loans = window.DB.getAll('loans').filter(l => l.status === 'Active');
+                const accounts = window.DB.getAll('accounts');
+
+                // Txn Volume
+                const volume = txns.reduce((sum, t) => {
+                    return (t.type === 'Deposit' || t.type === 'Transfer' || t.type === 'Credit') ? sum + parseFloat(t.amount) : sum;
+                }, 0);
+                this.animateValue(document.getElementById('kpiTxnVolume'), 0, volume, 1500, true);
+
+                // Txn Count
+                this.animateValue(document.getElementById('kpiTxnCount'), 0, txns.length, 1500, false);
+
+                // Failed Rate (Mock logic: 1-5% if no failed txns exist)
+                const failed = txns.filter(t => (t.status || '').toLowerCase() === 'failed').length;
+                const failRate = txns.length > 0 ? (failed / txns.length) * 100 : 2.4; 
+                document.getElementById('kpiFailRate').innerText = (failRate === 0 ? 1.2 : failRate.toFixed(1)) + '%';
+
+                // Active Users
+                this.animateValue(document.getElementById('kpiActiveUsers'), 0, users.length, 1500, false);
+
+                // Loans
+                const loansTotal = loans.reduce((sum, l) => sum + parseFloat(l.amount), 0);
+                this.animateValue(document.getElementById('kpiLoans'), 0, loansTotal, 1500, true);
+
+                // AUM
+                const aum = accounts.reduce((sum, a) => sum + parseFloat(a.balance), 0);
+                this.animateValue(document.getElementById('kpiTotalBal'), 0, aum, 1500, true);
+            },
+
+            initCharts() {
+                // Shared Chart Options
+                Chart.defaults.color = '#64748b';
+                Chart.defaults.font.family = "'Inter', sans-serif";
+                
+                const gridOptions = {
+                    color: 'rgba(100, 116, 139, 0.1)',
+                    drawBorder: false
+                };
+
+                // 1. Line Chart (Main Trend)
+                const ctxMain = document.getElementById('mainTrendChart').getContext('2d');
+                
+                // Gradient for line chart
+                let gradient = ctxMain.createLinearGradient(0, 0, 0, 300);
+                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.4)'); // Primary blue
+                gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+                this.charts.mainTrend = new Chart(ctxMain, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Daily Volume (₹)',
+                            data: [],
+                            borderColor: '#3b82f6',
+                            backgroundColor: gradient,
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#ffffff',
+                            pointBorderColor: '#3b82f6',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                mode: 'index',
+                                intersect: false,
+                                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                titleFont: { size: 13 },
+                                bodyFont: { size: 14, weight: 'bold' },
+                                padding: 10,
+                                cornerRadius: 8
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: { grid: gridOptions, beginAtZero: true }
+                        }
+                    }
+                });
+
+                // 2. Doughnut Chart
+                const ctxDoughnut = document.getElementById('typeDoughnutChart').getContext('2d');
+                this.charts.typeDoughnut = new Chart(ctxDoughnut, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['IMPS', 'NEFT', 'RTGS', 'UPI', 'Internal'],
+                        datasets: [{
+                            data: [35, 20, 10, 25, 10], // Mock distribution initially
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#64748b'],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '75%',
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, usePointStyle: true, padding: 20 } }
+                        }
+                    }
+                });
+
+                // 3. Bar Chart (Loans)
+                const ctxLoans = document.getElementById('loansBarChart').getContext('2d');
+                this.charts.loansBar = new Chart(ctxLoans, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Personal', 'Home', 'Vehicle', 'Education'],
+                        datasets: [{
+                            label: 'Active Loans (₹)',
+                            data: [0, 0, 0, 0],
+                            backgroundColor: '#10b981',
+                            borderRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: { grid: gridOptions, beginAtZero: true }
+                        }
+                    }
+                });
+
+                // 4. Bar Chart (Audit Logs)
+                const ctxAudit = document.getElementById('auditBarChart').getContext('2d');
+                this.charts.auditBar = new Chart(ctxAudit, {
+                    type: 'bar',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'System Actions',
+                            data: [],
+                            backgroundColor: '#8b5cf6',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: { grid: gridOptions, beginAtZero: true }
+                        }
+                    }
+                });
+
+                // Populate with DB Data
+                this.updateMainChart('30d');
+                this.updateLoansChart();
+                this.updateAuditChart();
+            },
+
+            updateMainChart(period) {
+                const txns = window.DB.getAll('transactions');
+                let days = period === '7d' ? 7 : (period === '30d' ? 30 : 180);
+                
+                // Generate last N days
+                const labels = [];
+                const data = [];
+                const today = new Date();
+                
+                // Group by date string
+                const volumeByDate = {};
+                txns.forEach(t => {
+                    if(t.type === 'Deposit' || t.type === 'Transfer' || t.type === 'Credit') {
+                        const d = new Date(t.date).toDateString();
+                        volumeByDate[d] = (volumeByDate[d] || 0) + parseFloat(t.amount);
+                    }
+                });
+
+                for (let i = days - 1; i >= 0; i--) {
+                    const d = new Date(today);
+                    d.setDate(today.getDate() - i);
+                    const dStr = d.toDateString();
+                    labels.push(d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
+                    
+                    // Add some mock baseline if db is empty for that day so chart isn't totally flat
+                    const realVol = volumeByDate[dStr] || 0;
+                    const mockVol = realVol === 0 ? Math.floor(Math.random() * 50000) + 10000 : 0;
+                    data.push(realVol + mockVol);
+                }
+
+                this.charts.mainTrend.data.labels = labels;
+                this.charts.mainTrend.data.datasets[0].data = data;
+                this.charts.mainTrend.update();
+                
+                // Also randomly adjust Doughnut just for visual flair upon time change
+                const base = [35, 20, 10, 25, 10];
+                this.charts.typeDoughnut.data.datasets[0].data = base.map(v => Math.max(0, v + (Math.random() * 10 - 5)));
+                this.charts.typeDoughnut.update();
+            },
+
+            updateLoansChart() {
+                const loans = window.DB.getAll('loans').filter(l => l.status === 'Active');
+                const sums = { 'Personal Loan': 0, 'Home Loan': 0, 'Car Loan': 0, 'Education Loan': 0 };
+                
+                loans.forEach(l => {
+                    if (sums[l.type] !== undefined) {
+                        sums[l.type] += parseFloat(l.amount);
+                    } else {
+                        sums['Personal Loan'] += parseFloat(l.amount); // fallback
+                    }
+                });
+
+                this.charts.loansBar.data.datasets[0].data = [sums['Personal Loan'], sums['Home Loan'], sums['Car Loan'], sums['Education Loan']];
+                this.charts.loansBar.update();
+            },
+
+            updateAuditChart() {
+                const logs = window.DB.getAll('auditLogs');
+                const today = new Date();
+                const labels = [];
+                const data = [];
+                
+                const countByDate = {};
+                logs.forEach(l => {
+                    const d = new Date(l.date).toDateString();
+                    countByDate[d] = (countByDate[d] || 0) + 1;
+                });
+
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date(today);
+                    d.setDate(today.getDate() - i);
+                    labels.push(d.toLocaleDateString('en-GB', { weekday: 'short' }));
+                    const real = countByDate[d.toDateString()] || 0;
+                    // Add some mock baseline
+                    data.push(real === 0 ? Math.floor(Math.random() * 15) + 5 : real);
+                }
+
+                this.charts.auditBar.data.labels = labels;
+                this.charts.auditBar.data.datasets[0].data = data;
+                this.charts.auditBar.update();
+            },
+
+            runComparativeAnalysis() {
+                const aStart = document.getElementById('compDateAStart').valueAsDate;
+                const aEnd = document.getElementById('compDateAEnd').valueAsDate;
+                const bStart = document.getElementById('compDateBStart').valueAsDate;
+                const bEnd = document.getElementById('compDateBEnd').valueAsDate;
+                
+                if(!aStart || !aEnd || !bStart || !bEnd) {
+                    alert("Please select all dates for comparison.");
+                    return;
+                }
+                
+                aEnd.setHours(23,59,59);
+                bEnd.setHours(23,59,59);
+
+                const txns = window.DB.getAll('transactions');
+                const getVolAndCount = (start, end) => {
+                    let vol = 0, count = 0;
+                    txns.forEach(t => {
+                        const d = new Date(t.date);
+                        if (d >= start && d <= end) {
+                            count++;
+                            if(t.type === 'Deposit' || t.type === 'Transfer' || t.type === 'Credit') vol += parseFloat(t.amount);
+                        }
+                    });
+                    return { vol, count };
+                };
+
+                const A = getVolAndCount(aStart, aEnd);
+                const B = getVolAndCount(bStart, bEnd);
+                
+                // Mocks for users and loans since they don't have perfect creation dates in the mock DB usually
+                const A_users = Math.floor(Math.random() * 20);
+                const B_users = Math.floor(Math.random() * 20);
+                const A_loans = Math.floor(Math.random() * 500000);
+                const B_loans = Math.floor(Math.random() * 500000);
+
+                const renderDiff = (elId, diffId, valA, valB, isCurrency = false) => {
+                    const el = document.getElementById(elId);
+                    const diffEl = document.getElementById(diffId);
+                    
+                    const displayB = isCurrency ? this.formatINR(valB) : valB.toLocaleString('en-IN');
+                    el.innerText = displayB;
+
+                    if (valA === 0) {
+                        diffEl.innerHTML = `<span class="text-success"><i class="bi bi-arrow-up"></i> N/A (Baseline 0)</span>`;
+                        return;
+                    }
+
+                    const pct = ((valB - valA) / valA) * 100;
+                    if (pct >= 0) {
+                        diffEl.innerHTML = `<span class="text-success"><i class="bi bi-arrow-up"></i> ${pct.toFixed(2)}%</span>`;
+                    } else {
+                        diffEl.innerHTML = `<span class="text-danger"><i class="bi bi-arrow-down"></i> ${Math.abs(pct).toFixed(2)}%</span>`;
+                    }
+                };
+
+                renderDiff('compVolVal', 'compVolDiff', A.vol, B.vol, true);
+                renderDiff('compCountVal', 'compCountDiff', A.count, B.count, false);
+                renderDiff('compUsersVal', 'compUsersDiff', A_users, B_users, false);
+                renderDiff('compLoansVal', 'compLoansDiff', A_loans, B_loans, true);
+
+                document.getElementById('comparativeResults').classList.remove('d-none');
+            },
+
+            switchTab(type) {
+                this.currentTab = type;
+                let data = [];
+                let heads = '';
+                
+                if (type === 'transactions') {
+                    data = window.DB.getAll('transactions').sort((a,b) => new Date(b.date) - new Date(a.date));
+                    heads = `<tr><th>Ref ID</th><th>Date</th><th>Description</th><th>Type</th><th class="text-end">Amount</th></tr>`;
+                } else if (type === 'users') {
+                    data = window.DB.getAll('users').filter(u => u.role === 'customer');
+                    heads = `<tr><th>User ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Status</th></tr>`;
+                } else if (type === 'accounts') {
+                    data = window.DB.getAll('accounts');
+                    heads = `<tr><th>Account No</th><th>User ID</th><th>Type</th><th class="text-end">Balance</th><th>Status</th></tr>`;
+                } else if (type === 'loans') {
+                    data = window.DB.getAll('loans');
+                    heads = `<tr><th>Loan ID</th><th>User ID</th><th>Type</th><th class="text-end">Amount</th><th>Status</th></tr>`;
+                } else if (type === 'audits') {
+                    data = window.DB.getAll('auditLogs').sort((a,b) => new Date(b.date) - new Date(a.date));
+                    heads = `<tr><th>Date</th><th>Admin ID</th><th>Action</th><th>Status</th></tr>`;
+                }
+
+                document.getElementById('dataGridHead').innerHTML = heads;
+                this.gridData = data;
+                this.gridPage = 1;
+                document.getElementById('gridSearch').value = '';
+                this.filterGrid();
+            },
+
+            setGridRows(num) {
+                this.gridRowsPerPage = num;
+                this.gridPage = 1;
+                this.renderGrid();
+            },
+
+            filterGrid() {
+                const term = document.getElementById('gridSearch').value.toLowerCase();
+                if (!term) {
+                    this.filteredGridData = [...this.gridData];
+                } else {
+                    this.filteredGridData = this.gridData.filter(item => {
+                        return Object.values(item).some(val => 
+                            String(val).toLowerCase().includes(term)
+                        );
+                    });
+                }
+                this.gridPage = 1;
+                this.renderGrid();
+            },
+
+            renderGrid() {
+                const tbody = document.getElementById('dataGridBody');
+                if (this.filteredGridData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">No records found.</td></tr>`;
+                    document.getElementById('gridPaginationInfo').innerText = `Showing 0 of 0`;
+                    document.getElementById('gridPaginationControls').innerHTML = '';
+                    return;
+                }
+
+                const total = this.filteredGridData.length;
+                const totalPages = Math.ceil(total / this.gridRowsPerPage);
+                if (this.gridPage > totalPages) this.gridPage = totalPages;
+
+                const startIdx = (this.gridPage - 1) * this.gridRowsPerPage;
+                const pageData = this.filteredGridData.slice(startIdx, startIdx + this.gridRowsPerPage);
+
+                let html = '';
+                pageData.forEach(item => {
+                    if (this.currentTab === 'transactions') {
+                        const d = new Date(item.date).toLocaleDateString();
+                        const color = (item.type === 'Deposit' || item.type === 'Credit') ? 'text-success' : 'text-danger';
+                        html += `<tr>
+                            <td class="small fw-medium">${item.id || item.ref}</td>
+                            <td class="small text-muted">${d}</td>
+                            <td class="small">${item.desc}</td>
+                            <td class="small"><span class="badge bg-light text-dark border">${item.type}</span></td>
+                            <td class="small fw-bold text-end ${color}">${this.formatINR(item.amount)}</td>
+                        </tr>`;
+                    } else if (this.currentTab === 'users') {
+                        const badgeClass = item.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+                        html += `<tr>
+                            <td class="small fw-medium">${item.id}</td>
+                            <td class="small fw-bold">${item.name}</td>
+                            <td class="small text-muted">${item.email}</td>
+                            <td class="small">${item.phone}</td>
+                            <td><span class="badge ${badgeClass}">${item.status}</span></td>
+                        </tr>`;
+                    } else if (this.currentTab === 'accounts') {
+                        const badgeClass = item.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger';
+                        html += `<tr>
+                            <td class="small fw-medium">${item.id}</td>
+                            <td class="small text-muted">${item.userId}</td>
+                            <td class="small">${item.type}</td>
+                            <td class="small fw-bold text-end">${this.formatINR(item.balance)}</td>
+                            <td><span class="badge ${badgeClass}">${item.status}</span></td>
+                        </tr>`;
+                    } else if (this.currentTab === 'loans') {
+                        const badgeClass = item.status === 'Active' ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary';
+                        html += `<tr>
+                            <td class="small fw-medium">${item.id}</td>
+                            <td class="small text-muted">${item.userId}</td>
+                            <td class="small">${item.type}</td>
+                            <td class="small fw-bold text-end">${this.formatINR(item.amount)}</td>
+                            <td><span class="badge ${badgeClass}">${item.status}</span></td>
+                        </tr>`;
+                    } else if (this.currentTab === 'audits') {
+                        const d = new Date(item.date).toLocaleString();
+                        const statColor = item.status === 'SUCCESS' ? 'text-success' : (item.status === 'ERROR' || item.status === 'CRITICAL' ? 'text-danger' : 'text-primary');
+                        html += `<tr>
+                            <td class="small text-muted">${d}</td>
+                            <td class="small fw-medium">${item.adminId}</td>
+                            <td class="small">${item.action}</td>
+                            <td><span class="badge bg-light border ${statColor}">${item.status || 'INFO'}</span></td>
+                        </tr>`;
+                    }
+                });
+                tbody.innerHTML = html;
+
+                // Pagination logic
+                document.getElementById('gridPaginationInfo').innerText = `Showing ${startIdx + 1}-${Math.min(startIdx + this.gridRowsPerPage, total)} of ${total}`;
+                
+                let pControls = '';
+                pControls += `<button class="btn btn-sm btn-light border" ${this.gridPage === 1 ? 'disabled' : ''} onclick="AnalyticsApp.changePage(-1)"><i class="bi bi-chevron-left"></i></button>`;
+                pControls += `<span class="btn btn-sm btn-white fw-bold disabled border-0">${this.gridPage} / ${totalPages}</span>`;
+                pControls += `<button class="btn btn-sm btn-light border" ${this.gridPage === totalPages ? 'disabled' : ''} onclick="AnalyticsApp.changePage(1)"><i class="bi bi-chevron-right"></i></button>`;
+                document.getElementById('gridPaginationControls').innerHTML = pControls;
+            },
+
+            changePage(delta) {
+                this.gridPage += delta;
+                this.renderGrid();
+            },
+
+            exportCSV() {
+                if(this.filteredGridData.length === 0) {
+                    alert("No data to export.");
+                    return;
+                }
+                const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+                modal.show();
+
+                setTimeout(() => {
+                    // Extract Headers
+                    const headers = Object.keys(this.filteredGridData[0]);
+                    const csvRows = [];
+                    csvRows.push(headers.join(','));
+                    
+                    this.filteredGridData.forEach(row => {
+                        const values = headers.map(h => {
+                            let val = row[h] === null ? '' : String(row[h]);
+                            // Escape quotes and wrap in quotes if contains comma
+                            val = val.replace(/"/g, '""');
+                            if (val.search(/("|,|\n)/g) >= 0) {
+                                val = `"${val}"`;
+                            }
+                            return val;
+                        });
+                        csvRows.push(values.join(','));
+                    });
+
+                    const csvString = csvRows.join('\n');
+                    const blob = new Blob([csvString], { type: 'text/csv' });
+                    const url = window.URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.setAttribute('hidden', '');
+                    a.setAttribute('href', url);
+                    a.setAttribute('download', `Nexus_Export_${this.currentTab}_${new Date().getTime()}.csv`);
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    modal.hide();
+                }, 1500); // Fake delay for UX
+            },
+
+            generateReport() {
+                const modal = new bootstrap.Modal(document.getElementById('exportModal'));
+                modal.show();
+                setTimeout(() => {
+                    modal.hide();
+                    alert("Comprehensive Report Generation Complete.\nA copy has been sent to your secure inbox.");
+                }, 2000);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            AnalyticsApp.init();
+        });
+
+    </script>
+</body>
+</html>

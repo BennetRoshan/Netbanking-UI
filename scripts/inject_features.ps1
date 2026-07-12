@@ -121,7 +121,7 @@ $emiHtml = @"
                                         <input type="text" id="emiAmountDisplay" class="form-control form-control-sm border-0 bg-transparent text-cyan fw-bold text-end p-0 shadow-none" value="7,50,000" style="width: 80px;" readonly>
                                     </div>
                                 </div>
-                                <input type="range" class="nexus-slider" id="emiAmount" min="25000" max="5000000" step="5000" value="750000">
+                                <input type="range" class="nexus-slider w-100 form-range" id="emiAmount" min="25000" max="5000000" step="5000" value="750000">
                                 <div class="d-flex justify-content-between mt-1">
                                     <small class="text-muted fw-medium">₹ 25,000</small>
                                     <small class="text-muted fw-medium">₹ 50,00,000</small>
@@ -136,7 +136,7 @@ $emiHtml = @"
                                         <input type="text" id="emiTenureDisplay" class="form-control form-control-sm border-0 bg-transparent text-cyan fw-bold text-end p-0 shadow-none" value="5" style="width: 40px;" readonly>
                                     </div>
                                 </div>
-                                <input type="range" class="nexus-slider" id="emiTenure" min="1" max="7" step="1" value="5">
+                                <input type="range" class="nexus-slider w-100 form-range" id="emiTenure" min="1" max="7" step="1" value="5">
                                 <div class="d-flex justify-content-between mt-1">
                                     <small class="text-muted fw-medium">1 year</small>
                                     <small class="text-muted fw-medium">7 years</small>
@@ -152,7 +152,7 @@ $emiHtml = @"
                                         <span class="fw-bold text-cyan ms-1">%</span>
                                     </div>
                                 </div>
-                                <input type="range" class="nexus-slider" id="emiRate" min="9.99" max="24.00" step="0.01" value="9.99">
+                                <input type="range" class="nexus-slider w-100 form-range" id="emiRate" min="9.99" max="24.00" step="0.01" value="9.99">
                                 <div class="d-flex justify-content-between mt-1">
                                     <small class="text-muted fw-medium">9.99% PA</small>
                                     <small class="text-muted fw-medium">24% PA</small>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Audit Logs - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    
+    <style>
+        .flash-new { animation: flashYellow 2s ease-out; }
+        @keyframes flashYellow {
+            0% { background-color: rgba(255, 193, 7, 0.4); }
+            100% { background-color: transparent; }
+        }
+        .expandable-row { cursor: pointer; transition: background-color 0.2s; }
+        .expandable-row:hover { background-color: rgba(0,0,0,0.02); }
+        .payload-row { display: none; background-color: #1e293b; color: #a5b4fc; }
+        .payload-row.show { display: table-row; animation: fadeIn 0.3s; }
+        .json-pre { margin: 0; padding: 15px; font-size: 0.8rem; white-space: pre-wrap; font-family: monospace; border: none; background: transparent; color: inherit; }
+        
+        .filter-panel { display: none; background: #fff; border-radius: 12px; padding: 1.5rem; border: 1px solid #dee2e6; margin-bottom: 1.5rem; animation: slideDown 0.3s; }
+        .filter-panel.show { display: block; }
+        
+        .role-toggle .btn { padding: 0.25rem 1rem; font-size: 0.85rem; }
+    </style>
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-grid fs-5"></i><span class="fw-medium">System Dashboard</span></a>
+            <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-people fs-5"></i><span class="fw-medium">Customer List</span></a>
+            <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-lock fs-5"></i><span class="fw-medium">Freeze Account</span></a>
+            <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-speedometer2 fs-5"></i><span class="fw-medium">CIBIL Score</span></a>
+            <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-house-door fs-5"></i><span class="fw-medium">Loans Terminal</span></a>
+            <a href="audit-logs.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;"><i class="bi bi-journal-text fs-5"></i><span class="fw-medium">Audit Logs</span></a>
+            <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-bar-chart fs-5"></i><span class="fw-medium">Reports Engine</span></a>
+            <a href="security-resets.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-arrow-clockwise fs-5"></i><span class="fw-medium">Security Resets</span></a>
+            <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-currency-dollar fs-5"></i><span class="fw-medium">Balance Update</span></a>
+            <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-plus fs-5"></i><span class="fw-medium">Bulk User Import</span></a>
+            <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-server fs-5"></i><span class="fw-medium">Backup & Recovery</span></a>
+            <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-file-earmark-richtext fs-5"></i><span class="fw-medium">Content Management</span></a>
+            <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-badge fs-5"></i><span class="fw-medium">Profile</span></a>
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">
+                Admin Portal / Audit Logs
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+                
+                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <i class="bi bi-bell fs-5 text-secondary"></i>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark" id="headerAdminName">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;" id="headerAdminRole">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content -->
+        <main class="p-4 p-md-5 position-relative z-1 pb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">System Audit Logs <span class="badge bg-success ms-2 fs-6"><i class="bi bi-broadcast me-1"></i>Live</span></h2>
+                    <p class="text-muted mb-0">Immutable cryptographic ledger of all administrative events.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary fw-medium shadow-sm" onclick="runArchivalJob()"><i class="bi bi-archive me-2"></i>Run Archival Job</button>
+                    <button class="btn btn-primary fw-medium shadow-sm" onclick="exportLogs()"><i class="bi bi-download me-2"></i>Export Logs</button>
+                    <button class="btn btn-dark fw-bold shadow-sm" onclick="verifyLedger()" id="verifyBtn"><i class="bi bi-shield-check me-2"></i>Verify Integrity</button>
+                </div>
+            </div>
+            
+            <!-- Filters Toggle -->
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+                <button class="btn btn-light border shadow-sm fw-medium text-dark" onclick="toggleFilters()"><i class="bi bi-sliders2 me-2"></i>Advanced Filters</button>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="spinner-grow spinner-grow-sm text-success" role="status" id="pollingIndicator"></div>
+                    <small class="text-muted fw-medium">Polling for updates...</small>
+                </div>
+            </div>
+
+            <!-- Filters Panel -->
+            <div id="filtersPanel" class="filter-panel shadow-sm">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted fw-medium">Date Range (Start)</label>
+                        <input type="date" class="form-control" id="filterStart">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted fw-medium">Date Range (End)</label>
+                        <input type="date" class="form-control" id="filterEnd">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label small text-muted fw-medium">Severity</label>
+                        <select class="form-select" id="filterSeverity">
+                            <option value="">All</option>
+                            <option value="INFO">INFO</option>
+                            <option value="SUCCESS">SUCCESS</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button class="btn btn-primary w-100 fw-medium" onclick="applyFilters()">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="glass-card bg-white shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="auditLogsTable">
+                        <thead class="bg-light border-bottom">
+                            <tr>
+                                <th class="small text-muted py-3 ps-4">Event Chain Hash</th>
+                                <th class="small text-muted py-3">Timestamp</th>
+                                <th class="small text-muted py-3">Severity</th>
+                                <th class="small text-muted py-3">Action Type</th>
+                                <th class="small text-muted py-3">Admin ID</th>
+                                <th class="small text-muted py-3">Event Description</th>
+                                <th class="small text-muted py-3 text-end pe-4">Payload</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditTableBody">
+                            <!-- Rendered dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Generate Fake Failed Login Button for testing Rule Engine -->
+            <div class="mt-4 text-end">
+                <button class="btn btn-sm btn-outline-danger" onclick="simulateFailedLogin()">Simulate Failed Login Attack</button>
+            </div>
+        </main>
+        
+        <script>
+        let currentRole = 'L3'; // L3 = unmasked, L1 = masked
+        let lastRenderedCount = 0;
+        let pollInterval;
+        let ruleEngineInterval;
+        
+        // Pseudo-hash helper
+        const simpleHash = (str) => {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash = hash & hash;
+            }
+            return Math.abs(hash).toString(16).padStart(8, '0');
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.DB) {
+                initializeHashes(); // Backfill legacy data hashes
+                renderLogs(true);
+                startPolling();
+                startRuleEngine();
+            }
+        });
+
+        // Initialize Hashes for legacy data missing it
+        function initializeHashes() {
+            let logs = window.DB.getAll('auditLogs');
+            let updated = false;
+            
+            // Check if chain is completely broken (due to previous bug)
+            let needsRepair = false;
+            for(let i = 0; i < logs.length - 1; i++) {
+                if (logs[i].prevHash && logs[i].prevHash !== logs[i+1].hash) {
+                    needsRepair = true; break;
+                }
+            }
+
+            let prevHash = 'GENESIS_HASH_0000';
+            
+            // Iterate backwards (oldest to newest) to build/verify chain correctly
+            for (let i = logs.length - 1; i >= 0; i--) {
+                const log = logs[i];
+                if (!log.hash || needsRepair) {
+                    if (!log.payload) log.payload = { ip: "127.0.0.1", userAgent: "System Initialization" };
+                    log.prevHash = prevHash;
+                    const dataStr = `${log.adminId}|${log.action}|${log.details}|${log.status || 'INFO'}|${log.date}|${JSON.stringify(log.payload)}|${prevHash}`;
+                    log.hash = simpleHash(dataStr);
+                    updated = true;
+                }
+                prevHash = log.hash;
+            }
+            if(updated) window.DB.save();
+        }
+
+        // Masking Function (DLP)
+        function applyDLP(text) {
+            if (currentRole === 'L3') return text;
+            
+            // Mask Customer IDs
+            let masked = text.replace(/(CUST-\d{4}-\d{6})/g, 'CUST-XXXX-XXXXXX');
+            // Mask Account Numbers
+            masked = masked.replace(/(\b\d{10,12}\b)/g, 'XXXXXXXXXX');
+            // Mask Names (Very basic regex for First Last)
+            masked = masked.replace(/\b([A-Z][a-z]+) ([A-Z][a-z]+)\b/g, (match, p1, p2) => {
+                if (match === 'Personal Loan' || match === 'Home Loan' || match === 'Car Loan' || match === 'Admin ID' || match === 'System action') return match; 
+                return p1[0] + '**** ' + p2[0] + '****';
+            });
+            
+            return masked;
+        }
+
+        function setRole(role) {
+            currentRole = role;
+            
+            document.getElementById('btnRoleL3').className = `btn ${role === 'L3' ? 'btn-primary active' : 'btn-outline-secondary'}`;
+            document.getElementById('btnRoleL1').className = `btn ${role === 'L1' ? 'btn-secondary active' : 'btn-outline-secondary'}`;
+            
+            document.getElementById('headerAdminName').textContent = role === 'L3' ? 'System Admin' : 'L1 Support';
+            document.getElementById('headerAdminRole').textContent = role === 'L3' ? 'Super Admin Power' : 'Restricted View';
+            
+            // Re-render everything with new masking rules
+            renderLogs(true);
+        }
+
+        function toggleFilters() {
+            const panel = document.getElementById('filtersPanel');
+            panel.classList.toggle('show');
+        }
+
+        function getSeverityBadge(severity) {
+            const s = (severity || 'INFO').toUpperCase();
+            if (s === 'SUCCESS') return '<span class="badge bg-success-subtle text-success border border-success border-opacity-25 px-2">SUCCESS</span>';
+            if (s === 'WARNING') return '<span class="badge bg-warning-subtle text-warning border border-warning border-opacity-25 px-2">WARNING</span>';
+            if (s === 'ERROR') return '<span class="badge bg-danger-subtle text-danger border border-danger border-opacity-25 px-2">ERROR</span>';
+            if (s === 'CRITICAL') return '<span class="badge bg-dark text-white shadow-sm px-2">CRITICAL</span>';
+            return '<span class="badge bg-secondary bg-opacity-10 text-secondary border px-2">INFO</span>';
+        }
+
+        function renderLogs(forceReset = false) {
+            let logs = window.DB.getAll('auditLogs');
+            
+            // Filters
+            const start = document.getElementById('filterStart').value;
+            const end = document.getElementById('filterEnd').value;
+            const severity = document.getElementById('filterSeverity').value;
+            
+            if (start) {
+                const sd = new Date(start).getTime();
+                logs = logs.filter(l => new Date(l.date).getTime() >= sd);
+            }
+            if (end) {
+                const ed = new Date(end);
+                ed.setHours(23,59,59);
+                logs = logs.filter(l => new Date(l.date).getTime() <= ed.getTime());
+            }
+            if (severity) {
+                logs = logs.filter(l => (l.status || 'INFO').toUpperCase() === severity);
+            }
+
+            // Sort newest first
+            const sortedLogs = [...logs].sort((a,b) => new Date(b.date) - new Date(a.date));
+            
+            const tbody = document.getElementById('auditTableBody');
+            
+            if (forceReset || sortedLogs.length !== lastRenderedCount) {
+                let html = '';
+                
+                // Identify how many are "new" to flash them
+                const newCount = (sortedLogs.length - lastRenderedCount) > 0 && !forceReset ? (sortedLogs.length - lastRenderedCount) : 0;
+                
+                sortedLogs.forEach((l, index) => {
+                    const isNew = index < newCount;
+                    const maskedDetails = applyDLP(l.details);
+                    const payloadStr = l.payload ? JSON.stringify(l.payload, null, 2) : '{\n  "status": "legacy_log"\n}';
+                    const maskedPayload = applyDLP(payloadStr);
+
+                    html += `
+                    <tr class="expandable-row border-bottom ${isNew ? 'flash-new' : ''}" onclick="togglePayload('payload_${l.id}')">
+                        <td class="ps-4 text-secondary" style="font-family: monospace; font-size: 0.8rem;">
+                            <i class="bi bi-link me-1"></i>${l.hash || 'LEGACY_LOG'}
+                        </td>
+                        <td class="small fw-medium">${new Date(l.date).toLocaleString()}</td>
+                        <td>${getSeverityBadge(l.status)}</td>
+                        <td><span class="fw-medium text-dark">${l.action}</span></td>
+                        <td><span class="badge bg-light text-dark border">${applyDLP(l.adminId)}</span></td>
+                        <td class="text-dark small">${maskedDetails}</td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-light border shadow-sm"><i class="bi bi-braces"></i></button>
+                        </td>
+                    </tr>
+                    <tr id="payload_${l.id}" class="payload-row">
+                        <td colspan="7" class="p-0 border-0">
+                            <pre class="json-pre">${maskedPayload}</pre>
+                            <div class="px-3 pb-2 text-end">
+                                <small class="text-secondary opacity-50">Previous Hash: ${l.prevHash || 'N/A'}</small>
+                            </div>
+                        </td>
+                    </tr>
+                    `;
+                });
+                
+                tbody.innerHTML = html;
+                lastRenderedCount = sortedLogs.length;
+            }
+        }
+
+        function applyFilters() {
+            renderLogs(true);
+            toggleFilters();
+        }
+
+        function togglePayload(id) {
+            const el = document.getElementById(id);
+            if(el.classList.contains('show')) el.classList.remove('show');
+            else el.classList.add('show');
+        }
+
+        // --- Live Stream Polling ---
+        function startPolling() {
+            const ind = document.getElementById('pollingIndicator');
+            pollInterval = setInterval(() => {
+                ind.style.opacity = 1;
+                renderLogs(false);
+                setTimeout(() => { ind.style.opacity = 0; }, 500);
+            }, 3000);
+        }
+
+        // --- Integrity Verification ---
+        async function verifyLedger() {
+            const btn = document.getElementById('verifyBtn');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Verifying...';
+            btn.disabled = true;
+            
+            await window.simulateNetworkRequest(1000, 2000); // simulate heavy compute
+            
+            const logs = window.DB.getAll('auditLogs');
+            let isValid = true;
+            let failurePoint = null;
+            
+            for(let i = 0; i < logs.length; i++) {
+                const log = logs[i];
+                // Since array is newest-first, prevHash should link to the older log (i+1)
+                const expectedPrev = (i === logs.length - 1) ? 'GENESIS_HASH_0000' : logs[i+1].hash;
+                
+                if (log.prevHash !== expectedPrev) {
+                    isValid = false;
+                    failurePoint = log.id;
+                    break;
+                }
+                
+                const dataStr = `${log.adminId}|${log.action}|${log.details}|${log.status || 'INFO'}|${log.date}|${JSON.stringify(log.payload)}|${log.prevHash}`;
+                const expectedHash = simpleHash(dataStr);
+                
+                if (log.hash !== expectedHash) {
+                    isValid = false;
+                    failurePoint = log.id;
+                    break;
+                }
+            }
+            
+            btn.disabled = false;
+            if (isValid) {
+                btn.innerHTML = '<i class="bi bi-shield-check me-2"></i>Integrity Verified';
+                btn.classList.replace('btn-dark', 'btn-success');
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="bi bi-shield-check me-2"></i>Verify Integrity';
+                    btn.classList.replace('btn-success', 'btn-dark');
+                }, 3000);
+                alert("Cryptographic Hash Chain verified successfully.\nZero tampering detected.");
+            } else {
+                btn.innerHTML = '<i class="bi bi-shield-x me-2"></i>Chain Broken!';
+                btn.classList.replace('btn-dark', 'btn-danger');
+                alert(`CRITICAL SECURITY ALERT:\nHash Chain Validation Failed at Log ID: ${failurePoint}.\nData tampering detected!`);
+                window.addAuditLog('Security Alert', 'SYSTEM', `Hash validation failed at ${failurePoint}`, 'CRITICAL', { trigger: 'LedgerVerification' });
+            }
+        }
+
+        // --- Automated Rules Engine Daemon ---
+        let failedLoginCount = 0;
+        function startRuleEngine() {
+            // Monitor logs every 5 seconds for rule conditions
+            ruleEngineInterval = setInterval(() => {
+                const logs = window.DB.getAll('auditLogs');
+                // Check recent failed logins (last 5 mins)
+                const fiveMinsAgo = new Date(Date.now() - 5 * 60000).getTime();
+                
+                const recentFails = logs.filter(l => 
+                    l.action === 'Auth' && 
+                    l.status === 'WARNING' && 
+                    l.details.includes('Failed login') &&
+                    new Date(l.date).getTime() > fiveMinsAgo
+                );
+
+                if (recentFails.length > 5 && !window.ruleEngineTriggered) {
+                    window.ruleEngineTriggered = true; // prevent loop
+                    // Extract ID
+                    const match = recentFails[0].details.match(/(CUST-\d{4}-\d{6})/);
+                    const targetId = match ? match[1] : 'UNKNOWN';
+                    
+                    window.addAuditLog('Automated Defense', 'SYSTEM', `Account ${targetId} automatically frozen due to rapid failed logins (>5 in 5m).`, 'CRITICAL', { target: targetId, rule: 'BR-04' });
+                    
+                    // Actually update DB status if we want
+                    const user = window.DB.getById('users', targetId);
+                    if(user) {
+                        user.status = 'Frozen';
+                        window.DB.update('users', targetId, user);
+                    }
+                }
+            }, 5000);
+        }
+
+        function simulateFailedLogin() {
+            window.addAuditLog('Auth', 'SYSTEM', `Failed login attempt for CUST-2026-000002. Invalid credentials.`, 'WARNING', { ip: '45.22.11.9' });
+            // By clicking this 6 times quickly, it will trigger the daemon!
+        }
+
+        // --- Mock Actions ---
+        function exportLogs() {
+            // Accountability log
+            window.addAuditLog('Data Export', (currentRole==='L3'?'ADM_SUPER':'ADM_L1'), `User exported Audit Logs to CSV.`, 'CRITICAL', { format: 'CSV', filtersApplied: true });
+            alert(`Logs exported successfully.\n\nWatermark Applied: "Exported by ${(currentRole==='L3'?'ADM_SUPER':'ADM_L1')} on ${new Date().toISOString()}"\n\nA CRITICAL audit event has been generated for accountability.`);
+        }
+        
+        async function runArchivalJob() {
+            if(!confirm("Execute cold-storage archival for logs older than 90 days?")) return;
+            
+            await window.simulateNetworkRequest(1000, 2000);
+            window.addAuditLog('System Archival', 'SYSTEM', `Nightly Cron Job: Compressed and moved 0 legacy logs to cold storage (AWS S3).`, 'SUCCESS', { recordsMoved: 0 });
+            alert("Archival job completed successfully.");
+        }
+        </script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="js/admin.js"></script>
+        
+        <!-- Alert Override -->
+        <script>
+            window.alert = function(msg) {
+                let modal = document.getElementById('globalAlertModal');
+                if (!modal) {
+                    const modalHtml = `
+                    <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 rounded-4 shadow">
+                                <div class="modal-body p-5 text-center">
+                                    <div class="mb-4 text-primary">
+                                        <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="fw-bold mb-3">Notification</h5>
+                                    <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap; font-size:0.9rem;"></p>
+                                    <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    document.body.insertAdjacentHTML('beforeend', modalHtml);
+                    modal = document.getElementById('globalAlertModal');
+                }
+                document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+                if (typeof bootstrap !== 'undefined') {
+                    const bsModal = new bootstrap.Modal(modal);
+                    bsModal.show();
+                }
+            };
+        </script>
+    </div>
+</body>
+</html>

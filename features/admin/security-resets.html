@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Resets - Nexus Bank Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+    <link href="css/admin.css" rel="stylesheet">
+    <style>
+        .request-item {
+            transition: all 0.3s ease;
+        }
+        .slide-in {
+            animation: slideInDown 0.5s ease-out, pulseAlert 2s 1;
+        }
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseAlert {
+            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        }
+        .timer-danger {
+            color: #dc3545 !important;
+            font-weight: bold;
+            animation: blinker 1.5s linear infinite;
+        }
+        @keyframes blinker {
+            50% { opacity: 0.5; }
+        }
+        
+        .disabled-btn {
+            pointer-events: none;
+            opacity: 0.4;
+            filter: grayscale(100%);
+        }
+    </style>
+</head>
+<body style="background-color: #f1f5f9; font-family: 'Inter', sans-serif;">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
+        <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
+            <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+        </div>
+        
+        <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
+            <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-grid fs-5"></i><span class="fw-medium">System Dashboard</span></a>
+            <a href="customer-directory.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-people fs-5"></i><span class="fw-medium">Customer List</span></a>
+            <a href="freeze-account.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-lock fs-5"></i><span class="fw-medium">Freeze Account</span></a>
+            <a href="cibil-score.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-speedometer2 fs-5"></i><span class="fw-medium">CIBIL Score</span></a>
+            <a href="loans-terminal.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-house-door fs-5"></i><span class="fw-medium">Loans Terminal</span></a>
+            <a href="audit-logs.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-journal-text fs-5"></i><span class="fw-medium">Audit Logs</span></a>
+            <a href="reports.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-bar-chart fs-5"></i><span class="fw-medium">Reports Engine</span></a>
+            <a href="security-resets.html" class="nav-link active px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="background-color: #0d6efd; color: white !important;"><i class="bi bi-arrow-clockwise fs-5"></i><span class="fw-medium">Security Resets</span></a>
+            <a href="balance-update.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-currency-dollar fs-5"></i><span class="fw-medium">Balance Update</span></a>
+            <a href="bulk-import.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-plus fs-5"></i><span class="fw-medium">Bulk User Import</span></a>
+            <a href="backup-recovery.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-server fs-5"></i><span class="fw-medium">Backup & Recovery</span></a>
+            <a href="content-management.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-file-earmark-richtext fs-5"></i><span class="fw-medium">Content Management</span></a>
+            <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;"><i class="bi bi-person-badge fs-5"></i><span class="fw-medium">Profile</span></a>
+        </div>
+        <div class="p-3 border-top border-secondary border-opacity-25">
+            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+                <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
+                <span class="fw-medium text-danger">Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-left: 280px; min-height: 100vh;">
+        
+        <!-- Header -->
+        <header class="d-flex justify-content-between align-items-center p-4 bg-white border-bottom sticky-top z-3">
+            <div class="text-muted small fw-medium">
+                Admin Portal / Security Resets
+            </div>
+            
+            <div class="d-flex align-items-center gap-4">
+                <div class="position-relative dropdown" style="cursor: pointer;">
+                    <i class="bi bi-bell fs-5 text-secondary"></i>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2 border-start ps-4">
+                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                        <i class="bi bi-person text-primary"></i>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-6 lh-1 text-dark">System Admin</div>
+                        <div class="text-muted small" style="font-size: 0.75rem;">Super Admin Power</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Content -->
+        <main class="p-4 p-md-5 position-relative z-1">
+
+            <div class="mb-5 d-flex justify-content-between align-items-end">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">Security Resets</h2>
+                    <p class="text-muted mb-0">Force password resets and clear active sessions for users.</p>
+                </div>
+                <div>
+                    <span class="badge bg-danger p-2" id="autoLockdownAlert" style="display: none;"><i class="bi bi-shield-x me-2"></i>Auto-Lockdown Daemon Active</span>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-7">
+                    <div class="glass-card p-4 h-100">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">Live Pending User Requests</h5>
+                            <span class="spinner-grow spinner-grow-sm text-primary" role="status"></span>
+                        </div>
+                        
+                        <div class="d-flex flex-column gap-3" id="queueContainer">
+                            <!-- Initial Static Item (Already handled) -->
+                            <div class="request-item border rounded p-3 bg-light d-flex justify-content-between align-items-center" data-time="0">
+                                <div>
+                                    <div class="fw-bold text-dark">Priya Sharma</div>
+                                    <div class="small text-muted mb-2">priya.s@gmail.com &bull; CUST-2026-000003</div>
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle mb-2 d-inline-block">Suspicious Activity Reported</span>
+                                    <div class="small text-muted timer-text"><i class="bi bi-clock me-1"></i>Reported <span class="time-mins">2</span> mins ago</div>
+                                </div>
+                                <div class="d-flex flex-column gap-2" style="min-width: 150px;">
+                                    <!-- Semantic Red -->
+                                    <button class="btn btn-sm btn-danger w-100 fw-bold" onclick="handleSecurityAction(this, 'CUST-2026-000003', 'Lockdown')">Trigger Lockdown</button>
+                                    <button class="btn btn-sm btn-outline-secondary w-100" onclick="dismissRequest(this)">Dismiss</button>
+                                </div>
+                            </div>
+
+                            <div class="request-item border rounded p-3 bg-light d-flex justify-content-between align-items-center" data-time="3">
+                                <div>
+                                    <div class="fw-bold text-dark">Rahul Verma</div>
+                                    <div class="small text-muted mb-2">rahul.v@yahoo.com &bull; CUST-2026-000004</div>
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle mb-2 d-inline-block">Device Lost / Stolen</span>
+                                    <div class="small text-muted timer-text"><i class="bi bi-clock me-1"></i>Reported <span class="time-mins">3</span> mins ago</div>
+                                </div>
+                                <div class="d-flex flex-column gap-2" style="min-width: 150px;">
+                                    <!-- Semantic Orange/Warning -->
+                                    <button class="btn btn-sm btn-warning text-dark w-100 fw-bold" onclick="handleSecurityAction(this, 'CUST-2026-000004', 'Unlink Devices')">Unlink Devices</button>
+                                    <button class="btn btn-sm btn-outline-secondary w-100" onclick="dismissRequest(this)">Dismiss</button>
+                                </div>
+                            </div>
+
+                            <div class="request-item border rounded p-3 bg-light d-flex justify-content-between align-items-center" data-time="1">
+                                <div>
+                                    <div class="fw-bold text-dark">Neha Gupta</div>
+                                    <div class="small text-muted mb-2">neha.g@outlook.com &bull; CUST-2026-000005</div>
+                                    <span class="badge bg-info-subtle text-info border border-info-subtle mb-2 d-inline-block">Locked Out of Account</span>
+                                    <div class="small text-muted timer-text"><i class="bi bi-clock me-1"></i>Reported <span class="time-mins">1</span> mins ago</div>
+                                </div>
+                                <div class="d-flex flex-column gap-2" style="min-width: 150px;">
+                                    <!-- Semantic Green/Success -->
+                                    <button class="btn btn-sm btn-success w-100 fw-bold" onclick="handleSecurityAction(this, 'CUST-2026-000005', 'Unlock Account')">Unlock Account</button>
+                                    <button class="btn btn-sm btn-outline-secondary w-100" onclick="dismissRequest(this)">Dismiss</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="glass-card p-4 h-100">
+                        <h5 class="fw-bold mb-4">Manual Override</h5>
+                        
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-medium">Target Customer ID / Email</label>
+                            <input type="text" id="targetUserInput" class="form-control bg-light" placeholder="e.g. arjun.mehta@gmail.com" oninput="validateOverrideInput()">
+                        </div>
+                        
+                        <div class="d-grid gap-3">
+                            <button id="btnForceReset" class="btn btn-outline-danger d-flex justify-content-between align-items-center p-3 disabled-btn" onclick="triggerMFA('Force Password Reset')">
+                                <div class="text-start">
+                                    <div class="fw-bold">Force Password Reset</div>
+                                    <div class="small opacity-75">Send a mandatory password reset email</div>
+                                </div>
+                                <i class="bi bi-envelope-exclamation fs-4"></i>
+                            </button>
+                            
+                            <button id="btnKillSessions" class="btn btn-outline-warning d-flex justify-content-between align-items-center p-3 disabled-btn" onclick="handleManualAction('Terminate Sessions')">
+                                <div class="text-start">
+                                    <div class="fw-bold">Kill Active Sessions</div>
+                                    <div class="small opacity-75">Flush JWTs instantly from Fast-Cache</div>
+                                </div>
+                                <i class="bi bi-power fs-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        
+        <!-- Step-Up MFA Modal -->
+        <div class="modal fade" id="mfaModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered modal-sm">
+                <div class="modal-content border-0 rounded-4 shadow">
+                    <div class="modal-body p-4 text-center">
+                        <i class="bi bi-shield-lock fs-1 text-primary mb-3"></i>
+                        <h5 class="fw-bold">Step-Up Auth Required</h5>
+                        <p class="small text-muted mb-4">Enter 6-digit Authenticator code to proceed with this destructive action.</p>
+                        
+                        <input type="text" id="mfaInput" class="form-control text-center fs-4 fw-bold mb-3" placeholder="------" maxlength="6" style="letter-spacing: 5px;">
+                        
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-light w-50" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary w-50 fw-bold" onclick="verifyMFA()">Verify</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            }
+        };
+    </script>
+
+    <script>
+        let mfaPendingAction = null;
+        let mfaModalInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startLiveTimers();
+            startLiveQueueInjector();
+        });
+
+        // 1. Live Timers
+        function startLiveTimers() {
+            setInterval(() => {
+                document.querySelectorAll('.request-item').forEach(item => {
+                    let time = parseFloat(item.getAttribute('data-time'));
+                    time += 0.5; // add 30s roughly every tick for demo
+                    item.setAttribute('data-time', time);
+                    
+                    const span = item.querySelector('.time-mins');
+                    if (span) {
+                        span.textContent = Math.floor(time);
+                    }
+                    
+                    const textContainer = item.querySelector('.timer-text');
+                    if (time >= 5 && textContainer) {
+                        textContainer.classList.add('timer-danger');
+                    }
+                });
+            }, 30000); // 30 sec real time update
+        }
+
+        // 2. Live Queue Injector (Simulating incoming critical events)
+        function startLiveQueueInjector() {
+            setTimeout(() => {
+                const container = document.getElementById('queueContainer');
+                
+                // Auto-Lockdown Logic simulation prior to inject
+                triggerAutoLockdown();
+                
+                const html = `
+                <div class="request-item border rounded p-3 bg-light d-flex justify-content-between align-items-center slide-in" data-time="0">
+                    <div>
+                        <div class="fw-bold text-dark">Simran Kaur</div>
+                        <div class="small text-muted mb-2">simran.k@mail.com &bull; CUST-2026-000009</div>
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle mb-2 d-inline-block">Multiple Failed Transfers</span>
+                        <div class="small text-muted timer-text"><i class="bi bi-clock me-1"></i>Reported <span class="time-mins">0</span> mins ago</div>
+                    </div>
+                    <div class="d-flex flex-column gap-2" style="min-width: 150px;">
+                        <button class="btn btn-sm btn-danger w-100 fw-bold" onclick="handleSecurityAction(this, 'CUST-2026-000009', 'Lockdown')">Trigger Lockdown</button>
+                        <button class="btn btn-sm btn-outline-secondary w-100" onclick="dismissRequest(this)">Dismiss</button>
+                    </div>
+                </div>`;
+                
+                container.insertAdjacentHTML('afterbegin', html);
+            }, 15000); // Inject after 15 seconds
+        }
+
+        // Auto-Lockdown Backend Engine Mock
+        function triggerAutoLockdown() {
+            document.getElementById('autoLockdownAlert').style.display = 'inline-block';
+            if (window.DB) {
+                // Mock user
+                let user = window.DB.getById('users', 'CUST-2026-000009');
+                if (!user) {
+                    user = { id: 'CUST-2026-000009', name: 'Simran Kaur', status: 'Active' };
+                    window.DB.insert('users', user);
+                }
+                user.status = 'Frozen';
+                window.DB.update('users', 'CUST-2026-000009', user);
+                window.addAuditLog('Auto-Lockdown', 'SYSTEM_DAEMON', 'Automatically soft-locked CUST-2026-000009 due to 3 failed high-value transfers.', 'CRITICAL');
+            }
+        }
+
+        function validateOverrideInput() {
+            const val = document.getElementById('targetUserInput').value.trim();
+            const btnReset = document.getElementById('btnForceReset');
+            const btnKill = document.getElementById('btnKillSessions');
+            
+            if (val.length >= 5) {
+                btnReset.classList.remove('disabled-btn');
+                btnKill.classList.remove('disabled-btn');
+            } else {
+                btnReset.classList.add('disabled-btn');
+                btnKill.classList.add('disabled-btn');
+            }
+        }
+
+        function dismissRequest(btn) {
+            btn.closest('.request-item').remove();
+        }
+
+        function handleSecurityAction(btn, userId, action) {
+            window.modernConfirm(
+                `Confirm ${action}`,
+                `Are you sure you want to execute '${action}' for user ${userId}?`,
+                async () => {
+                    await window.simulateNetworkRequest();
+                    
+                    if (window.DB) {
+                        const users = window.DB.getAll('users');
+                        const user = users.find(u => u.id === userId);
+                        if (user) {
+                            if (action === 'Lockdown') {
+                                user.status = 'Frozen';
+                                window.DB.update('users', userId, user);
+                                window.DB.insert('auditLogs', { action: `Security: ${action}`, details: `Target User: ${userId}`, date: new Date().toISOString() });
+                            } else if (action === 'Unlock Account') {
+                                user.status = 'Active';
+                                user.watch_24h = true; // POST-UNLOCK COOL-DOWN
+                                window.DB.update('users', userId, user);
+                                window.DB.insert('auditLogs', { action: `Security: ${action}`, details: `Target User: ${userId}. Attached 24-hour Watch flag.`, date: new Date().toISOString() });
+                            } else if (action === 'Unlink Devices') {
+                                user.trusted_devices = []; // CRYPTOGRAPHIC UNLINKING
+                                window.DB.update('users', userId, user);
+                                window.DB.insert('auditLogs', { action: `Security: Revoked Trusted Keys`, details: `Revoked all cryptographic public keys for ${userId}. Devices fully unlinked.`, date: new Date().toISOString() });
+                            }
+                        } else {
+                            window.DB.insert('auditLogs', { action: `Security: ${action}`, details: `Target User: ${userId} (User Not Found)`, date: new Date().toISOString() });
+                        }
+                    }
+
+                    btn.closest('.request-item').remove();
+                    
+                    let msg = `${action} executed successfully for ${userId}.`;
+                    if(action === 'Unlock Account') msg += `\n\nAccount is now under 24-hour Watch. Failed logins will trigger a Hard Branch-Lock.`;
+                    if(action === 'Unlink Devices') msg += `\n\nAll Cryptographic Device Keys revoked permanently.`;
+                    alert(msg);
+                }
+            );
+        }
+
+        // Admin MFA Flow
+        function triggerMFA(action) {
+            mfaPendingAction = action;
+            document.getElementById('mfaInput').value = '';
+            
+            if(!mfaModalInstance) {
+                mfaModalInstance = new bootstrap.Modal(document.getElementById('mfaModal'));
+            }
+            mfaModalInstance.show();
+        }
+
+        async function verifyMFA() {
+            const val = document.getElementById('mfaInput').value;
+            if(val.length !== 6) {
+                document.getElementById('mfaInput').classList.add('is-invalid');
+                return;
+            }
+            
+            document.getElementById('mfaInput').classList.remove('is-invalid');
+            mfaModalInstance.hide();
+            
+            handleManualAction(mfaPendingAction);
+        }
+
+        function handleManualAction(action) {
+            const input = document.getElementById('targetUserInput');
+            const target = input.value.trim();
+            
+            if (!target) return;
+
+            window.modernConfirm(
+                `Confirm ${action}`,
+                `Are you sure you want to execute '${action}' for ${target}?`,
+                async () => {
+                    await window.simulateNetworkRequest(800, 1500);
+                    
+                    let details = `Target String: ${target}`;
+                    if (window.DB) {
+                        const users = window.DB.getAll('users');
+                        const user = users.find(u => u.id === target || u.email === target);
+                        
+                        if (user) {
+                            details = `Target User: ${user.id}`;
+                            if(action === 'Terminate Sessions') {
+                                // MOCK: Flush JWT tokens
+                                details += " - Flushed JWT fast-cache. Session Invalidated.";
+                            }
+                        }
+                        window.DB.insert('auditLogs', { action: `Manual Security: ${action}`, details: details, date: new Date().toISOString() });
+                    }
+
+                    input.value = '';
+                    validateOverrideInput();
+                    
+                    let alertMsg = `${action} executed successfully for ${target}.`;
+                    if(action === 'Terminate Sessions') alertMsg += `\n\nJWT tokens instantly flushed from Redis fast-cache. Active sessions killed with 401 Unauthorized.`;
+                    
+                    alert(alertMsg);
+                }
+            );
+        }
+    </script>
+
+</body>
+</html>

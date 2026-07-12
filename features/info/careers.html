@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Bank</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+</head>
+<body class="bg-light">
+<!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light py-3 position-absolute w-100" style="z-index: 1000; background: transparent;">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-dark" href="../../index.html">
+                <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank" height="120">
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+                </ul>
+            <!-- Nav Links -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 fw-medium">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="our-story.html">Our Story</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="careers.html">Careers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="press.html">Press</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Blog</a>
+                    </li>
+                </ul>
+
+                <!-- Right Actions -->
+                <div class="d-flex align-items-center gap-3">
+                    <a href="../auth/login.html" class="btn btn-outline-secondary px-4 fw-medium">Login</a>
+                    <a href="../auth/signup.html" class="btn btn-primary px-4 fw-medium text-white">Open Account</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+<main id="app" style="padding-top: 120px; min-height: 80vh;">
+<div class="container">
+<div class="px-5 pb-5">
+        <div class="mb-5">
+            <h2 class="fw-bold text-dark mb-1">Careers</h2>
+            <p class="text-secondary">Join the team building the future of finance.</p>
+        </div>
+        <div class="card border-0 rounded-4 shadow-sm p-4 bg-white mb-4">
+            <img src="../../assets/images/careers_banner.png" class="img-fluid rounded-4 mb-4" style="max-height: 400px; object-fit: cover; width: 100%;" alt="Nexus Bank Careers">
+            <h4 class="fw-bold text-dark mb-3">Life at Nexus Bank</h4>
+            <p class="text-muted mb-4" style="line-height: 1.8;">
+                We are always looking for passionate individuals who are ready to make an impact. At Nexus Bank, you will work in a vibrant, 
+                collaborative environment that fosters innovation and personal growth.
+            </p>
+            <h5 class="fw-bold text-dark mb-3">Open Positions</h5>
+            <div class="list-group list-group-flush mb-3">
+                <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 fw-bold text-primary">Senior Frontend Developer</h6>
+                        <small class="text-muted">Remote</small>
+                    </div>
+                    <p class="mb-1 small text-muted">React, TypeScript, Bootstrap</p>
+                </a>
+                <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 fw-bold text-primary">Branch Manager</h6>
+                        <small class="text-muted">Mumbai, India</small>
+                    </div>
+                    <p class="mb-1 small text-muted">5+ years experience in retail banking</p>
+                </a>
+            </div>
+            
+            <!-- Hidden Extra Positions -->
+            <div id="extraPositions" class="list-group list-group-flush mb-3 d-none">
+                <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3 border-top-0">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 fw-bold text-primary">Data Analyst</h6>
+                        <small class="text-muted">Remote / Bangalore</small>
+                    </div>
+                    <p class="mb-1 small text-muted">Proficiency in SQL, Python, and Tableau</p>
+                </a>
+                <a href="javascript:void(0)" class="list-group-item list-group-item-action py-3">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h6 class="mb-1 fw-bold text-primary">Customer Support Specialist</h6>
+                        <small class="text-muted">Delhi, India</small>
+                    </div>
+                    <p class="mb-1 small text-muted">Excellent communication skills, flexible shifts</p>
+                </a>
+            </div>
+
+            <button id="togglePositionsBtn" onclick="togglePositions()" type="button" class="btn btn-primary px-4 py-2 rounded-pill">View All Positions</button>
+
+            <script>
+                function togglePositions() {
+                    const extra = document.getElementById('extraPositions');
+                    const btn = document.getElementById('togglePositionsBtn');
+                    if (extra.classList.contains('d-none')) {
+                        extra.classList.remove('d-none');
+                        btn.innerText = 'View Less Positions';
+                    } else {
+                        extra.classList.add('d-none');
+                        btn.innerText = 'View All Positions';
+                    }
+                }
+            </script>
+        </div>
+    
+</div>
+</main>
+<!-- Footer -->
+    <footer class="bg-dark text-white pt-5 pb-3" style="background-color: #0b1120 !important;">
+        <div class="container">
+            <div class="row gy-4 mb-5">
+                <div class="col-lg-3 col-md-6">
+                    <a class="d-flex align-items-center gap-2 fw-bold text-white text-decoration-none mb-4" href="../../index.html">
+                        <img src="../../assets/images/image%206.png" alt="Nexus Bank" height="60">
+                    </a>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="fw-bold mb-3 text-white-50 small">Quick Links</h6>
+                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../../index.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Home</a></li>
+                        <li><a href="../support/service-accounts.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Accounts</a></li>
+                        <li><a href="../support/service-loans.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Loans</a></li>
+                        <li><a href="../support/service-cards.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Cards</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="fw-bold mb-3 text-white-50 small">Resources</h6>
+                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href="index.html#services" class="text-white text-decoration-none opacity-75 hover-opacity-100">Services</a></li>
+                        
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="fw-bold mb-3 text-white-50 small">About Us</h6>
+                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href="../info/our-story.html"  class="text-white text-decoration-none opacity-75 hover-opacity-100">Our Story</a></li>
+                        <li><a href="../info/careers.html"  class="text-white text-decoration-none opacity-75 hover-opacity-100">Careers</a></li>
+                        <li><a href="../info/press.html"  class="text-white text-decoration-none opacity-75 hover-opacity-100">Press</a></li>
+                        <li><a href="../info/blog.html"  class="text-white text-decoration-none opacity-75 hover-opacity-100">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6 class="fw-bold mb-3 text-white-50 small">Follow Us</h6>
+                            <div class="d-flex gap-3">
+                                <a href="../../index.html" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-twitter"></i></a>
+                                <a href="../../index.html" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-facebook"></i></a>
+                                <a href="../../index.html" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-linkedin"></i></a>
+                                <a href="../../index.html" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-instagram"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="fw-bold mb-3 text-white-50 small">Contact Us</h6>
+                            <ul class="list-unstyled small mb-0 d-flex flex-column gap-2 text-white opacity-75">
+                                <li>1800 123 4567</li>
+                                <li>support@nexusbank.com</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary pt-3 mt-4 text-center">
+                <small class="text-white-50">&copy; 2026 Nexus Bank. All rights reserved.</small>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmxc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="../../assets/js/main.js"></script>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+
+    <script src="../../assets/js/nexa.js"></script>
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+</body>
+</html>
+
+
+
+

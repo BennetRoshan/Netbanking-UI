@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Nexus Bank</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../../assets/css/main.css" rel="stylesheet">
+
+    <!-- Global Dark Mode Loader -->
+    <script>
+        if (localStorage.getItem('nexus_dark_mode') === 'true') {
+            document.documentElement.classList.add('dark-mode');
+        }
+    </script>
+
+    <link rel="icon" type="image/png" href="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
+    <script src="../../shared/utils/db.js"></script>
+    <script src="../../shared/utils/app-init.js"></script>
+</head>
+<body>
+
+    <div class="container-fluid p-0 auth-page">
+        <div class="row g-0 w-100">
+            <!-- Left Panel -->
+            <div class="col-lg-4 d-none d-lg-block auth-left">
+                <div class="auth-left-content p-5 d-flex flex-column h-100">
+                    <a href="../../index.html">
+                        <img src="../../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Logo" class="mb-5" style="max-width: 400px;">
+                    </a>
+                    
+                    <h1 class="fw-bold mb-1 text-dark">Banking,</h1>
+                    <h1 class="fw-bold mb-4 text-dark">Reimagined for <span class="text-cyan">You</span></h1>
+                    
+                    <p class="text-muted mb-5 small pe-4">Create your account and experience secure, seamless and smarter banking with Nexus Bank.</p>
+                    
+                    <div class="d-flex flex-column gap-4">
+                        <div class="feature-item d-flex gap-3 align-items-start">
+                            <div class="icon-box"><i class="bi bi-shield-check"></i></div>
+                            <div>
+                                <h6 class="fw-bold mb-1 small">Secure & Safe</h6>
+                                <p class="text-muted mb-0" style="font-size:0.75rem;">Bank with advanced security and encryption.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item d-flex gap-3 align-items-start">
+                            <div class="icon-box"><i class="bi bi-lightning-charge"></i></div>
+                            <div>
+                                <h6 class="fw-bold mb-1 small">Quick & Easy</h6>
+                                <p class="text-muted mb-0" style="font-size:0.75rem;">Open your account in just a few simple steps.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item d-flex gap-3 align-items-start">
+                            <div class="icon-box"><i class="bi bi-people"></i></div>
+                            <div>
+                                <h6 class="fw-bold mb-1 small">Customer First</h6>
+                                <p class="text-muted mb-0" style="font-size:0.75rem;">Personalized banking solutions designed for you.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Panel -->
+            <div class="col-lg-8 col-12 auth-right position-relative">
+                <div class="p-4 p-md-5 mx-auto d-flex flex-column justify-content-center h-100" style="max-width: 800px; padding-top: 6rem !important;">
+                    <h2 class="fw-bold text-dark mb-1">Create New Account</h2>
+                    <p class="text-muted small mb-5">Join Nexus Bank and start your secure banking journey</p>
+                    
+                    <!-- Form Card -->
+                    <div class="auth-form-card bg-white p-4 p-md-5 rounded-4">
+                        <form id="signupForm" class="auth-form" novalidate>
+                            <!-- Personal Information -->
+                            <h6 class="form-section-title">Personal Information</h6>
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-6">
+                                    <label class="form-label">Full Name*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-person text-secondary"></i></span>
+                                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+                                        <div class="invalid-feedback">Please enter your full name.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Mobile Number*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-phone text-secondary"></i></span>
+                                        <input type="tel" class="form-control" id="mobileNumber" placeholder="Enter 10-digit mobile number" required pattern="^[0-9]{10}$">
+                                        <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email Address*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-envelope text-secondary"></i></span>
+                                        <input type="email" class="form-control" id="emailAddress" placeholder="Enter your email address" required>
+                                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Date of birth*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-calendar3 text-secondary"></i></span>
+                                        <input type="date" max="9999-12-31" class="form-control" id="dob" required>
+                                        <div class="invalid-feedback">Please select your date of birth.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- KYC Information -->
+                            <h6 class="form-section-title">KYC Information</h6>
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-6">
+                                    <label class="form-label">PAN Card Number*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-card-text text-secondary"></i></span>
+                                        <input type="text" class="form-control text-uppercase" id="panNumber" placeholder="Enter 10-character PAN" required pattern="^[A-Z]{5}[0-9]{4}[A-Z]{1}$">
+                                        <div class="invalid-feedback">Please enter a valid PAN (e.g. ABCDE1234F).</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Aadhaar Number (Optional)</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-fingerprint text-secondary"></i></span>
+                                        <input type="text" class="form-control" id="aadhaarNumber" placeholder="Enter 12-digit Aadhaar" pattern="^[0-9]{12}$">
+                                        <div class="invalid-feedback">Aadhaar must be exactly 12 digits.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Account Information -->
+                            <h6 class="form-section-title">Account Information</h6>
+                            <div class="row g-4 mb-5">
+                                <div class="col-md-6">
+                                    <label class="form-label">Account Type*</label>
+                                    <div class="has-validation">
+                                        <select class="form-select form-control no-icon" id="accountType" required>
+                                            <option value="" selected disabled>Select Account Type</option>
+                                            <option value="1">Savings</option>
+                                            <option value="2">Checking</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please select an account type.</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Preferred Branch*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-geo-alt text-secondary"></i></span>
+                                        <select class="form-select form-control" id="preferredBranch" required>
+                                            <option value="" selected disabled>Select Branch</option>
+                                            <option value="1">Main Downtown</option>
+                                            <option value="2">Westside Branch</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please select a preferred branch.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Security Information -->
+                            <h6 class="form-section-title">Security Information</h6>
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">Set Password*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-lock text-secondary"></i></span>
+                                        <input type="password" class="form-control" id="setPassword" placeholder="Create a strong password" required>
+                                        <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('setPassword')"><i class="bi bi-eye-slash" id="toggleSetPassword"></i></span>
+                                        <div class="invalid-feedback" id="passwordError">Password must meet requirements.</div>
+                                    </div>
+                                    <!-- Password Strength Indicator -->
+                                    <div id="passwordStrengthContainer" class="mt-2 d-none" style="transition: all 0.3s ease;">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="fw-bold" id="strengthText" style="font-size: 0.75rem;">Weak</small>
+                                            <small class="text-muted" id="strengthSuggestion" style="font-size: 0.7rem;"></small>
+                                        </div>
+                                        <div class="progress" style="height: 6px;">
+                                            <div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Confirm Password*</label>
+                                    <div class="input-group has-validation">
+                                        <span class="input-group-text"><i class="bi bi-lock text-secondary"></i></span>
+                                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                                        <span class="input-group-text" style="cursor: pointer;" onclick="togglePassword('confirmPassword')"><i class="bi bi-eye-slash" id="toggleConfirmPassword"></i></span>
+                                        <div class="invalid-feedback">Passwords do not match.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Removed Terms Checkbox -->
+                            
+                            <button type="submit" class="btn btn-primary w-100 py-3 mb-4 rounded-3 fw-bold" id="registerBtn">
+                                <span>Register</span>
+                                <div class="spinner-border spinner-border-sm ms-2 d-none" role="status" id="registerSpinner"></div>
+                            </button>
+                            
+                            <div class="divider">
+                                <span>or continue with</span>
+                            </div>
+                            
+                            <div class="row g-3 mb-5">
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn social-btn w-100 py-2 rounded-3"><i class="bi bi-fingerprint text-primary fs-5"></i> Biometric</button>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn social-btn w-100 py-2 rounded-3"><i class="bi bi-google text-danger fs-5"></i> Google</button>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn social-btn w-100 py-2 rounded-3">OTP Login</button>
+                                </div>
+                            </div>
+                            
+                            <p class="text-center small text-muted">Already have an account ? <a href="login.html" class="text-cyan fw-bold text-decoration-none">Login</a></p>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/signup.js"></script>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="../../assets/js/nexa.js"></script>
+
+<!-- Terms and Conditions Modal -->
+<div class="modal fade" id="tncModal" tabindex="-1" aria-labelledby="tncModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <h4 class="modal-title fw-bold text-dark" id="tncModalLabel">Terms & Conditions</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-secondary" id="tncModalBody" style="line-height: 1.7; font-size: 0.95rem;">
+                <h6 class="fw-bold text-dark mb-3">1. Introduction</h6>
+                <p>Welcome to Nexus Bank. These Terms and Conditions govern your use of our net banking platform, mobile applications, and all associated services. By registering for an account, you agree to be bound by these terms. Please read them carefully.</p>
+                
+                <h6 class="fw-bold text-dark mt-4 mb-3">2. Account Registration and Security</h6>
+                <p>To use our services, you must register for a Nexus Bank account. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.</p>
+                <p>You are solely responsible for safeguarding your password and account credentials. Nexus Bank will never ask for your password via email or phone. You must immediately notify us of any unauthorized use of your account.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">3. Use of Services</h6>
+                <p>Our net banking platform allows you to manage your funds, transfer money, pay bills, and access financial products. You agree not to use the services for any illegal or unauthorized purpose. You must not attempt to breach or circumvent any security measures of the platform.</p>
+                
+                <h6 class="fw-bold text-dark mt-4 mb-3">4. Electronic Fund Transfers</h6>
+                <p>All fund transfers initiated through our platform are subject to processing times, daily limits, and per-transaction limits as outlined in your account agreement. Nexus Bank is not liable for delays caused by third-party clearing networks.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">5. Privacy and Data Protection</h6>
+                <p>Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your personal data. By agreeing to these Terms, you also consent to our Privacy Policy.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">6. Fees and Charges</h6>
+                <p>Certain services may incur fees. A schedule of applicable fees is available on our website. We reserve the right to modify our fee structure with a 30-day prior notice to you.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">7. Limitation of Liability</h6>
+                <p>To the maximum extent permitted by law, Nexus Bank shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">8. Termination</h6>
+                <p>We reserve the right to suspend or terminate your account or access to the services at any time, with or without cause, and with or without notice, particularly in cases of suspected fraud or breach of these Terms.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">9. Changes to Terms</h6>
+                <p>We may modify these Terms at any time. We will provide notice of any material changes by posting the new Terms on the platform. Your continued use of the services after such modifications will constitute your acknowledgment and agreement to the modified terms.</p>
+                
+                <div class="mt-4 p-3 bg-light rounded text-center small">
+                    <i class="bi bi-info-circle text-primary me-2"></i> Please scroll to the bottom to agree and continue.
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-2 pb-4 px-4 d-flex justify-content-end bg-white">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-medium text-dark" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold d-flex align-items-center gap-2" id="agreeBtn" disabled>
+                    <span>Agree & Continue</span>
+                    <div class="spinner-border spinner-border-sm d-none" role="status" id="agreeSpinner"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full Page Transition Loader -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+    
+    #transition-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #0A0A0C;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    #transition-loader.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    #transition-loader.curtain-up {
+        transform: translateY(-100%);
+        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .loader-content {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .loader-logo { max-width: 450px; height: auto; margin-bottom: 80px; }
+    .loader-counter { font-family: 'JetBrains Mono', monospace; font-size: 4.5rem; font-weight: 700; color: #007bff;
+        margin-bottom: 10px;
+        line-height: 1;
+    }
+    .loader-progress-track {
+        width: 100%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    .loader-progress-fill {
+        height: 100%;
+        width: 0%;
+        background-color: #E5283F;
+        transition: width 0.1s linear;
+    }
+    .loader-status { font-family: 'Inter', sans-serif; color: #007bff;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+</style>
+<div id="transition-loader">
+    <div class="loader-content">
+        <img src="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank" class="loader-logo">
+        <div class="loader-counter"><span id="loader-percent">0</span>%</div>
+        <div class="loader-progress-track">
+            <div class="loader-progress-fill" id="loader-fill"></div>
+        </div>
+        <div class="loader-status" id="loader-status">Signing in...</div>
+    </div>
+</div>
+
+<script>
+window.triggerTransitionLoader = function(destinationUrl, mode = 'login') {
+    const loader = document.getElementById('transition-loader');
+    const percentEl = document.getElementById('loader-percent');
+    const fillEl = document.getElementById('loader-fill');
+    const statusEl = document.getElementById('loader-status');
+    
+    // Set initial text based on mode
+    let t1, t2, t3, t4;
+                                    <button type="button" class="btn social-btn w-100 py-2 rounded-3">OTP Login</button>
+                                </div>
+                            </div>
+                            
+                            <p class="text-center small text-muted">Already have an account ? <a href="login.html" class="text-cyan fw-bold text-decoration-none">Login</a></p>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/signup.js"></script>
+
+    <!-- Nexa Floating Chat Widget -->
+    <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
+        
+        <!-- Repeated Prompt -->
+        <div id="nexaPrompt" class="bg-white text-dark p-2 rounded-4 shadow-sm mb-3 position-relative d-none" style="transition: opacity 0.3s; border: 1px solid #0d6efd; max-width: 150px; font-size: 13px;">
+            Hi! Need help? <b>Ask Nexa!</b>
+            <div class="position-absolute" style="right: -8px; bottom: 15px; width: 15px; height: 15px; background: white; transform: rotate(45deg); border-top: 1px solid #0d6efd; border-right: 1px solid #0d6efd;"></div>
+        </div>
+
+        <!-- Orb -->
+        <button id="nexaOrbBtn" class="btn rounded-circle shadow-lg d-flex align-items-center justify-content-center border border-3 border-white" style="width: 65px; height: 65px; animation: pulse 2s infinite; background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+            <i class="bi bi-robot fs-3 text-white"></i>
+        </button>
+
+        <!-- Chat Window (Hidden) -->
+        <div id="nexaChatWindow" class="bg-white rounded-4 shadow-lg d-none position-absolute" style="bottom: 80px; right: 0; width: 350px; overflow: hidden; border: 1px solid #e9ecef;">
+            <div class="text-white p-3 d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #0d6efd 0%, #3a7bd5 100%);">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="bi bi-robot fs-4"></i>
+                    <h6 class="mb-0 fw-bold">Ask Nexa</h6>
+                </div>
+                <button id="nexaCloseChatBtn" class="btn-close btn-close-white shadow-none"></button>
+            </div>
+            <div class="p-3 bg-light" style="height: 250px; overflow-y: auto;" id="nexaChatHistory">
+                <div class="d-flex mb-3">
+                    <div class="bg-white p-2 rounded-3 shadow-sm" style="max-width: 85%; font-size: 14px;">
+                        Hi! I'm Nexa. How can I help you with your banking today?
+                    </div>
+                </div>
+            </div>
+            <div class="p-2 bg-white border-top d-flex">
+                <input type="text" id="nexaWidgetInput" class="form-control border-0 shadow-none" placeholder="Type your question...">
+                <button id="nexaWidgetSubmitBtn" class="btn rounded-circle ms-2 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; padding: 0; background: #0d6efd;"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); }
+        }
+    </style>
+
+    <script src="../../assets/js/nexa.js"></script>
+
+<!-- Terms and Conditions Modal -->
+<div class="modal fade" id="tncModal" tabindex="-1" aria-labelledby="tncModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header border-bottom-0 pb-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <h4 class="modal-title fw-bold text-dark" id="tncModalLabel">Terms & Conditions</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4 text-secondary" id="tncModalBody" style="line-height: 1.7; font-size: 0.95rem;">
+                <h6 class="fw-bold text-dark mb-3">1. Introduction</h6>
+                <p>Welcome to Nexus Bank. These Terms and Conditions govern your use of our net banking platform, mobile applications, and all associated services. By registering for an account, you agree to be bound by these terms. Please read them carefully.</p>
+                
+                <h6 class="fw-bold text-dark mt-4 mb-3">2. Account Registration and Security</h6>
+                <p>To use our services, you must register for a Nexus Bank account. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.</p>
+                <p>You are solely responsible for safeguarding your password and account credentials. Nexus Bank will never ask for your password via email or phone. You must immediately notify us of any unauthorized use of your account.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">3. Use of Services</h6>
+                <p>Our net banking platform allows you to manage your funds, transfer money, pay bills, and access financial products. You agree not to use the services for any illegal or unauthorized purpose. You must not attempt to breach or circumvent any security measures of the platform.</p>
+                
+                <h6 class="fw-bold text-dark mt-4 mb-3">4. Electronic Fund Transfers</h6>
+                <p>All fund transfers initiated through our platform are subject to processing times, daily limits, and per-transaction limits as outlined in your account agreement. Nexus Bank is not liable for delays caused by third-party clearing networks.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">5. Privacy and Data Protection</h6>
+                <p>Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your personal data. By agreeing to these Terms, you also consent to our Privacy Policy.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">6. Fees and Charges</h6>
+                <p>Certain services may incur fees. A schedule of applicable fees is available on our website. We reserve the right to modify our fee structure with a 30-day prior notice to you.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">7. Limitation of Liability</h6>
+                <p>To the maximum extent permitted by law, Nexus Bank shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">8. Termination</h6>
+                <p>We reserve the right to suspend or terminate your account or access to the services at any time, with or without cause, and with or without notice, particularly in cases of suspected fraud or breach of these Terms.</p>
+
+                <h6 class="fw-bold text-dark mt-4 mb-3">9. Changes to Terms</h6>
+                <p>We may modify these Terms at any time. We will provide notice of any material changes by posting the new Terms on the platform. Your continued use of the services after such modifications will constitute your acknowledgment and agreement to the modified terms.</p>
+                
+                <div class="mt-4 p-3 bg-light rounded text-center small">
+                    <i class="bi bi-info-circle text-primary me-2"></i> Please scroll to the bottom to agree and continue.
+                </div>
+            </div>
+            <div class="modal-footer border-top-0 pt-2 pb-4 px-4 d-flex justify-content-end bg-white">
+                <button type="button" class="btn btn-light rounded-pill px-4 fw-medium text-dark" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4 fw-bold d-flex align-items-center gap-2" id="agreeBtn" disabled>
+                    <span>Agree & Continue</span>
+                    <div class="spinner-border spinner-border-sm d-none" role="status" id="agreeSpinner"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Full Page Transition Loader -->
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+    
+    #transition-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #0A0A0C;
+        z-index: 99999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    #transition-loader.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    #transition-loader.curtain-up {
+        transform: translateY(-100%);
+        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+    }
+    .loader-content {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .loader-logo { max-width: 450px; height: auto; margin-bottom: 80px; }
+    .loader-counter { font-family: 'JetBrains Mono', monospace; font-size: 4.5rem; font-weight: 700; color: #007bff;
+        margin-bottom: 10px;
+        line-height: 1;
+    }
+    .loader-progress-track {
+        width: 100%;
+        height: 2px;
+        background-color: rgba(255, 255, 255, 0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+    .loader-progress-fill {
+        height: 100%;
+        width: 0%;
+        background-color: #E5283F;
+        transition: width 0.1s linear;
+    }
+    .loader-status { font-family: 'Inter', sans-serif; color: #007bff;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+</style>
+<div id="transition-loader">
+    <div class="loader-content">
+        <img src="../../assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank" class="loader-logo">
+        <div class="loader-counter"><span id="loader-percent">0</span>%</div>
+        <div class="loader-progress-track">
+            <div class="loader-progress-fill" id="loader-fill"></div>
+        </div>
+        <div class="loader-status" id="loader-status">Signing in...</div>
+    </div>
+</div>
+
+<script>
+window.triggerTransitionLoader = function(destinationUrl, mode = 'login') {
+    const loader = document.getElementById('transition-loader');
+    const percentEl = document.getElementById('loader-percent');
+    const fillEl = document.getElementById('loader-fill');
+    const statusEl = document.getElementById('loader-status');
+    
+    // Set initial text based on mode
+    let t1, t2, t3, t4;
+    if (mode === 'register') {
+        t1 = "Creating your account...";
+        t2 = "Securing data...";
+        t3 = "Finalizing setup...";
+        t4 = "Almost there...";
+    } else {
+        t1 = "Signing in...";
+        t2 = "Verifying credentials...";
+        t3 = "Loading dashboard...";
+        t4 = "Almost there...";
+    }
+    
+    statusEl.innerText = t1;
+    loader.classList.add('active');
+    
+    let percent = 0;
+    
+    function updateLoader() {
+        const increment = Math.floor(Math.random() * 12) + 2;
+        percent += increment;
+        
+        if (percent > 100) percent = 100;
+        
+        percentEl.innerText = percent;
+        fillEl.style.width = percent + '%';
+        
+        if (percent > 30 && percent <= 65) statusEl.innerText = t2;
+        else if (percent > 65 && percent <= 90) statusEl.innerText = t3;
+        else if (percent > 90) statusEl.innerText = t4;
+        
+        if (percent < 100) {
+            const delay = Math.floor(Math.random() * 120) + 50;
+            setTimeout(updateLoader, delay);
+        } else {
+            setTimeout(() => {
+                loader.classList.add('curtain-up');
+                setTimeout(() => {
+                    sessionStorage.setItem('authToken', 'true');
+                    window.location.href = destinationUrl;
+                }, 800);
+            }, 250);
+        }
+    }
+    
+    setTimeout(updateLoader, 100);
+}
+</script>
+
+    <!-- Global Alert Modal Override -->
+    <script>
+        window.alert = function(msg) {
+            let modal = document.getElementById('globalAlertModal');
+            if (!modal) {
+                const modalHtml = `
+                <div class="modal fade" id="globalAlertModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content border-0 rounded-4 shadow">
+                            <div class="modal-body p-5 text-center">
+                                <div class="mb-4 text-primary">
+                                    <i class="bi bi-info-circle" style="font-size: 3rem;"></i>
+                                </div>
+                                <h5 class="fw-bold mb-3">Notification</h5>
+                                <p id="globalAlertMessage" class="text-muted mb-4" style="white-space: pre-wrap;"></p>
+                                <button type="button" class="btn btn-primary w-100 rounded-pill py-2 fw-bold" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                modal = document.getElementById('globalAlertModal');
+            }
+            document.getElementById('globalAlertMessage').textContent = String(msg).replace(/\\n/g, '\n');
+            
+            // Check if bootstrap is available
+            if (typeof bootstrap !== 'undefined') {
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+            } else {
+                // Fallback for pages without bootstrap JS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                const btn = modal.querySelector('button');
+                btn.onclick = function() {
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                };
+            }
+        };
+    </script>
+
+
+    <script src="../../assets/js/global-validation.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

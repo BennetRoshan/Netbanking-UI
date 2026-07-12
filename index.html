@@ -13,7 +13,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/preloader.css">
 
     <!-- Global Dark Mode Loader -->
     <script>
@@ -21,6 +22,7 @@
             document.documentElement.classList.add('dark-mode');
         }
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
     
@@ -43,27 +45,33 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="support/service-accounts.html">Accounts</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Our Services
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-sm rounded-3 mt-2" aria-labelledby="servicesDropdown">
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/support/service-accounts.html">Accounts</a></li>
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/support/service-loans.html">Loans</a></li>
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/support/service-cards.html">Cards</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="support/service-loans.html">Loans</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            About Us
+                        </a>
+                        <ul class="dropdown-menu border-0 shadow-sm rounded-3 mt-2" aria-labelledby="aboutDropdown">
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/info/our-story.html">Our Story</a></li>
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/info/careers.html">Careers</a></li>
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/info/press.html">Press</a></li>
+                            <li><a class="dropdown-item py-2 fw-medium" href="features/info/blog.html">Blog</a></li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="support/service-cards.html">Cards</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="support/service-investments.html">Investments</a>
-                    </li>
-                    
-                    
-                    
                 </ul>
 
                 <!-- Right Actions -->
                 <div class="d-flex align-items-center gap-3">
-                    <a href="auth/login.html" class="btn btn-outline-secondary px-4 fw-medium">Login</a>
-                    <a href="auth/signup.html" class="btn btn-primary px-4 fw-medium text-white">Open Account</a>
+                    <a href="features/auth/login.html" class="btn btn-outline-secondary px-4 fw-medium">Login</a>
+                    <a href="features/auth/signup.html" class="btn btn-primary px-4 fw-medium text-white">Open Account</a>
                 </div>
             </div>
         </div>
@@ -87,7 +95,7 @@
                             Experience secure, seamless and smart banking solutions designed to help you achieve your financial goals.
                         </p>
                         <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-lg-start">
-                            <a href="auth/signup.html" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 px-5 py-3 shadow">
+                            <a href="features/auth/signup.html" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 px-5 py-3 shadow">
                                 Open an Account <i class="bi bi-arrow-right"></i>
                             </a>
                             <a href="#services" class="btn btn-outline-secondary px-5 py-3 bg-white">
@@ -234,60 +242,278 @@
                     <p class="text-muted">Discover our wide range of products tailored for you</p>
                 </div>
                 
-                                <!-- Interactive Services Carousel -->
-                <div id="servicesCarousel" class="carousel slide shadow-lg rounded-4 overflow-hidden mb-5">
-                    <div class="carousel-indicators mb-3">
-                        <button type="button" data-bs-slide-to="0" class="active bg-white" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-slide-to="1" class="bg-white" aria-label="Slide 2"></button>
-                        <button type="button" data-bs-slide-to="2" class="bg-white" aria-label="Slide 3"></button>
-                        <button type="button" data-bs-slide-to="3" class="bg-white" aria-label="Slide 4"></button>
+                                                <!-- Services Tabs -->
+                <ul class="nav nav-pills justify-content-center mb-4 pb-2 border-bottom" id="servicesTabs" role="tablist">
+                    <li class="nav-item mx-2" role="presentation">
+                        <button class="nav-link active rounded-pill px-4 fw-medium" id="accounts-tab" data-bs-toggle="tab" data-bs-target="#accounts-pane" type="button" role="tab" aria-controls="accounts-pane" aria-selected="true">Accounts</button>
+                    </li>
+                    <li class="nav-item mx-2" role="presentation">
+                        <button class="nav-link rounded-pill px-4 fw-medium" id="loans-tab" data-bs-toggle="tab" data-bs-target="#loans-pane" type="button" role="tab" aria-controls="loans-pane" aria-selected="false">Loans</button>
+                    </li>
+                    <li class="nav-item mx-2" role="presentation">
+                        <button class="nav-link rounded-pill px-4 fw-medium" id="cards-tab" data-bs-toggle="tab" data-bs-target="#cards-pane" type="button" role="tab" aria-controls="cards-pane" aria-selected="false">Cards</button>
+                    </li>
+                </ul>
+
+                                                <div class="tab-content" id="servicesTabContent" style="overflow: hidden;">
+
+                    <!-- accounts Pane -->
+                    <div class="tab-pane fade show active" id="accounts-pane" role="tabpanel" aria-labelledby="accounts-tab" tabindex="0">
+                        <div class="swiper mySwiper pb-5 pt-3">
+                            <div class="swiper-wrapper">
+
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/savings_account.png" class="w-100 h-100 object-fit-cover" alt="Savings Account">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Savings Account</h4>
+                                        <p class="text-muted small mb-4">Start your savings journey with us and enjoy secure growth for your funds.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Open Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/salary_account.png" class="w-100 h-100 object-fit-cover" alt="Salary Account">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Salary Account</h4>
+                                        <p class="text-muted small mb-4">Exclusive benefits for working professionals. Zero balance requirements.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Open Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/current_account.png" class="w-100 h-100 object-fit-cover" alt="Current Account">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Current Account</h4>
+                                        <p class="text-muted small mb-4">Your everyday business banking companion designed for high transactions.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Online</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/savings_account.png" class="w-100 h-100 object-fit-cover" alt="Savings Account">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Savings Account</h4>
+                                        <p class="text-muted small mb-4">Start your savings journey with us and enjoy secure growth for your funds.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Open Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/salary_account.png" class="w-100 h-100 object-fit-cover" alt="Salary Account">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Salary Account</h4>
+                                        <p class="text-muted small mb-4">Exclusive benefits for working professionals. Zero balance requirements.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Open Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/current_account.png" class="w-100 h-100 object-fit-cover" alt="Current Account">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Current Account</h4>
+                                        <p class="text-muted small mb-4">Your everyday business banking companion designed for high transactions.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Online</a>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                    <!-- Navigation buttons -->
+                            <div class="swiper-button-next" style="color: #0d6efd;"></div>
+                            <div class="swiper-button-prev" style="color: #0d6efd;"></div>
+                        </div>
                     </div>
-                    <div class="carousel-inner">
-                        <!-- &#8377;1 -->
-                        <div class="carousel-item active" data-bs-interval="4000">
-                            <img src="assets/images/slide_accounts.png" class="d-block w-100 object-fit-cover" alt="Premium Accounts" style="height: 500px;">
-                            <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(0,0,0,0.7); padding: 30px; border-radius: 15px; bottom: 40px; left: 5%; right: auto; max-width: 500px; backdrop-filter: blur(10px);">
-                                <h3 class="fw-bold text-white mb-2">Premium Bank Accounts</h3>
-                                <p class="text-light mb-4">Bank-grade security with up to 7% interest on savings. Experience wealth management like never before.</p>
-                                <a href="support/service-accounts.html" class="btn btn-primary rounded-pill px-4">Explore Accounts <i class="bi bi-arrow-right"></i></a>
+
+                    <!-- loans Pane -->
+                    <div class="tab-pane fade " id="loans-pane" role="tabpanel" aria-labelledby="loans-tab" tabindex="0">
+                        <div class="swiper mySwiper pb-5 pt-3">
+                            <div class="swiper-wrapper">
+
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/home_loan.png" class="w-100 h-100 object-fit-cover" alt="Home Loan">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Home Loan</h4>
+                                        <p class="text-muted small mb-4">Let your dreams find their address with our flexible home loans.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Quick Apply</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- &#8377;2 -->
-                        <div class="carousel-item" data-bs-interval="4000">
-                            <img src="assets/images/slide_loans.png" class="d-block w-100 object-fit-cover" alt="Flexible Loans" style="height: 500px;">
-                            <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(0,0,0,0.7); padding: 30px; border-radius: 15px; bottom: 40px; left: 5%; right: auto; max-width: 500px; backdrop-filter: blur(10px);">
-                                <h3 class="fw-bold text-white mb-2">Flexible Loan Solutions</h3>
-                                <p class="text-light mb-4">Make your dream home a reality or fund your personal needs with competitive interest rates.</p>
-                                <a href="support/service-loans.html" class="btn btn-primary rounded-pill px-4">Apply for a Loan <i class="bi bi-arrow-right"></i></a>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/personal_loan.png" class="w-100 h-100 object-fit-cover" alt="Personal Loan">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Personal Loan</h4>
+                                        <p class="text-muted small mb-4">Instant funds for all your personal needs with competitive rates.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Quick Apply</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- &#8377;3 -->
-                        <div class="carousel-item" data-bs-interval="4000">
-                            <img src="assets/images/slide_cards.png" class="d-block w-100 object-fit-cover" alt="Premium Cards" style="height: 500px;">
-                            <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(0,0,0,0.7); padding: 30px; border-radius: 15px; bottom: 40px; left: 5%; right: auto; max-width: 500px; backdrop-filter: blur(10px);">
-                                <h3 class="fw-bold text-white mb-2">Premium Credit Cards</h3>
-                                <p class="text-light mb-4">Enjoy 5% cashback, global lounge access, and zero forex markup on your international travels.</p>
-                                <a href="support/service-cards.html" class="btn btn-primary rounded-pill px-4">Explore Cards <i class="bi bi-arrow-right"></i></a>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/business_loan.png" class="w-100 h-100 object-fit-cover" alt="Business Loan">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Business Loan</h4>
+                                        <p class="text-muted small mb-4">Fuel your business growth with tailored financial solutions.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Quick Apply</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Slide 4 -->
-                        <div class="carousel-item" data-bs-interval="4000">
-                            <img src="assets/images/slide_investments.png" class="d-block w-100 object-fit-cover" alt="Wealth Management" style="height: 500px;">
-                            <div class="carousel-caption d-none d-md-block text-start" style="background: rgba(0,0,0,0.7); padding: 30px; border-radius: 15px; bottom: 40px; left: 5%; right: auto; max-width: 500px; backdrop-filter: blur(10px);">
-                                <h3 class="fw-bold text-white mb-2">Wealth Management</h3>
-                                <p class="text-light mb-4">Grow your portfolio with expert guidance, mutual funds, and custom investment strategies.</p>
-                                <a href="investments/investments.html" class="btn btn-primary rounded-pill px-4">Start Investing <i class="bi bi-arrow-right"></i></a>
+                            
+
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/home_loan.png" class="w-100 h-100 object-fit-cover" alt="Home Loan">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Home Loan</h4>
+                                        <p class="text-muted small mb-4">Let your dreams find their address with our flexible home loans.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Quick Apply</a>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/personal_loan.png" class="w-100 h-100 object-fit-cover" alt="Personal Loan">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Personal Loan</h4>
+                                        <p class="text-muted small mb-4">Instant funds for all your personal needs with competitive rates.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Quick Apply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/business_loan.png" class="w-100 h-100 object-fit-cover" alt="Business Loan">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Business Loan</h4>
+                                        <p class="text-muted small mb-4">Fuel your business growth with tailored financial solutions.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Quick Apply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <!-- Navigation buttons -->
+                            <div class="swiper-button-next" style="color: #0d6efd;"></div>
+                            <div class="swiper-button-prev" style="color: #0d6efd;"></div>
                         </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" id="customCarouselPrev">
-                        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" id="customCarouselNext">
-                        <span class="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+
+                    <!-- cards Pane -->
+                    <div class="tab-pane fade " id="cards-pane" role="tabpanel" aria-labelledby="cards-tab" tabindex="0">
+                        <div class="swiper mySwiper pb-5 pt-3">
+                            <div class="swiper-wrapper">
+
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/debit_card.png" class="w-100 h-100 object-fit-cover" alt="Debit Card">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Debit Card</h4>
+                                        <p class="text-muted small mb-4">Simplify your spending with our globally accepted debit cards.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/credit_card.png" class="w-100 h-100 object-fit-cover" alt="Credit Card">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Credit Card</h4>
+                                        <p class="text-muted small mb-4">Experience premium rewards, cashback, and exclusive travel benefits.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/mastercard.png" class="w-100 h-100 object-fit-cover" alt="Mastercard">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Mastercard</h4>
+                                        <p class="text-muted small mb-4">Secure online shopping and widespread acceptance around the world.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/debit_card.png" class="w-100 h-100 object-fit-cover" alt="Debit Card">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Debit Card</h4>
+                                        <p class="text-muted small mb-4">Simplify your spending with our globally accepted debit cards.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/credit_card.png" class="w-100 h-100 object-fit-cover" alt="Credit Card">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Credit Card</h4>
+                                        <p class="text-muted small mb-4">Experience premium rewards, cashback, and exclusive travel benefits.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-slide" style="width: 60%;">
+                                <div class="card h-100 border-0 shadow-sm rounded-4 service-card overflow-hidden">
+                                    <div class="card-img-wrapper" style="height: 300px; overflow: hidden;">
+                                        <img src="assets/images/mastercard.png" class="w-100 h-100 object-fit-cover" alt="Mastercard">
+                                    </div>
+                                    <div class="card-body p-4 bg-white d-flex flex-column text-center">
+                                        <h4 class="fw-bold text-dark mb-2">Mastercard</h4>
+                                        <p class="text-muted small mb-4">Secure online shopping and widespread acceptance around the world.</p>
+                                        <a href="features/auth/signup.html" class="btn btn-primary rounded-pill mt-auto mx-auto px-4">Apply Now</a>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <!-- Navigation buttons -->
+                            <div class="swiper-button-next" style="color: #0d6efd;"></div>
+                            <div class="swiper-button-prev" style="color: #0d6efd;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -400,8 +626,8 @@
                             </div>
 
                             <div class="d-flex gap-3">
-                                <a href="auth/signup.html" class="btn btn-primary rounded-3 flex-grow-1 py-2 fw-medium">Apply Now <i class="bi bi-chevron-right ms-1"></i></a>
-                                <a href="support/service-loans.html" class="btn btn-outline-secondary rounded-3 flex-grow-1 py-2 fw-medium bg-white">Know More <i class="bi bi-chevron-right ms-1 text-danger"></i></a>
+                                <a href="features/auth/signup.html" class="btn btn-primary rounded-3 flex-grow-1 py-2 fw-medium">Apply Now <i class="bi bi-chevron-right ms-1"></i></a>
+                                <a href="features/support/service-loans.html" class="btn btn-outline-secondary rounded-3 flex-grow-1 py-2 fw-medium bg-white">Know More <i class="bi bi-chevron-right ms-1 text-danger"></i></a>
                             </div>
                         </div>
                     </div>
@@ -410,105 +636,75 @@
         </section>
 
 
-        <!-- Banking Solutions Section -->
-        <section class="solutions-section py-5 bg-light">
-            <div class="container">
+                <!-- Advertisements Section -->
+        <section class="ads-section py-5 bg-light">
+            <div class="container-fluid px-0">
                 <div class="text-center mb-5">
-                    <h2 class="fw-bold text-dark mb-2">Banking Solutions for Every Need</h2>
-                    <p class="text-muted">Choose from our wide range of products tailored for you</p>
+                    <h1 class="fw-bold text-dark display-5 mb-2">How to Stay Safe From Financial Fraudsters</h1>
+                    <p class="text-muted fs-5">Essential security tips to protect your wealth</p>
                 </div>
                 
-                <div class="row g-4 justify-content-center">
-                    <!-- &#8377;1 -->
-                    <div class="col-sm-6 col-lg">
-                        <div class="card service-card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-column">
-                            <div class="icon-box bg-light-cyan text-cyan rounded-circle p-2 mb-3" style="width: 40px; height: 40px;">
-                                <i class="bi bi-currency-rupee fs-5"></i>
+                <div class="swiper adCoverflowSwiper py-5">
+                    <div class="swiper-wrapper">
+
+                        <div class="swiper-slide ad-slide" style="width: 500px; max-width: 80vw;">
+                            <div class="card bg-dark text-white border-0 overflow-hidden shadow-lg" style="height: 350px; border-radius: 20px;">
+                                <img src="assets/images/ad_phishing.png" class="card-img h-100 object-fit-cover " alt="Beware of Phishing Links!">
+                                <div class="card-img-overlay card-img-overlay d-flex flex-column justify-content-end align-items-center text-center p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 100%); justify-content: flex-end; padding-bottom: 2rem !important;">
+                                    <h2 class="fw-bold display-6 mb-3 text-white text-shadow-sm">BEWARE OF PHISHING LINKS!</h2>
+                                    <p class="fs-5 text-white">Never click on suspicious links asking for your banking details.</p>
+                                </div>
                             </div>
-                            <h6 class="fw-bold text-cyan mb-2">Savings Account</h6>
-                            <p class="text-muted small flex-grow-1">Earn more with higher interest rates and smart features</p>
-                            <div class="d-flex align-items-center mt-3 pt-3 border-top">
-                                <div class="bg-light border text-secondary rounded-circle me-2 d-flex justify-content-center align-items-center" style="width:30px; height:30px;"><i class="bi bi-person-fill"></i></div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold" style="font-size: 10px;">Rohit Kumar</h6>
-                                    <small class="text-muted" style="font-size: 8px;">Business Owner</small>
+                        </div>
+                        <div class="swiper-slide ad-slide" style="width: 500px; max-width: 80vw;">
+                            <div class="card bg-dark text-white border-0 overflow-hidden shadow-lg" style="height: 350px; border-radius: 20px;">
+                                <img src="assets/images/ad_password.png" class="card-img h-100 object-fit-cover " alt="Use Strong Passwords">
+                                <div class="card-img-overlay card-img-overlay d-flex flex-column justify-content-end align-items-center text-center p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 100%); justify-content: flex-end; padding-bottom: 2rem !important;">
+                                    <h2 class="fw-bold display-6 mb-3 text-white text-shadow-sm">USE STRONG PASSWORDS</h2>
+                                    <p class="fs-5 text-white">Secure your accounts with unique, complex passwords and change them regularly.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide ad-slide" style="width: 500px; max-width: 80vw;">
+                            <div class="card bg-dark text-white border-0 overflow-hidden shadow-lg" style="height: 350px; border-radius: 20px;">
+                                <img src="assets/images/ad_investment.png" class="card-img h-100 object-fit-cover " alt="Big Returns, Bigger Risks">
+                                <div class="card-img-overlay card-img-overlay d-flex flex-column justify-content-end align-items-center text-center p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 100%); justify-content: flex-end; padding-bottom: 2rem !important;">
+                                    <h2 class="fw-bold display-6 mb-3 text-white text-shadow-sm">BIG RETURNS, BIGGER RISKS</h2>
+                                    <p class="fs-5 text-white">Verify investment schemes thoroughly before parting with your money.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide ad-slide" style="width: 500px; max-width: 80vw;">
+                            <div class="card bg-dark text-white border-0 overflow-hidden shadow-lg" style="height: 350px; border-radius: 20px;">
+                                <img src="assets/images/ad_otp.png" class="card-img h-100 object-fit-cover " alt="Never Share Your OTP">
+                                <div class="card-img-overlay card-img-overlay d-flex flex-column justify-content-end align-items-center text-center p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 100%); justify-content: flex-end; padding-bottom: 2rem !important;">
+                                    <h2 class="fw-bold display-6 mb-3 text-white text-shadow-sm">NEVER SHARE YOUR OTP</h2>
+                                    <p class="fs-5 text-white">Bank officials will NEVER ask for your OTP, PIN, or CVV over the phone.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide ad-slide" style="width: 500px; max-width: 80vw;">
+                            <div class="card bg-dark text-white border-0 overflow-hidden shadow-lg" style="height: 350px; border-radius: 20px;">
+                                <img src="assets/images/ad_caller.png" class="card-img h-100 object-fit-cover " alt="Verify Unknown Callers">
+                                <div class="card-img-overlay card-img-overlay d-flex flex-column justify-content-end align-items-center text-center p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 100%); justify-content: flex-end; padding-bottom: 2rem !important;">
+                                    <h2 class="fw-bold display-6 mb-3 text-white text-shadow-sm">VERIFY UNKNOWN CALLERS</h2>
+                                    <p class="fs-5 text-white">Fraudsters pose as bank reps. Hang up and call the official bank number.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide ad-slide" style="width: 500px; max-width: 80vw;">
+                            <div class="card bg-dark text-white border-0 overflow-hidden shadow-lg" style="height: 350px; border-radius: 20px;">
+                                <img src="assets/images/ad_shopping.png" class="card-img h-100 object-fit-cover " alt="Safe Online Shopping">
+                                <div class="card-img-overlay card-img-overlay d-flex flex-column justify-content-end align-items-center text-center p-4" style="background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 100%); justify-content: flex-end; padding-bottom: 2rem !important;">
+                                    <h2 class="fw-bold display-6 mb-3 text-white text-shadow-sm">SAFE ONLINE SHOPPING</h2>
+                                    <p class="fs-5 text-white">Only enter card details on secure websites starting with HTTPS.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- &#8377;2 -->
-                    <div class="col-sm-6 col-lg">
-                        <div class="card service-card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-column">
-                            <div class="icon-box bg-light-cyan text-cyan rounded-circle p-2 mb-3" style="width: 40px; height: 40px;">
-                                <i class="bi bi-person fs-5"></i>
-                            </div>
-                            <h6 class="fw-bold text-cyan mb-2">Personal Loan</h6>
-                            <p class="text-muted small flex-grow-1">Quick funds for your personal needs</p>
-                            <div class="mt-3 pt-3 border-top">
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-cyan text-decoration-none small fw-semibold">Learn More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- &#8377;3 -->
-                    <div class="col-sm-6 col-lg">
-                        <div class="card service-card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-column">
-                            <div class="icon-box bg-light-cyan text-cyan rounded-circle p-2 mb-3" style="width: 40px; height: 40px;">
-                                <i class="bi bi-house fs-5"></i>
-                            </div>
-                            <h6 class="fw-bold text-cyan mb-2">Home Loan</h6>
-                            <p class="text-muted small flex-grow-1">Make your dreams home a reality with low rates</p>
-                            <div class="d-flex align-items-center mt-3 pt-3 border-top">
-                                <div class="bg-light border text-secondary rounded-circle me-2 d-flex justify-content-center align-items-center" style="width:30px; height:30px;"><i class="bi bi-person-fill"></i></div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold" style="font-size: 10px;">Priya Sharma</h6>
-                                    <small class="text-muted" style="font-size: 8px;">Working Professional</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- &#8377;4 -->
-                    <div class="col-sm-6 col-lg">
-                        <div class="card service-card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-column">
-                            <div class="icon-box bg-light-cyan text-cyan rounded-circle p-2 mb-3" style="width: 40px; height: 40px;">
-                                <i class="bi bi-car-front fs-5"></i>
-                            </div>
-                            <h6 class="fw-bold text-warning mb-2">Car Loan</h6>
-                            <p class="text-muted small flex-grow-1">Drive home your dream car with flexible options</p>
-                            <div class="d-flex align-items-center mt-3 pt-3 border-top">
-                                <div class="bg-light border text-secondary rounded-circle me-2 d-flex justify-content-center align-items-center" style="width:30px; height:30px;"><i class="bi bi-person-fill"></i></div>
-                                <div>
-                                    <h6 class="mb-0 fw-bold" style="font-size: 10px;">Amit Mehta</h6>
-                                    <small class="text-muted" style="font-size: 8px;">IT Consultant</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- &#8377;5 -->
-                    <div class="col-sm-6 col-lg">
-                        <div class="card service-card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-column">
-                            <div class="icon-box bg-light-warning text-warning rounded-circle p-2 mb-3 bg-opacity-10" style="width: 40px; height: 40px; background-color: rgba(255,193,7,0.1);">
-                                <i class="bi bi-star text-warning fs-5"></i>
-                            </div>
-                            <h6 class="fw-bold text-warning mb-2">Fixed Deposit</h6>
-                            <p class="text-muted small flex-grow-1">Secure your future with attractive returns</p>
-                            <div class="mt-3 pt-3 border-top">
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-cyan text-decoration-none small fw-semibold">Learn More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Investment Card -->
-                    <div class="col-sm-6 col-lg">
-                        <div class="card service-card h-100 border-0 shadow-sm rounded-4 p-4 d-flex flex-column">
-                            <div class="icon-box bg-light-success text-success rounded-circle p-2 mb-3 bg-opacity-10" style="width: 40px; height: 40px; background-color: rgba(25,135,84,0.1);">
-                                <i class="bi bi-graph-up-arrow text-success fs-5"></i>
-                            </div>
-                            <h6 class="fw-bold text-success mb-2">Investments</h6>
-                            <p class="text-muted small flex-grow-1">Grow your wealth with mutual funds and stocks</p>
-                            <div class="mt-3 pt-3 border-top">
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-cyan text-decoration-none small fw-semibold">Learn More <i class="bi bi-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Navigation buttons -->
+                    <div class="swiper-button-next text-dark fw-bold fs-4" style="right: 2%; z-index: 10;"></div>
+                    <div class="swiper-button-prev text-dark fw-bold fs-4" style="left: 2%; z-index: 10;"></div>
                 </div>
             </div>
         </section>
@@ -630,71 +826,72 @@
 
     <!-- Footer -->
     <footer class="bg-dark text-white pt-5 pb-3" style="background-color: #0b1120 !important;">
-        <div class="container">
-            <div class="row gy-4 mb-5">
-                <div class="col-lg-3 col-md-6">
-                    <a class="d-flex align-items-center gap-2 fw-bold text-white text-decoration-none mb-4" href="javascript:void(0)" onclick="alert('This section is coming soon!')">
-                        <img src="assets/images/image%206.png" alt="Nexus Bank" height="60">
-                    </a>
-                </div>
-                <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="fw-bold mb-3 text-white-50 small">Quick Links</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="index.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Home</a></li>
-                        <li><a href="support/service-accounts.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Accounts</a></li>
-                        <li><a href="support/service-loans.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Loans</a></li>
-                        <li><a href="support/service-cards.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Cards</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="fw-bold mb-3 text-white-50 small">Resources</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="index.html#services" class="text-white text-decoration-none opacity-75 hover-opacity-100">Services</a></li>
-                        <li><a href="support/service-investments.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Investments</a></li>
-                        <li><a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white text-decoration-none opacity-75 hover-opacity-100">Help Center</a></li>
-                        <li><a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white text-decoration-none opacity-75 hover-opacity-100">FAQs</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="fw-bold mb-3 text-white-50 small">About Us</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white text-decoration-none opacity-75 hover-opacity-100">Our Story</a></li>
-                        <li><a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white text-decoration-none opacity-75 hover-opacity-100">Careers</a></li>
-                        <li><a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white text-decoration-none opacity-75 hover-opacity-100">Press</a></li>
-                        <li><a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white text-decoration-none opacity-75 hover-opacity-100">Blog</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="row">
-                        <div class="col-6">
-                            <h6 class="fw-bold mb-3 text-white-50 small">Follow Us</h6>
-                            <div class="d-flex gap-3">
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-twitter"></i></a>
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-facebook"></i></a>
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-linkedin"></i></a>
-                                <a href="javascript:void(0)" onclick="alert('This section is coming soon!')" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-instagram"></i></a>
-                            </div>
+            <div class="container">
+                <div class="row g-4 pb-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <img src="assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png" alt="Nexus Bank Logo" height="120">
                         </div>
-                        <div class="col-6">
-                            <h6 class="fw-bold mb-3 text-white-50 small">Contact Us</h6>
-                            <ul class="list-unstyled small mb-0 d-flex flex-column gap-2 text-white opacity-75">
-                                <li>1800 123 4567</li>
-                                <li>support@nexusbank.com</li>
-                            </ul>
+                        <p class="text-white-50 small mb-0 pe-lg-4">Your trusted partner in financial growth. Experience seamless banking with our innovative digital solutions.</p>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <h6 class="fw-bold mb-3 text-white-50 small">Quick Links</h6>
+                        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                            <li><a href="index.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Home</a></li>
+                            <li><a href="features/dashboard/account.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Accounts</a></li>
+                            <li><a href="features/loans/loans.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Loans</a></li>
+                            <li><a href="features/cards/cards.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Cards</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <h6 class="fw-bold mb-3 text-white-50 small">Resources</h6>
+                        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                            <li><a href="#servicesTabs" class="text-white text-decoration-none opacity-75 hover-opacity-100">Services</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-1 col-md-6 col-6">
+                        <h6 class="fw-bold mb-3 text-white-50 small">About Us</h6>
+                        <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                            <li><a href="features/info/our-story.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Our Story</a></li>
+                            <li><a href="features/info/careers.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Careers</a></li>
+                            <li><a href="features/info/press.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Press</a></li>
+                            <li><a href="features/info/blog.html" class="text-white text-decoration-none opacity-75 hover-opacity-100">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="row">
+                            <div class="col-6">
+                                <h6 class="fw-bold mb-3 text-white-50 small">Follow Us</h6>
+                                <div class="d-flex gap-3">
+                                    <a href="https://twitter.com/login" target="_blank" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-twitter"></i></a>
+                                    <a href="https://www.facebook.com/login/" target="_blank" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-facebook"></i></a>
+                                    <a href="https://www.linkedin.com/login" target="_blank" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-linkedin"></i></a>
+                                    <a href="https://www.instagram.com/accounts/login/" target="_blank" class="text-white opacity-75 hover-opacity-100"><i class="bi bi-instagram"></i></a>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <h6 class="fw-bold mb-3 text-white-50 small">Contact Us</h6>
+                                <ul class="list-unstyled small mb-0 d-flex flex-column gap-2 text-white opacity-75">
+                                    <li>1800 123 4567</li>
+                                    <li>support@nexusbank.com</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <div class="border-top border-secondary pt-3 mt-4 text-center">
+                    <small class="text-white-50">&copy; 2026 Nexus Bank. All rights reserved.</small>
+                </div>
             </div>
-            
-            <div class="border-top border-secondary pt-3 mt-4 text-center">
-                <small class="text-white-50">&copy; 2026 Nexus Bank. All rights reserved.</small>
-            </div>
-        </div>
-    </footer>
+        </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
     <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmxc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
 
     <!-- Nexa Floating Chat Widget -->
     <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
@@ -741,7 +938,7 @@
     </style>
 
 
-    <script src="js/nexa.js"></script>
+    <script src="assets/js/nexa.js"></script>
     <!-- Global Alert Modal Override -->
     <script>
         window.alert = function(msg) {
@@ -784,6 +981,83 @@
             }
         };
     </script>
+    <script src="assets/js/preloader.js"></script>
+
+    <!-- Swiper Init -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+                const swiperParams = {
+          effect: 'coverflow',
+          grabCursor: true,
+          slidesPerView: 'auto',
+          centeredSlides: true,
+          loopedSlides: 6,
+          loop: true,
+          autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+          },
+          coverflowEffect: {
+            rotate: 20,
+            stretch: 0,
+            depth: 200,
+            modifier: 1,
+            slideShadows: true,
+          },
+          keyboard: {
+            enabled: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        };
+        // Initialize Swipers for all tabs
+        let swipers = document.querySelectorAll('.mySwiper');
+        swipers.forEach(function(swiperEl) {
+          new Swiper(swiperEl, swiperParams);
+        });
+
+        // Re-initialize or update swiper when tab changes to fix layout issues
+        const triggerTabList = document.querySelectorAll('#servicesTabs button[data-bs-toggle="tab"]')
+        triggerTabList.forEach(triggerEl => {
+          triggerEl.addEventListener('shown.bs.tab', event => {
+            swipers.forEach(function(swiperEl) {
+                if (swiperEl.swiper) {
+                    swiperEl.swiper.update();
+                }
+            });
+          })
+        });
+      });
+
+        // Initialize Coverflow Swiper for Ads
+        const adSwiper = new Swiper('.adCoverflowSwiper', {
+          effect: 'coverflow',
+          grabCursor: true,
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          loopedSlides: 6,
+          loop: true,
+          autoplay: {
+            delay: 3500,
+            disableOnInteraction: false,
+          },
+          coverflowEffect: {
+            rotate: 20,
+            stretch: 0,
+            depth: 200,
+            modifier: 1,
+            slideShadows: true,
+          },
+          navigation: {
+            nextEl: '.adCoverflowSwiper .swiper-button-next',
+            prevEl: '.adCoverflowSwiper .swiper-button-prev',
+          },
+        });
+
+    </script>
+
 </body>
 </html>
 

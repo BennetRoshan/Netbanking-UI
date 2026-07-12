@@ -20,12 +20,12 @@
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
         <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <img src="../NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+            <img src="../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
         </div>
         
         <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
             
-        <a href="../dashboard/dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-grid fs-5"></i>
             <span class="fw-medium">System Dashboard</span>
         </a>
@@ -85,14 +85,14 @@
             <span class="fw-medium">Content Management</span>
         </a>
     
-        <a href="../dashboard/profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-person-badge fs-5"></i>
             <span class="fw-medium">Profile</span>
         </a>
     
         </div>
         <div class="p-3 border-top border-secondary border-opacity-25">
-            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+            <a href="../login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
                 <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
                 <span class="fw-medium text-danger">Logout</span>
             </a>
@@ -186,8 +186,9 @@
                     <div class="row g-4">
                         <div class="col-md-6">
                             <label class="form-label text-muted small fw-medium">Customer ID</label>
-                            <input type="text" id="targetCustomerId" class="form-control bg-light" placeholder="e.g. CUST-123456" pattern="^CUST-[a-zA-Z0-9]{6}$" title="Must start with 'CUST-' followed by 6 alphanumeric characters" required>
-                            <div class="invalid-feedback">Please enter a valid Customer ID (e.g. CUST-123456).</div>
+                            <input type="text" id="targetCustomerId" class="form-control bg-light" placeholder="e.g. CUST-123456" onblur="fetchCustomerSnapshot()" required>
+                            <div class="invalid-feedback">Please enter a valid Customer ID.</div>
+                            <div id="targetSnapshot" class="mt-2 p-2 bg-white border rounded d-none small"></div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-muted small fw-medium">Adjustment Type</label>
@@ -223,39 +224,108 @@
                 </form>
 
                 <script>
+                    let currentTargetAccount = null;
+
+                    function fetchCustomerSnapshot() {
+                        const custId = document.getElementById('targetCustomerId').value.trim().toUpperCase();
+                        const snapshotDiv = document.getElementById('targetSnapshot');
+                        
+                        if (!custId || !window.DB) {
+                            snapshotDiv.classList.add('d-none');
+                            currentTargetAccount = null;
+                            return;
+                        }
+
+                        const user = window.DB.getAll('users').find(u => u.id.toUpperCase() === custId);
+                        if (!user) {
+                            snapshotDiv.innerHTML = '<span class="text-danger">Customer not found.</span>';
+                            snapshotDiv.classList.remove('d-none');
+                            currentTargetAccount = null;
+                            return;
+                        }
+
+                        const accounts = window.DB.getAll('accounts').filter(a => a.userId === user.id);
+                        if (accounts.length === 0) {
+                            snapshotDiv.innerHTML = '<span class="text-danger">No accounts found for this customer.</span>';
+                            snapshotDiv.classList.remove('d-none');
+                            currentTargetAccount = null;
+                            return;
+                        }
+
+                        currentTargetAccount = accounts[0]; // Use primary
+                        snapshotDiv.innerHTML = `
+                            <strong>${user.name}</strong><br>
+                            Current Balance: <strong class="text-primary">₹ ${parseFloat(currentTargetAccount.balance).toLocaleString('en-IN')}</strong>
+                        `;
+                        snapshotDiv.classList.remove('d-none');
+                    }
+
                     function handleBalanceUpdate(event) {
                         event.preventDefault();
                         const form = document.getElementById('balanceUpdateForm');
                         
-                        // Enforce HTML5 validation styling
-                        if (!form.checkValidity()) {
+                        if (!form.checkValidity() || !currentTargetAccount) {
                             form.classList.add('was-validated');
+                            if (!currentTargetAccount) alert("Please enter a valid Customer ID first.");
                             return;
                         }
 
-                        const customerId = document.getElementById('targetCustomerId').value.toUpperCase();
                         const adjType = document.getElementById('adjustmentType').value;
-                        const amount = parseFloat(document.getElementById('adjustmentAmount').value).toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
+                        const amountStr = document.getElementById('adjustmentAmount').value;
+                        const amountNum = parseFloat(amountStr);
                         const reason = document.getElementById('adjustmentReason').value;
 
-                        // Utilize the modern confirm dialog from admin.js
-                        if (typeof window.modernConfirm === 'function') {
-                            window.modernConfirm(
-                                'Confirm Ledger Adjustment',
-                                `Are you absolutely sure you want to ${adjType.toUpperCase()} ${amount} for ${customerId}?\n\nReason: ${reason}`,
-                                () => {
-                                    alert(`Ledger Adjustment Committed Successfully.\\n\\n- Account: ${customerId}\\n- Type: ${adjType}\\n- Amount: ${amount}\\n- Txn ID: MAN-${Math.floor(10000 + Math.random() * 90000)}`);
-                                    form.reset();
-                                    form.classList.remove('was-validated');
+                        if (isNaN(amountNum) || amountNum <= 0) {
+                            alert("Invalid amount.");
+                            return;
+                        }
+
+                        const confirmMsg = `Are you absolutely sure you want to ${adjType.toUpperCase()} ₹${amountNum.toLocaleString('en-IN')} for ${currentTargetAccount.userId}?\n\nReason: ${reason}`;
+                        
+                        const executeUpdate = () => {
+                            if (adjType === 'Credit') {
+                                currentTargetAccount.balance = parseFloat(currentTargetAccount.balance) + amountNum;
+                            } else {
+                                if (parseFloat(currentTargetAccount.balance) < amountNum) {
+                                    alert('Insufficient funds for this debit.');
+                                    return;
                                 }
-                            );
-                        } else {
-                            // Fallback if admin.js is missing
-                            if (confirm(`Are you absolutely sure you want to ${adjType.toUpperCase()} ${amount} for ${customerId}?`)) {
-                                alert(`Ledger Adjustment Committed Successfully.\\n\\n- Account: ${customerId}\\n- Type: ${adjType}\\n- Amount: ${amount}\\n- Txn ID: MAN-${Math.floor(10000 + Math.random() * 90000)}`);
-                                form.reset();
-                                form.classList.remove('was-validated');
+                                currentTargetAccount.balance = parseFloat(currentTargetAccount.balance) - amountNum;
                             }
+                            
+                            // Save account
+                            window.DB.update('accounts', currentTargetAccount.id, currentTargetAccount);
+                            
+                            // Save transaction
+                            const txnId = 'MAN-' + Math.floor(10000 + Math.random() * 90000);
+                            window.DB.insert('transactions', {
+                                id: txnId,
+                                userId: currentTargetAccount.userId,
+                                accountId: currentTargetAccount.id,
+                                type: adjType === 'Credit' ? 'Deposit' : 'Withdrawal',
+                                amount: amountNum,
+                                status: 'Completed',
+                                desc: reason
+                            });
+
+                            // Save audit
+                            window.DB.insert('auditLogs', {
+                                action: 'Manual Balance Update',
+                                details: `${adjType} of ₹${amountNum} for ${currentTargetAccount.userId}. Txn: ${txnId}`,
+                                date: new Date().toISOString()
+                            });
+
+                            alert(`Ledger Adjustment Committed Successfully.\\n\\n- Account: ${currentTargetAccount.userId}\\n- Type: ${adjType}\\n- Amount: ₹${amountNum.toLocaleString('en-IN')}\\n- Txn ID: ${txnId}`);
+                            form.reset();
+                            form.classList.remove('was-validated');
+                            document.getElementById('targetSnapshot').classList.add('d-none');
+                            currentTargetAccount = null;
+                        };
+
+                        if (typeof window.modernConfirm === 'function') {
+                            window.modernConfirm('Confirm Ledger Adjustment', confirmMsg, executeUpdate);
+                        } else {
+                            if (confirm(confirmMsg)) executeUpdate();
                         }
                     }
                 </script>

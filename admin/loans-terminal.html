@@ -20,12 +20,12 @@
     <!-- Sidebar -->
     <div class="sidebar d-flex flex-column flex-shrink-0" style="width: 280px; height: 100vh; position: fixed; background-color: #0f172a;">
         <div class="p-4 text-center border-bottom border-secondary border-opacity-25">
-            <img src="../NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
+            <img src="../assets/images/NEXUS%20BANK%20LOGO.png" alt="Nexus Bank Admin" style="height: 140px; filter: brightness(0) invert(1); object-fit: contain; max-width: 90%;">
         </div>
         
         <div class="nav flex-column flex-nowrap mb-auto p-3 overflow-auto" style="height: calc(100vh - 160px);">
             
-        <a href="../dashboard/dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="dashboard.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-grid fs-5"></i>
             <span class="fw-medium">System Dashboard</span>
         </a>
@@ -85,14 +85,14 @@
             <span class="fw-medium">Content Management</span>
         </a>
     
-        <a href="../dashboard/profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
+        <a href="profile.html" class="nav-link text-white-50 px-3 py-3 rounded d-flex align-items-center gap-3 mb-1" style="transition: 0.3s;">
             <i class="bi bi-person-badge fs-5"></i>
             <span class="fw-medium">Profile</span>
         </a>
     
         </div>
         <div class="p-3 border-top border-secondary border-opacity-25">
-            <a href="../auth/login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
+            <a href="../login.html" class="nav-link text-white-50 px-3 py-2 rounded d-flex align-items-center gap-3" onclick="localStorage.removeItem('admin_logged_in');">
                 <i class="bi bi-box-arrow-right fs-5 text-danger"></i>
                 <span class="fw-medium text-danger">Logout</span>
             </a>
@@ -208,29 +208,8 @@
                                 <th class="text-muted small fw-medium pb-3 text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td><span class="fw-medium text-primary">APP-883921</span></td>
-                                <td>Arjun Mehta</td>
-                                <td>Personal Loan</td>
-                                <td class="text-end fw-bold">₹ 5,00,000</td>
-                                <td class="text-end text-success fw-bold">785</td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-success me-1" onclick="alert('Application Approved'); this.closest('tr').remove();"><i class="bi bi-check-lg"></i></button>
-                                    <button class="btn btn-sm btn-danger" onclick="alert('Application Rejected'); this.closest('tr').remove();"><i class="bi bi-x-lg"></i></button>
-                                </td>
-                            </tr>
-                            <tr class="border-top">
-                                <td><span class="fw-medium text-primary">APP-883922</span></td>
-                                <td>Sneha Iyer</td>
-                                <td>Home Loan</td>
-                                <td class="text-end fw-bold">₹ 35,00,000</td>
-                                <td class="text-end text-success fw-bold">810</td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-success me-1" onclick="alert('Application Approved'); this.closest('tr').remove();"><i class="bi bi-check-lg"></i></button>
-                                    <button class="btn btn-sm btn-danger" onclick="alert('Application Rejected'); this.closest('tr').remove();"><i class="bi bi-x-lg"></i></button>
-                                </td>
-                            </tr>
+                        <tbody id="pendingLoansBody">
+                            <!-- Populated dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -290,6 +269,102 @@
     </div>
     
     <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPendingLoans();
+            loadLoanPolicies();
+        });
+
+        function loadPendingLoans() {
+            if (!window.DB) return;
+            const loans = window.DB.getAll('loans').filter(l => l.status === 'Pending');
+            const tbody = document.getElementById('pendingLoansBody');
+            let html = '';
+
+            if (loans.length === 0) {
+                html = '<tr><td colspan="6" class="text-center text-muted py-4">No pending loan applications.</td></tr>';
+            } else {
+                loans.forEach(loan => {
+                    const user = window.DB.getAll('users').find(u => u.id === loan.userId);
+                    const userName = user ? user.name : 'Unknown User';
+                    // We mock a CIBIL score for display if not saved
+                    const cibil = user && user.cibilScore ? user.cibilScore : (Math.floor(Math.random() * 300) + 500); 
+                    
+                    html += `
+                    <tr class="border-top">
+                        <td><span class="fw-medium text-primary">${loan.id}</span></td>
+                        <td>${userName}</td>
+                        <td>${loan.type || 'Personal Loan'}</td>
+                        <td class="text-end fw-bold">₹ ${parseFloat(loan.amount).toLocaleString('en-IN')}</td>
+                        <td class="text-end ${cibil > 700 ? 'text-success' : 'text-danger'} fw-bold">${cibil}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-success me-1" onclick="actionLoan('${loan.id}', 'Approved')"><i class="bi bi-check-lg"></i></button>
+                            <button class="btn btn-sm btn-danger" onclick="actionLoan('${loan.id}', 'Rejected')"><i class="bi bi-x-lg"></i></button>
+                        </td>
+                    </tr>`;
+                });
+            }
+            tbody.innerHTML = html;
+        }
+
+        function actionLoan(loanId, action) {
+            if (!window.DB) return;
+            const loans = window.DB.getAll('loans');
+            const loanIndex = loans.findIndex(l => l.id === loanId);
+            
+            if (loanIndex !== -1) {
+                const loan = loans[loanIndex];
+                loan.status = action === 'Approved' ? 'Active' : 'Rejected';
+                window.DB.update('loans', loan.id, loan);
+
+                if (action === 'Approved') {
+                    // Credit the amount to user's account
+                    const accounts = window.DB.getAll('accounts').filter(a => a.userId === loan.userId);
+                    if (accounts.length > 0) {
+                        const acc = accounts[0]; // Primary account
+                        acc.balance = parseFloat(acc.balance) + parseFloat(loan.amount);
+                        window.DB.update('accounts', acc.id, acc);
+
+                        // Log transaction
+                        window.DB.insert('transactions', {
+                            userId: loan.userId,
+                            accountId: acc.id,
+                            type: 'Deposit',
+                            amount: loan.amount,
+                            status: 'Completed',
+                            desc: `Loan Disbursal - ${loan.id}`
+                        });
+                    }
+                }
+
+                // Log audit
+                window.DB.insert('auditLogs', {
+                    action: `Loan ${action}`,
+                    details: `Loan ${loanId} was ${action.toLowerCase()} by Admin.`,
+                    date: new Date().toISOString()
+                });
+
+                alert(`Application ${loanId} has been ${action}.`);
+                loadPendingLoans();
+            }
+        }
+
+        function loadLoanPolicies() {
+            const policies = JSON.parse(localStorage.getItem('nexus_loan_policies')) || {
+                'Personal Loan': { rate: 10.5, max: 1000000 },
+                'Home Loan': { rate: 8.5, max: 50000000 },
+                'Vehicle Loan': { rate: 9.0, max: 2500000 }
+            };
+            
+            document.querySelectorAll('#config .col-md-4').forEach(col => {
+                const title = col.querySelector('h6').textContent;
+                if (policies[title]) {
+                    const inputs = col.querySelectorAll('input');
+                    inputs[0].value = policies[title].rate;
+                    inputs[1].value = policies[title].max;
+                }
+            });
+        }
+
         function updateLoanPolicy(loanType, btn) {
             const container = btn.closest('.border.rounded');
             const inputs = container.querySelectorAll('input');
@@ -301,6 +376,16 @@
                 return;
             }
             
+            let policies = JSON.parse(localStorage.getItem('nexus_loan_policies')) || {};
+            policies[loanType] = { rate: parseFloat(rate), max: parseInt(maxAmount) };
+            localStorage.setItem('nexus_loan_policies', JSON.stringify(policies));
+            
+            window.DB.insert('auditLogs', {
+                action: 'Loan Policy Update',
+                details: `${loanType} updated to ${rate}% and max ₹${maxAmount}`,
+                date: new Date().toISOString()
+            });
+
             alert(`${loanType} policy updated successfully!\n\nNew Interest Rate: ${rate}%\nNew Max Amount: ₹ ${parseInt(maxAmount).toLocaleString('en-IN')}`);
         }
 

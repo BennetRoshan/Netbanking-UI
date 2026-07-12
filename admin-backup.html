@@ -9,7 +9,7 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="css/main.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
 
     <!-- Global Dark Mode Loader -->
     <script>
@@ -17,6 +17,8 @@
             document.documentElement.classList.add('dark-mode');
         }
     </script>
+
+    <link rel="icon" type="image/png" href="assets/images/NEXUS%20BANK%20LOGO%20FOR%20DARK%20BACKGROUND.png">
 </head>
 <body>
 
@@ -33,38 +35,38 @@
             
             <!-- Navigation -->
             <nav class="nav flex-column flex-grow-1 px-3 gap-1">
-                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="dashboard/dashboard.html" style="background-color: #007bff;">
+                <a class="nav-link text-white active d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium" href="features/dashboard/dashboard.html" style="background-color: #007bff;">
                     <i class="bi bi-grid fs-5 text-primary"></i> Dashboard
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="dashboard/account.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/dashboard/account.html">
                     <i class="bi bi-briefcase fs-5 text-info"></i> Accounts
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="transfers/fund-transfer.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/transfers/fund-transfer.html">
                     <i class="bi bi-arrow-up-right fs-5 text-success"></i> Fund Transfer
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="transfers/payments.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/transfers/payments.html">
                       <i class="bi bi-list-ul fs-5 text-warning"></i> Payments
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="loans/loans.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/loans/loans.html">
                     <i class="bi bi-currency-rupee fs-5 text-danger"></i> Loans
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="cards/cards.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/cards/cards.html">
                     <i class="bi bi-credit-card fs-5 text-info"></i> Cards
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="dashboard/statements.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/dashboard/statements.html">
                     <i class="bi bi-file-earmark-text fs-5 text-success"></i> Statements
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="dashboard/profile.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/dashboard/profile.html">
                     <i class="bi bi-person fs-5 text-warning"></i> Profile
                 </a>
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="support/support.html">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/support/support.html">
                     <i class="bi bi-shield-check fs-5 text-danger"></i> Support
                 </a>
             </nav>
             
             <!-- Logout -->
             <div class="p-3">
-                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="auth/login.html" style="background-color: rgba(255,255,255,0.05);">
+                <a class="nav-link text-white-50 d-flex align-items-center gap-3 py-3 px-4 rounded-3 fw-medium sidebar-link" href="features/auth/login.html" style="background-color: rgba(255,255,255,0.05);">
                     <i class="bi bi-box-arrow-right fs-5 text-danger"></i> Logout
                 </a>
             </div>
@@ -77,7 +79,7 @@
             <header class="d-flex justify-content-between align-items-center px-5 py-4 bg-transparent w-100 position-relative" style="z-index: 1050;">
                 <!-- Breadcrumb -->
                 <div class="text-muted small fw-medium">
-                    <a href="dashboard/dashboard.html" class="text-decoration-none text-muted">Admin Portal</a> / <span class="text-dark">Backup & Recovery</span>
+                    <a href="features/dashboard/dashboard.html" class="text-decoration-none text-muted">Admin Portal</a> / <span class="text-dark">Backup & Recovery</span>
                 </div>
                 
                 <!-- Right Header Tools -->
@@ -188,7 +190,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
-    <script src="js/export.js"></script>
+    <script src="assets/js/export.js"></script>
     <!-- Nexa Floating Chat Widget -->
     <div id="nexaWidget" class="position-fixed z-index-3 d-flex align-items-end" style="bottom: 30px; right: 30px; gap: 15px;">
         
@@ -311,7 +313,7 @@
         });
     </script>
 
-    <script src="js/nexa.js"></script>
+    <script src="assets/js/nexa.js"></script>
     <style>
         /* Custom Colors & Variables */
         :root {
@@ -754,6 +756,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
