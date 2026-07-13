@@ -113,6 +113,15 @@ function exportToPDF(tableId, filename, title) {
         headStyles: {
             fillColor: [0, 210, 255],
             textColor: 255
+        },
+        didParseCell: function(data) {
+            if (data.cell.text && data.cell.text.length > 0) {
+                for (let i = 0; i < data.cell.text.length; i++) {
+                    if (typeof data.cell.text[i] === 'string') {
+                        data.cell.text[i] = data.cell.text[i].replace(/₹/g, 'Rs. ');
+                    }
+                }
+            }
         }
     });
 
