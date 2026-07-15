@@ -1,0 +1,14 @@
+{
+  "name": "Nexus Bank Flow Generator",
+  "id": "123456789",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figjam"
+  ],
+  "networkAccess": {
+    "allowedDomains": [
+      "none"
+    ]
+  }
+}
